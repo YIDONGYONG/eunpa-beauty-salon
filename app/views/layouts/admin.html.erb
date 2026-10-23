@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <title><%= [ yield(:title).presence, "관리자" ].compact.join(" | ") %> - 은파미용실</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags "admin" %>
+  </head>
+  <body class="admin">
+    <header class="admin-header">
+      <div class="admin-container admin-header-inner">
+        <%= link_to admin_root_path, class: "admin-brand" do %>
+          <%= render "shared/flower", size: 40 %>
+          <span>은파미용실 관리자</span>
+        <% end %>
+        <nav class="admin-nav" aria-label="관리자 메뉴">
+          <%= link_to "메뉴·가격", admin_menu_items_path %>
+          <%= link_to "블로그 글", admin_posts_path %>
+          <%= link_to "원장님 소개", edit_admin_owner_profile_path %>
+          <%= link_to "사이트 설정", edit_admin_site_setting_path %>
+          <%= link_to "홈페이지 보기", root_path(locale: :ko), target: "_blank", rel: "noopener" %>
+          <%= button_to "로그아웃", admin_session_path, method: :delete, class: "admin-link-button", form_class: "inline-form" %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="admin-container admin-main">
+      <% if notice %><p class="flash flash-notice" role="status"><%= notice %></p><% end %>
+      <% if alert %><p class="flash flash-alert" role="alert"><%= alert %></p><% end %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

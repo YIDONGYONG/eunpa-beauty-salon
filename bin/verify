@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# 変更後にまとめて確認するスクリプト: スタイル → セキュリティ点検 → テスト（翻訳漏れ検査を含む）
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+echo "▶ rubocop";   bundle exec rubocop -f simple
+echo "▶ brakeman";  bundle exec brakeman -q --no-pager --no-exit-on-warn >/dev/null && echo "  완료(상세: bundle exec brakeman)"
+echo "▶ tests";     bin/rails test
+echo "✅ 모든 검증 통과"

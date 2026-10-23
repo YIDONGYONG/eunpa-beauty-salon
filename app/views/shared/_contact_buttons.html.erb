@@ -1,0 +1,8 @@
+<% if site_setting.phone.present? %>
+  <%= link_to site_setting.phone_href, class: "btn btn-primary" do %>
+    <span aria-hidden="true">📞</span> <%= t("common.call") %> <span class="btn-sub"><%= site_setting.phone %></span>
+  <% end %>
+<% end %>
+<%= link_to location_path, class: "btn btn-secondary" do %>
+  <span aria-hidden="true">📍</span> <%= t("common.directions") %>
+<% end %>

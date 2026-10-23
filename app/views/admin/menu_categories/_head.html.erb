@@ -1,0 +1,35 @@
+<div id="<%= dom_id(category, :head) %>" class="category-head">
+  <%= form_with model: category, url: admin_menu_category_path(category), class: "category-form" do |f| %>
+    <div class="field">
+      <%= f.label :name_ko, "분류 이름", for: "category_name_#{category.id}" %>
+      <%= f.text_field :name_ko, id: "category_name_#{category.id}", required: true, class: "category-name" %>
+    </div>
+    <details class="more-langs">
+      <summary>분류 이름 번역</summary>
+      <div class="grid-2">
+        <% { en: "영어", vi: "베트남어", ja: "일본어" }.each do |locale, label| %>
+          <div class="field">
+            <%= f.label :"name_#{locale}", label, for: "category_name_#{locale}_#{category.id}" %>
+            <%= f.text_field :"name_#{locale}", id: "category_name_#{locale}_#{category.id}", lang: locale %>
+          </div>
+        <% end %>
+      </div>
+    </details>
+    <% if category.errors.any? %>
+      <p class="flash flash-alert" role="alert"><%= category.errors.full_messages.to_sentence %></p>
+    <% end %>
+    <div class="item-save">
+      <%= f.submit "분류 이름 저장", class: "btn btn-primary btn-small" %>
+      <% if saved %><span class="saved" role="status">✓ 저장되었습니다</span><% end %>
+      <% unless category.visible? %><span class="tag-hidden">홈페이지에서 숨김</span><% end %>
+    </div>
+  <% end %>
+
+  <div class="item-actions">
+    <%= button_to "▲ 위로", move_up_admin_menu_category_path(category), method: :patch, class: "btn btn-outline btn-small", form: { data: { turbo_frame: "_top" } } %>
+    <%= button_to "▼ 아래로", move_down_admin_menu_category_path(category), method: :patch, class: "btn btn-outline btn-small", form: { data: { turbo_frame: "_top" } } %>
+    <%= button_to (category.visible? ? "분류 숨기기" : "분류 보이기"), toggle_admin_menu_category_path(category), method: :patch, class: "btn btn-outline btn-small", form: { data: { turbo_frame: "_top" } } %>
+    <%= button_to "분류 삭제", admin_menu_category_path(category), method: :delete, class: "btn btn-danger btn-small",
+                  form: { data: { turbo_frame: "_top", turbo_confirm: "'#{category.name_ko}' 분류와 안에 있는 시술 #{category.menu_items.size}개가 모두 삭제됩니다. 계속할까요?" } } %>
+  </div>
+</div>

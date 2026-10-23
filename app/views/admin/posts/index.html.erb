@@ -1,0 +1,27 @@
+<% content_for :title, "블로그 글" %>
+<div class="page-head">
+  <h1>블로그 글 관리</h1>
+  <%= link_to "＋ 새 글 쓰기", new_admin_post_path, class: "btn btn-primary" %>
+</div>
+
+<% if @posts.empty? %>
+  <p class="empty">아직 작성한 글이 없습니다. "새 글 쓰기"를 눌러 첫 글을 올려 보세요.</p>
+<% else %>
+  <ul class="post-admin-list">
+    <% @posts.each do |post| %>
+      <li class="post-admin-item">
+        <div>
+          <strong class="post-admin-title"><%= post.title_ko %></strong>
+          <span class="tag <%= post.published? ? 'tag-on' : 'tag-off' %>"><%= post.published? ? "게시 중" : "비공개" %></span>
+          <div class="help"><%= l(post.updated_at, format: :short) %> 수정</div>
+        </div>
+        <div class="item-actions">
+          <%= link_to "수정", edit_admin_post_path(post), class: "btn btn-outline btn-small" %>
+          <%= button_to (post.published? ? "비공개로 바꾸기" : "게시하기"), toggle_admin_post_path(post), method: :patch, class: "btn btn-outline btn-small" %>
+          <%= button_to "삭제", admin_post_path(post), method: :delete, class: "btn btn-danger btn-small",
+                        form: { data: { turbo_confirm: "'#{post.title_ko}' 글을 삭제할까요? 되돌릴 수 없습니다." } } %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

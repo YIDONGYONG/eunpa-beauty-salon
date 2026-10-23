@@ -1,0 +1,13 @@
+<section id="new_category" class="category-card new-category">
+  <%= form_with model: category, url: admin_menu_categories_path, class: "category-form" do |f| %>
+    <h2>＋ 새 분류 추가</h2>
+    <div class="field">
+      <%= f.label :name_ko, "분류 이름 (예: 염색)", for: "new_category_name" %>
+      <%= f.text_field :name_ko, id: "new_category_name", required: true, maxlength: 40 %>
+    </div>
+    <% if category.errors.any? %>
+      <p class="flash flash-alert" role="alert"><%= category.errors.full_messages.to_sentence %></p>
+    <% end %>
+    <%= f.submit "분류 추가", class: "btn btn-secondary" %>
+  <% end %>
+</section>

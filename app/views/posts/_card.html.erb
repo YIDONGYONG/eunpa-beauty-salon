@@ -1,0 +1,14 @@
+<article class="post-card">
+  <%= link_to post_path(post), class: "post-card-link" do %>
+    <% if post.featured_image.attached? %>
+      <%= salon_image_tag post.featured_image, width: 600, height: 400, alt: "" %>
+    <% else %>
+      <%= image_tag "post-placeholder.svg", alt: "", loading: "lazy" %>
+    <% end %>
+    <div class="post-card-body">
+      <h3 class="post-card-title"><%= post.title %></h3>
+      <p class="post-card-date"><%= post_date(post.published_at) %></p>
+      <p><%= post.excerpt %></p>
+    </div>
+  <% end %>
+</article>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <title>관리자 로그인 - 은파미용실</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="admin admin-login">
+    <main class="login-box">
+      <div class="login-logo"><%= render "shared/flower", size: 72 %></div>
+      <h1>은파미용실 관리자</h1>
+      <% if notice %><p class="flash flash-notice" role="status"><%= notice %></p><% end %>
+      <% if alert %><p class="flash flash-alert" role="alert"><%= alert %></p><% end %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

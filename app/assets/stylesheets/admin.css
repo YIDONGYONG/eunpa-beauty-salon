@@ -1,0 +1,85 @@
+/* 管理画面（非エンジニア向け: 大きな文字、大きなボタン） */
+body.admin { background: #F7F3EC; padding-bottom: 60px; font-size: 1.125rem; word-break: keep-all; }
+.admin-container { width: 100%; max-width: 980px; margin-inline: auto; padding-inline: 16px; }
+.admin-header { background: var(--ivory); border-bottom: 3px solid var(--pink-300); }
+.admin-header-inner { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; padding-block: 10px; }
+.admin-brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.25rem; color: var(--text); text-decoration: none; }
+.admin-nav { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.admin-nav a, .admin-link-button { display: inline-flex; align-items: center; min-height: 48px; padding: 6px 14px; border-radius: 12px; background: #fff; border: 2px solid var(--line);
+  color: var(--text); font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+.admin-nav a:hover, .admin-link-button:hover { background: var(--pink-100); }
+.inline-form { display: inline; margin: 0; }
+.admin-main { padding-block: 24px; }
+.admin h1 { font-size: 1.875rem; }
+.page-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+
+.help { color: var(--text-muted); font-size: 1rem; line-height: 1.6; }
+.empty { background: #fff; padding: 24px; border-radius: var(--radius); border: 2px dashed var(--line); }
+.flash { padding: 12px 16px; border-radius: 12px; margin-block: 12px; }
+.flash ul { margin: 6px 0 0; padding-left: 20px; }
+.flash-notice { background: var(--green-100); border: 2px solid var(--green-700); }
+.flash-alert { background: #FDECEC; border: 2px solid #A12D2D; color: #5C1414; }
+
+.admin input[type="text"], .admin input[type="email"], .admin input[type="password"], .admin input[type="tel"], .admin input[type="number"], .admin textarea {
+  width: 100%; min-height: 52px; padding: 10px 14px; font: inherit; color: var(--text); background: #fff; border: 2px solid #B9A59C; border-radius: 10px; }
+.admin textarea { min-height: 120px; line-height: 1.6; }
+.admin input:focus, .admin textarea:focus { border-color: var(--green-700); outline: 3px solid var(--green-100); }
+.admin input[type="checkbox"] { width: 26px; height: 26px; accent-color: var(--rose-700); vertical-align: middle; }
+.admin input[type="file"] { font: inherit; padding: 8px 0; max-width: 100%; }
+.field { margin-bottom: 14px; }
+.field label, .field > label { display: block; font-weight: 700; margin-bottom: 4px; }
+.check { display: inline-flex !important; align-items: center; gap: 8px; font-weight: 500; min-height: 48px; }
+.grid-2 { display: grid; gap: 0 16px; }
+.btn-block { width: 100%; }
+.admin .btn { border-radius: 12px; }
+.form-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-block: 24px; }
+.admin-form .translated-field, .translated-field { background: #fff; border: 2px solid var(--line); border-radius: var(--radius); padding: 16px 18px; margin: 0 0 18px; }
+.translated-field legend { font-weight: 700; font-size: 1.25rem; padding-inline: 8px; color: var(--rose-700); }
+.more-langs { background: var(--cream); border-radius: 12px; padding: 8px 14px; margin-block: 8px; }
+.more-langs summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; color: var(--green-700); }
+
+.dash-grid { display: grid; gap: 16px; margin-top: 20px; }
+.dash-card { display: block; background: #fff; border: 3px solid var(--pink-300); border-radius: var(--radius); padding: 22px; color: var(--text); text-decoration: none; }
+.dash-card:hover { border-color: var(--rose-700); background: var(--pink-100); }
+.dash-card strong { display: block; font-size: 1.5rem; color: var(--rose-700); margin-bottom: 4px; }
+
+/* ログイン */
+.admin-login { display: grid; place-items: center; min-height: 100vh; padding: 20px; }
+.login-box { width: 100%; max-width: 420px; background: #fff; border-radius: var(--radius); padding: 28px; border: 3px solid var(--pink-300); }
+.login-logo { text-align: center; }
+.login-box h1 { text-align: center; font-size: 1.5rem; }
+
+/* メニュー／価格の管理 */
+.category-card { background: #fff; border: 3px solid var(--pink-300); border-radius: var(--radius); padding: 16px; margin-bottom: 24px; }
+.category-card.is-hidden { border-color: var(--line); background: #FBF8F4; }
+.category-head { padding-bottom: 12px; border-bottom: 2px solid var(--pink-100); margin-bottom: 12px; }
+.category-name { font-size: 1.375rem !important; font-weight: 700; }
+.item-row { padding: 14px; margin-bottom: 12px; border: 2px solid var(--line); border-radius: 12px; background: var(--ivory); }
+.item-row.is-hidden { opacity: .8; background: #F1ECE5; }
+.item-fields { display: grid; gap: 0 12px; }
+.price-input { display: flex; align-items: center; gap: 8px; }
+.price-input input { max-width: 200px; text-align: right; font-weight: 700; }
+.item-save { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 4px; }
+.saved { color: var(--green-700); font-weight: 700; }
+.tag-hidden, .tag { display: inline-block; padding: 2px 12px; border-radius: 999px; font-size: .9375rem; font-weight: 700; border: 1px solid; }
+.tag-hidden, .tag-off { color: #6B5A52; background: #EEE7E0; border-color: #B9A59C; }
+.tag-on { color: var(--green-700); background: var(--green-100); border-color: var(--green-700); }
+.item-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.item-actions form { margin: 0; }
+.new-item { margin-top: 16px; padding: 14px; background: var(--green-100); border-radius: 12px; }
+.new-category { background: var(--ivory); }
+.post-admin-list { list-style: none; margin: 16px 0; padding: 0; display: grid; gap: 12px; }
+.post-admin-item { background: #fff; border: 2px solid var(--line); border-radius: var(--radius); padding: 16px; }
+.post-admin-title { font-size: 1.25rem; margin-right: 8px; }
+.admin-thumb { max-width: 320px; border-radius: 12px; }
+.admin-gallery { list-style: none; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+.admin-gallery img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 12px; }
+trix-editor { background: #fff; min-height: 260px; font-size: 1.125rem; line-height: 1.7; }
+
+@media (min-width: 720px) {
+  .grid-2 { grid-template-columns: repeat(3, 1fr); }
+  .item-fields { grid-template-columns: 1fr 240px auto; align-items: end; }
+  .post-admin-item { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .post-admin-item .item-actions { margin-top: 0; }
+  .dash-grid { grid-template-columns: repeat(2, 1fr); }
+}

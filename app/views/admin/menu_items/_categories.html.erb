@@ -1,0 +1,4 @@
+<% if categories.empty? %>
+  <p class="empty">아직 분류가 없습니다. 아래에서 "커트", "파마" 같은 분류를 먼저 추가해 주세요.</p>
+<% end %>
+<%= render partial: "admin/menu_items/category", collection: categories, as: :category %>

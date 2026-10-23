@@ -1,0 +1,20 @@
+<% page_title @post.title %>
+<% page_description @post.excerpt(150) %>
+<% content_for(:og_image, rails_blob_url(@post.featured_image, locale: nil)) if @post.featured_image.attached? %>
+
+<article class="section">
+  <div class="container narrow">
+    <p><%= link_to "← #{t('blog.back')}", posts_path, class: "back-link" %></p>
+    <h1 class="page-title"><%= @post.title %></h1>
+    <p class="post-card-date"><%= post_date(@post.published_at) %></p>
+    <%= translation_fallback_notice(@post.translated?(:title) && @post.content_translated?) %>
+
+    <% if @post.featured_image.attached? %>
+      <%= salon_image_tag @post.featured_image, width: 1000, height: 700, class: "post-hero", alt: "" %>
+    <% end %>
+
+    <div class="prose"><%= @post.content %></div>
+
+    <p class="post-footer"><%= link_to t("blog.back"), posts_path, class: "btn btn-outline" %></p>
+  </div>
+</article>

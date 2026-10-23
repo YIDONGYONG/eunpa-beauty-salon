@@ -1,0 +1,22 @@
+# 환경변수 / 비밀 값
+/.env
+/.env.*
+!/.env.example
+/config/master.key
+/config/credentials/*.key
+
+# 로그, 임시 파일, 업로드 파일
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/.keep
+
+/public/assets
+.byebug_history
+.DS_Store
+/node_modules
+/db/*.sqlite3*

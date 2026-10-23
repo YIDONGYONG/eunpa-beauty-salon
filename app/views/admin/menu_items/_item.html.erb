@@ -1,0 +1,66 @@
+<%= turbo_frame_tag item do %>
+  <div class="item-row <%= 'is-hidden' unless item.visible? %>">
+    <%= form_with model: item, url: admin_menu_item_path(item), class: "item-form" do |f| %>
+      <div class="item-fields">
+        <div class="field field-name">
+          <%= f.label :name_ko, "시술명" %>
+          <%= f.text_field :name_ko, required: true, maxlength: 60 %>
+        </div>
+        <div class="field field-price">
+          <%= f.label :price, "가격(원)" %>
+          <div class="price-input">
+            <%= f.text_field :price, inputmode: "numeric", pattern: "[0-9,]*", autocomplete: "off", value: item.price %>
+            <span>원</span>
+          </div>
+        </div>
+        <div class="field field-from">
+          <label class="check"><%= f.check_box :price_from %> "~부터" 표기</label>
+        </div>
+      </div>
+
+      <details class="more-langs" <%= "open" if item.errors.any? %>>
+        <summary>번역·설명 입력하기</summary>
+        <div class="grid-2">
+          <% { en: "영어", vi: "베트남어", ja: "일본어" }.each do |locale, label| %>
+            <div class="field">
+              <%= f.label :"name_#{locale}", "시술명 (#{label})" %>
+              <%= f.text_field :"name_#{locale}", lang: locale %>
+            </div>
+          <% end %>
+        </div>
+        <div class="field">
+          <%= f.label :description_ko, "설명 (한국어, 선택)" %>
+          <%= f.text_field :description_ko, placeholder: "예) 샴푸와 드라이 포함" %>
+        </div>
+        <div class="grid-2">
+          <% { en: "영어", vi: "베트남어", ja: "일본어" }.each do |locale, label| %>
+            <div class="field">
+              <%= f.label :"description_#{locale}", "설명 (#{label})" %>
+              <%= f.text_field :"description_#{locale}", lang: locale %>
+            </div>
+          <% end %>
+        </div>
+      </details>
+
+      <% if item.errors.any? %>
+        <p class="flash flash-alert" role="alert"><%= item.errors.full_messages.to_sentence %></p>
+      <% end %>
+
+      <div class="item-save">
+        <%= f.submit "저장", class: "btn btn-primary btn-small" %>
+        <% if saved %>
+          <span class="saved" role="status">✓ 저장되었습니다 (<%= number_with_delimiter(item.price) %>원)</span>
+        <% end %>
+        <% unless item.visible? %><span class="tag-hidden">홈페이지에서 숨김</span><% end %>
+      </div>
+    <% end %>
+
+    <div class="item-actions">
+      <%= button_to "▲ 위로", move_up_admin_menu_item_path(item), method: :patch, class: "btn btn-outline btn-small", form: { data: { turbo_frame: "_top" } } %>
+      <%= button_to "▼ 아래로", move_down_admin_menu_item_path(item), method: :patch, class: "btn btn-outline btn-small", form: { data: { turbo_frame: "_top" } } %>
+      <%= button_to (item.visible? ? "숨기기" : "보이기"), toggle_admin_menu_item_path(item), method: :patch, class: "btn btn-outline btn-small", form: { data: { turbo_frame: "_top" } } %>
+      <%= button_to "삭제", admin_menu_item_path(item), method: :delete, class: "btn btn-danger btn-small",
+                    form: { data: { turbo_frame: "_top", turbo_confirm: "'#{item.name_ko}' 항목을 삭제할까요?" } } %>
+    </div>
+  </div>
+<% end %>

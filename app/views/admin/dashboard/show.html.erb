@@ -1,0 +1,26 @@
+<% content_for :title, "대시보드" %>
+<h1>안녕하세요, 원장님 😊</h1>
+<p class="help">수정하실 항목의 큰 버튼을 눌러 주세요.</p>
+
+<div class="dash-grid">
+  <%= link_to admin_menu_items_path, class: "dash-card" do %>
+    <strong>메뉴·가격 관리</strong>
+    <span>시술명과 가격을 바로 고칠 수 있어요 (등록된 시술 <%= @counts[:menu_items] %>개)</span>
+  <% end %>
+  <%= link_to admin_posts_path, class: "dash-card" do %>
+    <strong>블로그 글 관리</strong>
+    <span>글 쓰기·수정·공개 설정 (게시 중 <%= @counts[:published_posts] %>개 / 전체 <%= @counts[:posts] %>개)</span>
+  <% end %>
+  <%= link_to edit_admin_owner_profile_path, class: "dash-card" do %>
+    <strong>원장님 소개·사진</strong>
+    <span>인사말, 원장님 사진, 매장 사진</span>
+  <% end %>
+  <%= link_to edit_admin_site_setting_path, class: "dash-card" do %>
+    <strong>사이트 설정</strong>
+    <span>주소, 전화번호, 영업시간, 휴무일, 주차 안내, 지도 위치</span>
+  <% end %>
+  <%= link_to edit_admin_password_path, class: "dash-card" do %>
+    <strong>비밀번호 변경</strong>
+    <span>관리자 비밀번호를 바꿉니다</span>
+  <% end %>
+</div>

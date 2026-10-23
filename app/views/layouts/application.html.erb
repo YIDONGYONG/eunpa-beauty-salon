@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="utf-8">
+    <% title = [ page_title.presence, t("site.name") ].compact.join(" | ") %>
+    <% description = page_description.presence || t("home.meta_description") %>
+    <title><%= title %></title>
+    <meta name="description" content="<%= description %>">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#FFF8F5">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="canonical" href="<%= base_url %><%= request.path %>">
+    <% I18n.available_locales.each do |locale| %>
+      <link rel="alternate" hreflang="<%= locale %>" href="<%= base_url %><%= locale_path_for(locale) %>">
+    <% end %>
+    <link rel="alternate" hreflang="x-default" href="<%= base_url %><%= locale_path_for(:ko) %>">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="<%= t('site.name') %>">
+    <meta property="og:title" content="<%= title %>">
+    <meta property="og:description" content="<%= description %>">
+    <meta property="og:url" content="<%= base_url %><%= request.path %>">
+    <meta property="og:locale" content="<%= { ko: 'ko_KR', en: 'en_US', vi: 'vi_VN', ja: 'ja_JP' }[I18n.locale] %>">
+    <meta property="og:image" content="<%= content_for(:og_image).presence || "#{base_url}/og-image.png" %>">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# 韓国語 / 英語・ベトナム語 / 日本語のWebフォント（必要な文字だけ自動分割で読み込み） %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400..600&family=Libre+Franklin:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+KR:wght@500;600;700&family=Noto+Serif:wght@500;600;700&family=Noto+Serif+JP:wght@500;600;700&display=swap">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="public lang-<%= I18n.locale %>">
+    <a class="skip-link" href="#main"><%= t("skip_to_content") %></a>
+
+    <header class="site-header" data-controller="nav">
+      <div class="container header-inner">
+        <%= link_to root_path, class: "logo-link", "aria-label": t("site.name") do %>
+          <%= render "shared/logo" %>
+        <% end %>
+
+        <button type="button" class="nav-toggle" data-nav-target="button" data-action="nav#toggle"
+                aria-expanded="false" aria-controls="site-nav"
+                data-open-label="<%= t('nav.open') %>" data-close-label="<%= t('nav.close') %>">
+          <span class="nav-toggle-icon" aria-hidden="true"></span>
+          <span class="nav-toggle-label"><%= t("nav.open") %></span>
+        </button>
+
+        <%# モバイル: 2行目（ロゴ・メニューの下）に言語選択、デスクトップ: メニューの右 %>
+        <%= render "shared/language_switcher" %>
+
+        <div class="header-menu" id="site-nav" data-nav-target="menu">
+          <nav aria-label="<%= t('nav.label') %>">
+            <ul class="nav-list">
+              <% [ [ :home, root_path ], [ :about, about_path ], [ :blog, posts_path ], [ :location, location_path ] ].each do |key, path| %>
+                <li><%= link_to t("nav.#{key}"), path, "aria-current": (current_page?(path) ? "page" : nil) %></li>
+              <% end %>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <%= yield %>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-brand">
+          <%= render "shared/flower", size: 44 %>
+          <strong><%= t("site.name") %></strong>
+        </div>
+        <ul class="footer-links">
+          <li><%= link_to t("nav.about"), about_path %></li>
+          <li><%= link_to t("nav.blog"), posts_path %></li>
+          <li><%= link_to t("nav.location"), location_path %></li>
+          <li><%= link_to t("footer.privacy"), privacy_path %></li>
+        </ul>
+        <section class="footer-business" aria-label="<%= t('footer.business_info') %>">
+          <h2 class="footer-heading"><%= t("footer.business_info") %></h2>
+          <% if site_setting.business_info.present? %>
+            <%= multiline site_setting.business_info %>
+          <% else %>
+            <p><%= t("footer.business_info_pending") %></p>
+          <% end %>
+        </section>
+        <p class="copyright"><%= t("footer.copyright", year: Time.current.year, name: t("site.name")) %></p>
+      </div>
+    </footer>
+
+    <%# モバイル下部のタブバー（ホーム / 料金表 / 紹介 / 電話） %>
+    <nav class="mobile-bar" aria-label="<%= t('tabbar.label') %>">
+      <%= link_to root_path, class: "tab", "aria-current": (current_page?(root_path) ? "page" : nil) do %>
+        <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <span><%= t("tabbar.home") %></span>
+      <% end %>
+      <%= link_to "#{root_path}#prices", class: "tab" do %>
+        <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span><%= t("tabbar.prices") %></span>
+      <% end %>
+      <%= link_to about_path, class: "tab", "aria-current": (current_page?(about_path) ? "page" : nil) do %>
+        <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c1-4.5 4-6.5 8-6.5s7 2 8 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span><%= t("tabbar.about") %></span>
+      <% end %>
+      <% if site_setting.phone.present? %>
+        <%= link_to site_setting.phone_href, class: "tab tab-call", "aria-label": "#{t('common.call')} #{site_setting.phone}" do %>
+          <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          <span><%= t("tabbar.call") %></span>
+        <% end %>
+      <% else %>
+        <%= link_to location_path, class: "tab tab-call", "aria-current": (current_page?(location_path) ? "page" : nil) do %>
+          <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          <span><%= t("common.directions") %></span>
+        <% end %>
+      <% end %>
+    </nav>
+  </body>
+</html>

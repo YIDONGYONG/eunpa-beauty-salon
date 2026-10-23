@@ -1,0 +1,12 @@
+<% content_for :title, "메뉴·가격 관리" %>
+<h1>메뉴·가격 관리</h1>
+<p class="help">
+  시술명이나 가격을 고친 뒤 그 줄의 <strong>저장</strong> 버튼을 누르면 바로 반영됩니다. 화면이 넘어가지 않아요.<br>
+  ▲▼ 버튼으로 순서를 바꾸고, <strong>숨기기</strong>를 누르면 홈페이지에서 보이지 않습니다.
+</p>
+
+<div id="categories">
+  <%= render "admin/menu_items/categories", categories: @categories %>
+</div>
+
+<%= render "admin/menu_categories/new_form", category: MenuCategory.new %>

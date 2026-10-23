@@ -1,0 +1,17 @@
+<%# 言語選択: クリックで下に展開するリスト。英字の略称（KO / EN / VI / JA）のみ表示します。 %>
+<details class="lang-switcher" data-controller="lang-menu" data-action="keydown.esc->lang-menu#close click@window->lang-menu#clickOutside">
+  <summary aria-label="<%= t('lang.label') %>: <%= t("lang.#{I18n.locale}") %>">
+    <span class="lang-current"><%= t("lang.#{I18n.locale}") %></span>
+    <span class="lang-arrow" aria-hidden="true"></span>
+  </summary>
+  <ul class="lang-list">
+    <% ApplicationHelper::LOCALE_CODES.each_key do |locale| %>
+      <li>
+        <%= link_to t("lang.#{locale}"), locale_path_for(locale), lang: locale, hreflang: locale,
+                    class: ("is-current" if locale == I18n.locale),
+                    "aria-label": t("lang.#{locale}", locale: locale),
+                    "aria-current": (locale == I18n.locale ? "true" : nil) %>
+      </li>
+    <% end %>
+  </ul>
+</details>

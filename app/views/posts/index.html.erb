@@ -1,0 +1,18 @@
+<% page_title [ t("blog.title"), (t("blog.page", page: @page) if @page > 1) ].compact.join(" - ") %>
+<% page_description t("blog.meta_description") %>
+
+<section class="section">
+  <div class="container">
+    <h1 class="page-title"><%= t("blog.title") %></h1>
+    <p class="lead"><%= t("blog.lead") %></p>
+
+    <% if @posts.empty? %>
+      <p><%= t("blog.empty") %></p>
+    <% else %>
+      <div class="post-grid">
+        <%= render partial: "posts/card", collection: @posts, as: :post %>
+      </div>
+      <%= render "shared/pagination", page: @page, total_pages: @total_pages %>
+    <% end %>
+  </div>
+</section>

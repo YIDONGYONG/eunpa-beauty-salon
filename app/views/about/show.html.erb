@@ -1,0 +1,53 @@
+<% page_title t("about.title") %>
+<% page_description t("about.meta_description") %>
+
+<section class="section">
+  <div class="container">
+    <h1 class="page-title"><%= t("about.title") %></h1>
+
+    <div class="owner">
+      <% if owner_profile.photo.attached? %>
+        <%= salon_image_tag owner_profile.photo, width: 640, class: "owner-photo", alt: t("about.photo_alt") %>
+      <% else %>
+        <%= image_tag "owner-placeholder.svg", class: "owner-photo", alt: t("about.photo_alt") %>
+      <% end %>
+      <div>
+        <h2 class="section-title"><%= t("about.owner_title") %></h2>
+        <p class="owner-name"><%= owner_profile.name %></p>
+        <p class="badge"><%= t("about.years", years: owner_profile.years_of_experience) %></p>
+        <%= translation_fallback_notice(owner_profile.name_translated? || owner_profile.greeting_translated?) %>
+        <% if owner_profile.headline.present? %>
+          <p class="lead"><%= owner_profile.headline %></p>
+        <% end %>
+      </div>
+    </div>
+
+    <% if owner_profile.greeting.present? %>
+      <h2 class="section-title"><%= t("about.greeting_title") %></h2>
+      <div class="prose"><%= multiline owner_profile.greeting %></div>
+    <% end %>
+
+    <% if owner_profile.career.present? %>
+      <h2 class="section-title"><%= t("about.career_title") %></h2>
+      <div class="prose"><%= multiline owner_profile.career %></div>
+    <% end %>
+  </div>
+</section>
+
+<section class="section section-alt" aria-labelledby="gallery-title">
+  <div class="container">
+    <h2 id="gallery-title" class="section-title"><%= t("about.gallery_title") %></h2>
+    <% if @gallery_images.any? %>
+      <ul class="gallery">
+        <% @gallery_images.each do |image| %>
+          <li><%= salon_image_tag image, width: 800, alt: t("about.gallery_title") %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="gallery-empty">
+        <%= image_tag "gallery-placeholder.svg", alt: "", loading: "lazy" %>
+        <p><%= t("about.gallery_empty") %></p>
+      </div>
+    <% end %>
+  </div>
+</section>

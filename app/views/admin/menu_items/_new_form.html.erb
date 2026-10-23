@@ -1,0 +1,26 @@
+<div id="<%= dom_id(category, :new_item) %>" class="new-item">
+  <%= form_with model: item, url: admin_menu_items_path, class: "new-item-form" do |f| %>
+    <%= f.hidden_field :menu_category_id, value: category.id %>
+    <strong>＋ "<%= category.name_ko %>"에 시술 추가</strong>
+    <div class="item-fields">
+      <div class="field field-name">
+        <%= f.label :name_ko, "시술명", for: "new_item_name_#{category.id}" %>
+        <%= f.text_field :name_ko, id: "new_item_name_#{category.id}", required: true, placeholder: "예) 여성 커트", maxlength: 60 %>
+      </div>
+      <div class="field field-price">
+        <%= f.label :price, "가격(원)", for: "new_item_price_#{category.id}" %>
+        <div class="price-input">
+          <%= f.text_field :price, id: "new_item_price_#{category.id}", inputmode: "numeric", pattern: "[0-9,]*", placeholder: "15000", value: (item.price if item.price.to_i > 0) %>
+          <span>원</span>
+        </div>
+      </div>
+      <div class="field field-from">
+        <label class="check"><%= f.check_box :price_from, id: "new_item_from_#{category.id}" %> "~부터" 표기</label>
+      </div>
+    </div>
+    <% if item.errors.any? %>
+      <p class="flash flash-alert" role="alert"><%= item.errors.full_messages.to_sentence %></p>
+    <% end %>
+    <%= f.submit "추가", class: "btn btn-secondary btn-small" %>
+  <% end %>
+</div>

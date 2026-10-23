@@ -1,0 +1,18 @@
+<% content_for :title, "비밀번호 변경" %>
+<h1>비밀번호 변경</h1>
+<%= form_with url: admin_password_path, method: :patch, class: "admin-form" do |f| %>
+  <div class="field">
+    <%= f.label :current_password, "현재 비밀번호" %>
+    <%= f.password_field :current_password, autocomplete: "current-password", required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :password, "새 비밀번호 (8자 이상)" %>
+    <%= f.password_field :password, autocomplete: "new-password", required: true, minlength: 8 %>
+  </div>
+  <div class="field">
+    <%= f.label :password_confirmation, "새 비밀번호 확인" %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true, minlength: 8 %>
+  </div>
+  <%= f.submit "비밀번호 변경", class: "btn btn-primary" %>
+  <%= link_to "취소", admin_root_path, class: "btn btn-outline" %>
+<% end %>

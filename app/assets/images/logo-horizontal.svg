@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 100" width="360" height="100" role="img" aria-label="은파미용실">
+  <title>은파미용실</title>
+  <g data-fit="1" transform="translate(7 11) scale(0.82)">
+  <defs>
+    <linearGradient id="cosmos-petal" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#D9728D"/>
+      <stop offset="0.45" stop-color="#EE9FB2"/>
+      <stop offset="1" stop-color="#F8CCD6"/>
+    </linearGradient>
+  </defs>
+  <path d="M50 52 C48 64 47 76 41 97" fill="none" stroke="#98707A" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M46 74 C40 70 36 66 31 60" fill="none" stroke="#98707A" stroke-width="1" stroke-linecap="round"/><path d="M44.5 80 C50 76 55 74 60 68" fill="none" stroke="#98707A" stroke-width="1" stroke-linecap="round"/><path d="M43 87 C36 84 31 82 25 77" fill="none" stroke="#98707A" stroke-width="1" stroke-linecap="round"/><path d="M42 92 C47 90 52 89 57 84" fill="none" stroke="#98707A" stroke-width="1" stroke-linecap="round"/>
+  <path d="M0,-3 C-10,-9 -19,-24 -16,-37 C-15,-41 -11,-43 -7,-41.5 C-4,-43.5 0,-43.5 2,-41.8 C5,-43.8 10,-43 13,-40 C18,-30 12,-12 0,-3 Z" transform="translate(52 44) rotate(-112) scale(0.8 0.8)" fill="url(#cosmos-petal)" stroke="#E58EA6" stroke-width="0.6" stroke-linejoin="round"/>
+  <path d="M0,-3 C-10,-9 -19,-24 -16,-37 C-15,-41 -11,-43 -7,-41.5 C-4,-43.5 0,-43.5 2,-41.8 C5,-43.8 10,-43 13,-40 C18,-30 12,-12 0,-3 Z" transform="translate(52 44) rotate(-72) scale(0.95 0.95)" fill="url(#cosmos-petal)" stroke="#E58EA6" stroke-width="0.6" stroke-linejoin="round"/>
+  <path d="M0,-3 C-10,-9 -19,-24 -16,-37 C-15,-41 -11,-43 -7,-41.5 C-4,-43.5 0,-43.5 2,-41.8 C5,-43.8 10,-43 13,-40 C18,-30 12,-12 0,-3 Z" transform="translate(52 44) rotate(-36) scale(1.05 1.05)" fill="url(#cosmos-petal)" stroke="#E58EA6" stroke-width="0.6" stroke-linejoin="round"/>
+  <path d="M0,-3 C-10,-9 -19,-24 -16,-37 C-15,-41 -11,-43 -7,-41.5 C-4,-43.5 0,-43.5 2,-41.8 C5,-43.8 10,-43 13,-40 C18,-30 12,-12 0,-3 Z" transform="translate(52 44) rotate(0) scale(1.1 1.1)" fill="url(#cosmos-petal)" stroke="#E58EA6" stroke-width="0.6" stroke-linejoin="round"/>
+  <path d="M0,-3 C-10,-9 -19,-24 -16,-37 C-15,-41 -11,-43 -7,-41.5 C-4,-43.5 0,-43.5 2,-41.8 C5,-43.8 10,-43 13,-40 C18,-30 12,-12 0,-3 Z" transform="translate(52 44) rotate(36) scale(1.1550000000000002 1.05)" fill="url(#cosmos-petal)" stroke="#E58EA6" stroke-width="0.6" stroke-linejoin="round"/>
+  <path d="M0,-3 C-10,-9 -19,-24 -16,-37 C-15,-41 -11,-43 -7,-41.5 C-4,-43.5 0,-43.5 2,-41.8 C5,-43.8 10,-43 13,-40 C18,-30 12,-12 0,-3 Z" transform="translate(52 44) rotate(74) scale(1.2075 1.15)" fill="url(#cosmos-petal)" stroke="#E58EA6" stroke-width="0.6" stroke-linejoin="round"/>
+  <path d="M0,-3 C-10,-9 -19,-24 -16,-37 C-15,-41 -11,-43 -7,-41.5 C-4,-43.5 0,-43.5 2,-41.8 C5,-43.8 10,-43 13,-40 C18,-30 12,-12 0,-3 Z" transform="translate(52 44) rotate(112) scale(1.1025 1.05)" fill="url(#cosmos-petal)" stroke="#E58EA6" stroke-width="0.6" stroke-linejoin="round"/>
+  <path d="M44 52 C48 58 56 58 60 52 C56 54 48 54 44 52 Z" fill="#B58A8A" opacity=".9"/>
+  <circle cx="52" cy="46" r="5.2" fill="#8E3B5A"/><g stroke="#8E3B5A" stroke-width="0.9" stroke-linecap="round"><path d="M52 41 L51 32"/><path d="M49 42 L44 34"/><path d="M55 42 L60 35"/><path d="M57 45 L65 40"/><path d="M47 46 L39 42"/></g><g fill="#8E3B5A"><circle cx="51" cy="31.5" r="1.3"/><circle cx="43.8" cy="33.6" r="1.3"/><circle cx="60.3" cy="34.6" r="1.3"/><circle cx="65.5" cy="39.6" r="1.3"/><circle cx="38.6" cy="41.6" r="1.3"/></g>
+  </g>
+  <text x="112" y="64" font-family="'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif" font-size="44" font-weight="700" fill="#4A3C36" letter-spacing="1">은파미용실</text>
+</svg>

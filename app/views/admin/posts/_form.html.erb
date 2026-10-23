@@ -1,0 +1,39 @@
+<%= form_with model: [:admin, post], class: "admin-form" do |f| %>
+  <%= render "admin/shared/errors", record: post %>
+
+  <fieldset class="translated-field">
+    <legend>공개 설정</legend>
+    <label class="check"><%= f.check_box :published %> 홈페이지에 게시하기 (체크하지 않으면 비공개로 저장됩니다)</label>
+  </fieldset>
+
+  <fieldset class="translated-field">
+    <legend>대표 이미지</legend>
+    <% if post.featured_image.attached? && post.persisted? %>
+      <p><%= image_tag url_for(post.featured_image), class: "admin-thumb", alt: "현재 대표 이미지" %></p>
+      <label class="check"><%= check_box_tag "post[remove_featured_image]", "1", false %> 현재 이미지 삭제</label>
+    <% end %>
+    <div class="field">
+      <%= f.label :featured_image, "새 이미지 올리기 (JPG, PNG, WEBP, 5MB 이하)" %>
+      <%= f.file_field :featured_image, accept: "image/jpeg,image/png,image/webp,image/gif" %>
+    </div>
+  </fieldset>
+
+  <%= render "admin/shared/translated_field", f: f, attr: :title, label: "제목", required: true %>
+
+  <% names = { ko: "한국어 (기본)", en: "영어 (English)", vi: "베트남어 (Tiếng Việt)", ja: "일본어 (日本語)" } %>
+  <fieldset class="translated-field">
+    <legend>본문</legend>
+    <% Translatable::LOCALES.each do |locale| %>
+      <details class="more-langs" <%= "open" if locale == :ko || post.public_send(:"content_#{locale}").present? %>>
+        <summary>본문 — <%= names[locale] %></summary>
+        <%= f.rich_text_area :"content_#{locale}" %>
+      </details>
+    <% end %>
+    <p class="help">다른 언어 본문을 비워 두면 한국어 본문이 대신 표시됩니다.</p>
+  </fieldset>
+
+  <div class="form-actions">
+    <%= f.submit "저장", class: "btn btn-primary" %>
+    <%= link_to "목록으로", admin_posts_path, class: "btn btn-outline" %>
+  </div>
+<% end %>

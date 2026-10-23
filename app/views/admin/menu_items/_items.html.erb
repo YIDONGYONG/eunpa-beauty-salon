@@ -1,0 +1,5 @@
+<div id="<%= dom_id(category, :items) %>" class="items">
+  <% category.menu_items.each do |item| %>
+    <%= render "admin/menu_items/item", item: item, saved: false %>
+  <% end %>
+</div>

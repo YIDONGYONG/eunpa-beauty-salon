@@ -1,0 +1,59 @@
+<% page_title t("location.title") %>
+<% page_description t("location.meta_description") %>
+<% name = t("site.name") %>
+
+<section class="section">
+  <div class="container">
+    <h1 class="page-title"><%= t("location.title") %></h1>
+
+    <div class="map-wrap"
+         data-controller="naver-map"
+         data-naver-map-client-id-value="<%= naver_client_id %>"
+         data-naver-map-lat-value="<%= site_setting.latitude %>"
+         data-naver-map-lng-value="<%= site_setting.longitude %>"
+         data-naver-map-title-value="<%= name %>">
+      <div class="map" data-naver-map-target="canvas" role="img" aria-label="<%= t('location.map_title') %>"></div>
+      <p class="map-fallback" data-naver-map-target="fallback" hidden><%= t("location.map_unavailable") %></p>
+    </div>
+
+    <div class="button-row location-actions"
+         data-controller="navi"
+         data-navi-app-url-value="<%= naver_navi_app_url(site_setting, name) %>"
+         data-navi-web-url-value="<%= naver_web_url(site_setting) %>">
+      <button type="button" class="btn btn-secondary" data-action="navi#go">
+        <span aria-hidden="true">🧭</span> <%= t("location.navi") %>
+      </button>
+      <% if site_setting.phone.present? %>
+        <%= link_to site_setting.phone_href, class: "btn btn-primary" do %>
+          <span aria-hidden="true">📞</span> <%= t("common.call") %> <span class="btn-sub"><%= site_setting.phone %></span>
+        <% end %>
+      <% end %>
+      <%= link_to naver_web_url(site_setting), class: "btn btn-outline", target: "_blank", rel: "noopener" do %>
+        <%= t("location.open_web") %>
+      <% end %>
+    </div>
+    <p class="hint"><%= t("location.navi_hint") %></p>
+
+    <dl class="info-list info-list-stack">
+      <div data-controller="copy" data-copy-text-value="<%= site_setting.address %>"
+           data-copy-done-value="<%= t('location.copied') %>" data-copy-fail-value="<%= t('location.copy_failed') %>">
+        <dt><%= t("location.address") %></dt>
+        <dd>
+          <p class="address-text"><%= site_setting.address.presence || t("location.empty") %></p>
+          <% if site_setting.address.present? %>
+            <button type="button" class="btn btn-outline" data-action="copy#copy">
+              <span aria-hidden="true">📋</span> <%= t("location.copy_address") %>
+            </button>
+            <p class="copy-status" role="status" aria-live="polite" data-copy-target="status"></p>
+          <% end %>
+        </dd>
+      </div>
+      <% { hours: :hours, closed: :closed_days, parking: :parking, entrance: :entrance }.each do |label, attr| %>
+        <div>
+          <dt><%= t("location.#{label}") %></dt>
+          <dd><%= site_setting.public_send(attr).present? ? multiline(site_setting.public_send(attr)) : t("location.empty") %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+</section>

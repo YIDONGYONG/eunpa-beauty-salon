@@ -1,0 +1,14 @@
+<% if total_pages > 1 %>
+  <nav class="pagination" aria-label="<%= t('blog.pagination') %>">
+    <% if page > 1 %>
+      <%= link_to t("blog.prev"), posts_path(page: page - 1), class: "btn btn-outline", rel: "prev" %>
+    <% end %>
+    <% (1..total_pages).each do |n| %>
+      <%= link_to n, posts_path(page: n), class: "page-link #{'is-current' if n == page}",
+                  "aria-label": t("blog.page", page: n), "aria-current": (n == page ? "page" : nil) %>
+    <% end %>
+    <% if page < total_pages %>
+      <%= link_to t("blog.next"), posts_path(page: page + 1), class: "btn btn-outline", rel: "next" %>
+    <% end %>
+  </nav>
+<% end %>

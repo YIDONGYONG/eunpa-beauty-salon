@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV["DB_HOST"] %>
+  username: <%= ENV["DB_USER"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
+
+development:
+  <<: *default
+  database: <%= ENV.fetch("DB_NAME") { "eunpa_development" } %>
+
+test:
+  <<: *default
+  database: <%= ENV.fetch("DB_TEST_NAME") { "eunpa_test" } %>
+
+# 本番サーバーは未定のため、DATABASE_URL 環境変数で接続します。
+production:
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>

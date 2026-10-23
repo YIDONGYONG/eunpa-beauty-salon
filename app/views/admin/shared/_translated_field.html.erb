@@ -1,0 +1,26 @@
+<%# 4言語の入力欄: 韓国語（デフォルト）は常に表示、その他の言語は展開して入力します。 %>
+<%# locals: f, attr, label, as (:string / :text / :rich), hint(optional), required(optional) %>
+<% as = local_assigns.fetch(:as, :string) %>
+<% names = { ko: "한국어 (기본)", en: "영어 (English)", vi: "베트남어 (Tiếng Việt)", ja: "일본어 (日本語)" } %>
+
+<fieldset class="translated-field">
+  <legend><%= label %></legend>
+  <% if local_assigns[:hint] %><p class="help"><%= hint %></p><% end %>
+
+  <div class="field">
+    <label for="<%= f.field_id(:"#{attr}_ko") %>"><%= names[:ko] %><%= " *" if local_assigns.fetch(:required, false) %></label>
+    <%= render "admin/shared/lang_input", f: f, attr: attr, locale: :ko, as: as %>
+  </div>
+
+  <% filled = %i[en vi ja].any? { |l| f.object.public_send(:"#{attr}_#{l}").present? } %>
+  <details class="more-langs" <%= "open" if filled %>>
+    <summary>다른 언어 번역 입력하기 (영어 · 베트남어 · 일본어)</summary>
+    <p class="help">비워 두면 한국어 내용이 대신 표시됩니다.</p>
+    <% %i[en vi ja].each do |locale| %>
+      <div class="field">
+        <label for="<%= f.field_id(:"#{attr}_#{locale}") %>"><%= names[locale] %></label>
+        <%= render "admin/shared/lang_input", f: f, attr: attr, locale: locale, as: as %>
+      </div>
+    <% end %>
+  </details>
+</fieldset>

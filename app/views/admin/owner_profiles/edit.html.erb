@@ -1,0 +1,64 @@
+<% content_for :title, "원장님 소개" %>
+<h1>원장님 소개·사진</h1>
+
+<%= form_with model: @profile, url: admin_owner_profile_path, method: :patch, class: "admin-form" do |f| %>
+  <%= render "admin/shared/errors", record: @profile %>
+
+  <fieldset class="translated-field">
+    <legend>원장님 사진</legend>
+    <% if @profile.photo.attached? %>
+      <p><%= image_tag url_for(@profile.photo), class: "admin-thumb", alt: "현재 원장님 사진" %></p>
+    <% else %>
+      <p class="help">아직 사진이 없어 임시 그림이 보입니다. 사진을 올리면 바로 바뀝니다.</p>
+    <% end %>
+    <div class="field">
+      <%= f.label :photo, "사진 올리기 (JPG, PNG, WEBP, 5MB 이하)" %>
+      <%= f.file_field :photo, accept: "image/jpeg,image/png,image/webp" %>
+    </div>
+  </fieldset>
+
+  <fieldset class="translated-field">
+    <legend>경력</legend>
+    <div class="field">
+      <%= f.label :years_of_experience, "경력 (년)" %>
+      <%= f.number_field :years_of_experience, min: 1, max: 80 %>
+    </div>
+  </fieldset>
+
+  <%= render "admin/shared/translated_field", f: f, attr: :name, label: "원장님 이름 / 호칭" %>
+  <%= render "admin/shared/translated_field", f: f, attr: :headline, label: "한 줄 소개", as: :text %>
+  <%= render "admin/shared/translated_field", f: f, attr: :greeting, label: "인사말", as: :text %>
+  <%= render "admin/shared/translated_field", f: f, attr: :career, label: "걸어온 길 (경력 소개)", as: :text %>
+
+  <fieldset class="translated-field">
+    <legend>매장 사진 (여러 장 올릴 수 있습니다)</legend>
+    <div class="field">
+      <%= f.label :gallery_images, "사진 추가하기 (JPG, PNG, WEBP, 장당 5MB 이하)" %>
+      <%= f.file_field :gallery_images, multiple: true, accept: "image/jpeg,image/png,image/webp" %>
+    </div>
+  </fieldset>
+
+  <div class="form-actions">
+    <%= f.submit "저장", class: "btn btn-primary" %>
+    <%= link_to "취소", admin_root_path, class: "btn btn-outline" %>
+  </div>
+<% end %>
+
+<% if @profile.photo.attached? %>
+  <%= button_to "원장님 사진 삭제", photo_admin_owner_profile_path, method: :delete, class: "btn btn-danger",
+                form: { data: { turbo_confirm: "원장님 사진을 삭제할까요?" } } %>
+<% end %>
+
+<% if @profile.gallery_images.attached? %>
+  <h2>올려 둔 매장 사진</h2>
+  <ul class="admin-gallery">
+    <% @profile.gallery_images.attachments.each do |attachment| %>
+      <li>
+        <%= image_tag url_for(attachment), alt: "" %>
+        <%= button_to "삭제", gallery_image_admin_owner_profile_path(attachment_id: attachment.id), method: :delete,
+                      class: "btn btn-danger btn-small",
+                      form: { data: { turbo_confirm: "이 사진을 삭제할까요?" } } %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

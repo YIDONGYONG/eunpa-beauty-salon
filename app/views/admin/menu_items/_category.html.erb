@@ -1,0 +1,7 @@
+<section class="category-card <%= 'is-hidden' unless category.visible? %>" id="<%= dom_id(category) %>">
+  <%= render "admin/menu_categories/head", category: category, saved: false %>
+
+  <%= render "admin/menu_items/items", category: category %>
+
+  <%= render "admin/menu_items/new_form", category: category, item: category.menu_items.new %>
+</section>
