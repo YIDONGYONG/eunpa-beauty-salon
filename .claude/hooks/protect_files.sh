@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# PreToolUse(Edit|Write): 비밀 값/자동 생성 파일을 실수로 수정하지 못하게 막습니다.
+# PreToolUse(Edit|Write): 秘密の値や自動生成ファイルを誤って編集しないように止めます。
 file=$(jq -r '.tool_input.file_path // empty')
 [ -z "$file" ] && exit 0
 case "$file" in

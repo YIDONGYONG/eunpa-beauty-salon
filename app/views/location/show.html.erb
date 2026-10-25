@@ -13,19 +13,28 @@
          data-naver-map-lng-value="<%= site_setting.longitude %>"
          data-naver-map-title-value="<%= name %>">
       <div class="map" data-naver-map-target="canvas" role="img" aria-label="<%= t('location.map_title') %>"></div>
-      <p class="map-fallback" data-naver-map-target="fallback" hidden><%= t("location.map_unavailable") %></p>
+      <%# NAVER 地図が出ないとき（キーなし・エラー）の代わりの領域: 登録済みの地図画像があれば、その画像を表示します %>
+      <div class="map-fallback" data-naver-map-target="fallback" hidden>
+        <% if site_setting.map_image.attached? %>
+          <%= salon_image_tag site_setting.map_image, width: 1200, class: "map-image", alt: t("location.map_title") %>
+          <p class="hint"><%= t("location.map_image_hint") %></p>
+        <% else %>
+          <p><%= t("location.map_unavailable") %></p>
+        <% end %>
+      </div>
     </div>
 
     <div class="button-row location-actions"
          data-controller="navi"
          data-navi-app-url-value="<%= naver_navi_app_url(site_setting, name) %>"
-         data-navi-web-url-value="<%= naver_web_url(site_setting) %>">
+         data-navi-web-url-value="<%= naver_web_url(site_setting) %>"
+         data-navi-track-url-value="<%= clicks_path(locale: nil) %>">
       <button type="button" class="btn btn-secondary" data-action="navi#go">
         <span aria-hidden="true">🧭</span> <%= t("location.navi") %>
       </button>
       <% if site_setting.phone.present? %>
-        <%= link_to site_setting.phone_href, class: "btn btn-primary" do %>
-          <span aria-hidden="true">📞</span> <%= t("common.call") %> <span class="btn-sub"><%= site_setting.phone %></span>
+        <%= link_to site_setting.phone_href, class: "btn btn-primary", data: track_data(:call) do %>
+          <span aria-hidden="true">📞</span> <%= t("common.call") %>
         <% end %>
       <% end %>
       <%= link_to naver_web_url(site_setting), class: "btn btn-outline", target: "_blank", rel: "noopener" do %>
@@ -35,20 +44,25 @@
     <p class="hint"><%= t("location.navi_hint") %></p>
 
     <dl class="info-list info-list-stack">
-      <div data-controller="copy" data-copy-text-value="<%= site_setting.address %>"
-           data-copy-done-value="<%= t('location.copied') %>" data-copy-fail-value="<%= t('location.copy_failed') %>">
+      <div>
         <dt><%= t("location.address") %></dt>
         <dd>
           <p class="address-text"><%= site_setting.address.presence || t("location.empty") %></p>
-          <% if site_setting.address.present? %>
-            <button type="button" class="btn btn-outline" data-action="copy#copy">
-              <span aria-hidden="true">📋</span> <%= t("location.copy_address") %>
-            </button>
-            <p class="copy-status" role="status" aria-live="polite" data-copy-target="status"></p>
+        </dd>
+      </div>
+      <div class="salon-photo-box">
+        <dt><%= t("extras.salon_photo_title") %></dt>
+        <dd>
+          <% if site_setting.address_photo.attached? %>
+            <%= salon_image_tag site_setting.address_photo, width: 1000, class: "address-photo", alt: t("extras.address_photo_alt") %>
+          <% else %>
+            <%# 写真を登録する前の空の枠（管理画面のサイト設定で登録するとすぐ置き換わります） %>
+            <%= image_tag "salon-photo-placeholder.svg", class: "address-photo", alt: "", loading: "lazy" %>
+            <p class="hint"><%= t("extras.salon_photo_empty") %></p>
           <% end %>
         </dd>
       </div>
-      <% { hours: :hours, closed: :closed_days, parking: :parking, entrance: :entrance }.each do |label, attr| %>
+      <% { hours: :hours, closed: :closed_days }.each do |label, attr| %>
         <div>
           <dt><%= t("location.#{label}") %></dt>
           <dd><%= site_setting.public_send(attr).present? ? multiline(site_setting.public_send(attr)) : t("location.empty") %></dd>

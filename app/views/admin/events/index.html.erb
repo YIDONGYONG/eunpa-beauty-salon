@@ -1,0 +1,29 @@
+<% content_for :title, "이벤트" %>
+<div class="page-head">
+  <h1>이벤트·안내 배너</h1>
+  <%= link_to "＋ 새 이벤트", new_admin_event_path, class: "btn btn-primary" %>
+</div>
+<p class="help">기간 안에만 홈 화면에 보이고, 종료일이 지나면 자동으로 사라집니다. 쿠폰 번호 없이 "전화 예약 시 말씀해 주세요"처럼 문구로 안내합니다.</p>
+
+<% if @events.empty? %>
+  <p class="empty">등록된 이벤트가 없습니다.</p>
+<% else %>
+  <ul class="post-admin-list">
+    <% @events.each do |event| %>
+      <li class="post-admin-item">
+        <div>
+          <strong class="post-admin-title"><%= event.title_ko %></strong>
+          <span class="tag <%= event.published? ? 'tag-on' : 'tag-off' %>"><%= event.published? ? "보이게 설정" : "숨김" %></span>
+          <% if event.published? && Event.active.exists?(event.id) %><span class="tag tag-on">지금 홈에 보임</span><% end %>
+          <div class="help"><%= event.starts_on || "시작 제한 없음" %> ~ <%= event.ends_on || "종료 제한 없음" %></div>
+        </div>
+        <div class="item-actions">
+          <%= link_to "수정", edit_admin_event_path(event), class: "btn btn-outline btn-small" %>
+          <%= button_to (event.published? ? "숨기기" : "보이게 하기"), toggle_admin_event_path(event), method: :patch, class: "btn btn-outline btn-small" %>
+          <%= button_to "삭제", admin_event_path(event), method: :delete, class: "btn btn-danger btn-small",
+                        form: { data: { turbo_confirm: "'#{event.title_ko}' 이벤트를 삭제할까요? (휴지통에서 되돌릴 수 있습니다)" } } %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

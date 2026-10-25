@@ -6,7 +6,8 @@
 
   <fieldset class="translated-field">
     <legend>원장님 사진</legend>
-    <% if @profile.photo.attached? %>
+    <p class="help">사진을 올려도 아래 "공개 화면에 보이기"를 체크하기 전에는 홈페이지에 나오지 않습니다. 준비가 되면 체크하고 저장하세요.</p>
+    <% if saved_attachment?(@profile.photo) %>
       <p><%= image_tag url_for(@profile.photo), class: "admin-thumb", alt: "현재 원장님 사진" %></p>
     <% else %>
       <p class="help">아직 사진이 없어 임시 그림이 보입니다. 사진을 올리면 바로 바뀝니다.</p>
@@ -14,6 +15,10 @@
     <div class="field">
       <%= f.label :photo, "사진 올리기 (JPG, PNG, WEBP, 5MB 이하)" %>
       <%= f.file_field :photo, accept: "image/jpeg,image/png,image/webp" %>
+    </div>
+    <div class="field">
+      <%= f.check_box :show_photo_on_home %>
+      <%= f.label :show_photo_on_home, "공개 화면에 보이기 (홈 맨 위의 문구 위쪽, 미용실 소개 페이지)" %>
     </div>
   </fieldset>
 
@@ -27,7 +32,28 @@
 
   <%= render "admin/shared/translated_field", f: f, attr: :name, label: "원장님 이름 / 호칭" %>
   <%= render "admin/shared/translated_field", f: f, attr: :headline, label: "한 줄 소개", as: :text %>
-  <%= render "admin/shared/translated_field", f: f, attr: :greeting, label: "인사말", as: :text %>
+  <fieldset class="translated-field">
+    <legend>인사말 (여러 개 등록하면 방문할 때마다 무작위로 하나가 보입니다)</legend>
+    <% greetings = @profile.greetings.to_a
+       greetings << @profile.greetings.build if greetings.size < 3 %>
+    <%= f.fields_for :greetings, greetings do |g| %>
+      <div class="field">
+        <%= g.label :body_ko, "인사말 #{g.index.to_i + 1} (한국어)" %>
+        <%= g.text_area :body_ko, rows: 4 %>
+      </div>
+      <details class="more-langs" <%= "open" if g.object.body_en.present? %>>
+        <summary>영어 번역 입력하기</summary>
+        <div class="field">
+          <%= g.label :body_en, "인사말 #{g.index.to_i + 1} (영어)" %>
+          <%= g.text_area :body_en, rows: 4 %>
+        </div>
+      </details>
+      <div class="field">
+        <%= g.check_box :visible %>
+        <%= g.label :visible, "이 인사말 보이기" %>
+      </div>
+    <% end %>
+  </fieldset>
   <%= render "admin/shared/translated_field", f: f, attr: :career, label: "걸어온 길 (경력 소개)", as: :text %>
 
   <fieldset class="translated-field">
@@ -44,15 +70,16 @@
   </div>
 <% end %>
 
-<% if @profile.photo.attached? %>
+<% if saved_attachment?(@profile.photo) %>
   <%= button_to "원장님 사진 삭제", photo_admin_owner_profile_path, method: :delete, class: "btn btn-danger",
                 form: { data: { turbo_confirm: "원장님 사진을 삭제할까요?" } } %>
 <% end %>
 
-<% if @profile.gallery_images.attached? %>
+<% saved_gallery = @profile.gallery_images.attachments.select(&:persisted?) %>
+<% if saved_gallery.any? %>
   <h2>올려 둔 매장 사진</h2>
   <ul class="admin-gallery">
-    <% @profile.gallery_images.attachments.each do |attachment| %>
+    <% saved_gallery.each do |attachment| %>
       <li>
         <%= image_tag url_for(attachment), alt: "" %>
         <%= button_to "삭제", gallery_image_admin_owner_profile_path(attachment_id: attachment.id), method: :delete,
@@ -62,3 +89,4 @@
     <% end %>
   </ul>
 <% end %>
+

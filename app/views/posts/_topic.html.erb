@@ -1,0 +1,12 @@
+<%# ホームの「TOPICS」用の小さな記事カード（画像・日付・タイトル） %>
+<article class="topic-card">
+  <%= link_to post_path(post), class: "topic-link" do %>
+    <% if post.featured_image.attached? %>
+      <%= salon_image_tag post.featured_image, width: 520, height: 360, alt: "" %>
+    <% else %>
+      <%= image_tag "post-placeholder.svg", alt: "", loading: "lazy" %>
+    <% end %>
+    <p class="topic-date"><%= post_date(post.published_at) %></p>
+    <h3 class="topic-title"><%= post.title %></h3>
+  <% end %>
+</article>

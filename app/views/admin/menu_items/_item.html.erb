@@ -21,7 +21,7 @@
       <details class="more-langs" <%= "open" if item.errors.any? %>>
         <summary>번역·설명 입력하기</summary>
         <div class="grid-2">
-          <% { en: "영어", vi: "베트남어", ja: "일본어" }.each do |locale, label| %>
+          <% { en: "영어" }.each do |locale, label| %>
             <div class="field">
               <%= f.label :"name_#{locale}", "시술명 (#{label})" %>
               <%= f.text_field :"name_#{locale}", lang: locale %>
@@ -33,7 +33,7 @@
           <%= f.text_field :description_ko, placeholder: "예) 샴푸와 드라이 포함" %>
         </div>
         <div class="grid-2">
-          <% { en: "영어", vi: "베트남어", ja: "일본어" }.each do |locale, label| %>
+          <% { en: "영어" }.each do |locale, label| %>
             <div class="field">
               <%= f.label :"description_#{locale}", "설명 (#{label})" %>
               <%= f.text_field :"description_#{locale}", lang: locale %>

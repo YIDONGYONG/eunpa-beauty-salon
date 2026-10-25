@@ -1,0 +1,24 @@
+<% content_for :title, "휴지통" %>
+<h1>휴지통</h1>
+<p class="help">삭제한 항목이 여기에 보관됩니다. "되돌리기"를 누르면 원래대로 돌아옵니다. "완전 삭제"는 되돌릴 수 없습니다.</p>
+
+<% if @entries.empty? %>
+  <p class="empty">휴지통이 비어 있습니다.</p>
+<% else %>
+  <ul class="post-admin-list">
+    <% @entries.each do |entry| %>
+      <li class="post-admin-item">
+        <div>
+          <strong class="post-admin-title"><%= entry.title %></strong>
+          <span class="tag tag-off"><%= entry.type_label %></span>
+          <div class="help"><%= l(entry.discarded_at, format: :short) %> 삭제</div>
+        </div>
+        <div class="item-actions">
+          <%= button_to "되돌리기", admin_restore_trash_path(type: entry.type, id: entry.record.id), method: :patch, class: "btn btn-primary btn-small" %>
+          <%= button_to "완전 삭제", admin_purge_trash_path(type: entry.type, id: entry.record.id), method: :delete, class: "btn btn-danger btn-small",
+                        form: { data: { turbo_confirm: "'#{entry.title}' 을(를) 완전히 삭제할까요? 되돌릴 수 없습니다." } } %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

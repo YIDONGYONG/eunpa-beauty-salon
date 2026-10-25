@@ -1,0 +1,12 @@
+<%# 初回来店特典・お知らせ。期間中のものがあるときだけ表示（管理画面の「イベント」で編集） %>
+<% event = Event.current %>
+<% if event %>
+  <section class="event-banner" aria-label="<%= t("extras.event_label") %>">
+    <div class="container">
+      <div class="event-box">
+      <p class="event-title"><span class="event-label"><%= t("extras.event_label") %></span> <%= event.title %></p>
+      <% if event.message.present? %><p class="event-message"><%= event.message %></p><% end %>
+      </div>
+    </div>
+  </section>
+<% end %>

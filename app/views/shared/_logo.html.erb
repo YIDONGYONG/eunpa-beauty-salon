@@ -1,18 +1,2 @@
-<%# ロゴ: 4枚花びらのアイコン + 「Eunpa / HAIR SALON」ワードマーク（名前はリンクの aria-label で読み上げられます） %>
-<span class="logo">
-  <span class="logo-mark" aria-hidden="true">
-    <svg viewBox="0 0 48 48" width="30" height="30" focusable="false">
-      <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round">
-        <circle cx="24" cy="12.5" r="7"/>
-        <circle cx="24" cy="35.5" r="7"/>
-        <circle cx="12.5" cy="24" r="7"/>
-        <circle cx="35.5" cy="24" r="7"/>
-        <circle cx="24" cy="24" r="3.6"/>
-      </g>
-    </svg>
-  </span>
-  <span class="logo-words" aria-hidden="true">
-    <span class="logo-name">Eunpa</span>
-    <span class="logo-sub">HAIR SALON</span>
-  </span>
-</span>
+<%# ロゴ: 新ロゴ（透過 WebP）。名前はリンクの aria-label で読み上げられます %>
+<%= image_tag "logo-header.webp", alt: "", width: 640, height: 270, class: "logo" %>

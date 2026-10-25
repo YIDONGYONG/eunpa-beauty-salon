@@ -1,9 +1,26 @@
+# 秘密・ローカル専用のファイルはイメージに入れない（config/master.key が入らないことが重要）
 .git
+.github
+.claude
 .env
 .env.*
 !.env.example
+config/master.key
+config/credentials/*.key
+*.pem
 log/*
 tmp/*
 storage/*
+db/*.sqlite3*
 node_modules
 public/assets
+vendor/bundle
+docs
+README*.md
+db/seed_images/owner.jpg
+app/assets/images/Owner.JPG
+app/assets/images/kosumosu.png
+app/assets/images/cut.png
+app/assets/images/perm.png
+app/assets/images/hair.png
+app/assets/images/logo.png

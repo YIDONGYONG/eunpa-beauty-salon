@@ -1,36 +1,111 @@
 <% page_description t("home.meta_description") %>
 
-<section class="hero <%= "has-photo" if site_setting.hero_photo.attached? %>">
-  <% if site_setting.hero_photo.attached? %>
-    <%= salon_image_tag site_setting.hero_photo, width: 1600, class: "hero-photo", alt: "", "aria-hidden": "true", loading: "eager" %>
-  <% else %>
-    <div class="hero-art" aria-hidden="true"><%= render "shared/flower", size: 360 %></div>
-  <% end %>
-  <div class="container">
-    <div class="hero-card">
-      <div class="hero-flower"><%= render "shared/flower", size: 88 %></div>
-      <p class="hero-hello"><%= t("home.hero_hello") %></p>
-      <h1 class="hero-title"><%= t("site.name") %></h1>
-      <p class="hero-tagline"><%= site_setting.tagline.presence || t("site.default_tagline") %></p>
-      <div class="button-row">
-        <%= render "shared/contact_buttons" %>
-      </div>
+<%# ① ヒーロー: 新ロゴ + 最初の文言 + 大きなボタン（写真は使わず、やわらかなグラデーション） %>
+<section class="hero">
+  <div class="container hero-inner">
+    <%= image_tag "logo-hero.webp", alt: t("site.name"), width: 800, height: 591, class: "hero-logo", loading: "eager", fetchpriority: "high" %>
+    <%# 院長の写真（あとから追加する場所）: 管理画面で「公開画面に表示」がオンで写真があるときだけ表示。既定は非表示 %>
+    <% if owner_profile.show_photo_on_home? && owner_profile.photo.attached? %>
+      <%= salon_image_tag owner_profile.photo, width: 480, class: "hero-owner-photo", alt: t("about.photo_alt"), loading: "eager" %>
+    <% end %>
+    <h1 class="hero-title"><%= safe_join(site_setting.hero_phrase.split(/\r?\n|\\n/), tag.br) %></h1>
+    <p class="hero-sub"><%= t("home.hero_sub") %></p>
+    <div class="button-row">
+      <%= render "shared/contact_buttons" %>
     </div>
   </div>
 </section>
 
-<section class="section" id="prices" aria-labelledby="prices-title">
+<%= render "shared/event_banner" %>
+
+<section class="info-strip" aria-label="<%= t("home.info_title") %>">
   <div class="container">
-    <p class="eyebrow"><%= t("home.price_eyebrow") %></p>
-    <h2 id="prices-title" class="section-title"><%= t("home.price_title") %></h2>
+    <dl class="info-list">
+      <div>
+        <dt><%= t("home.hours") %></dt>
+        <dd><%= site_setting.hours.present? ? multiline(site_setting.hours) : t("home.info_empty") %></dd>
+      </div>
+      <div>
+        <dt><%= t("home.closed") %></dt>
+        <dd><%= site_setting.closed_days.present? ? multiline(site_setting.closed_days) : t("home.info_empty") %></dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<%# ② TOPICS: 最近のブログ（小さなカードが横に並ぶ） %>
+<section class="section topics" aria-labelledby="topics-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow"><%= t("home.label_topics") %></p>
+      <h2 id="topics-title" class="section-title"><%= t("home.posts_title") %></h2>
+    </div>
+    <% if @recent_posts.any? %>
+      <div class="topic-grid">
+        <%= render partial: "posts/topic", collection: @recent_posts, as: :post %>
+      </div>
+      <p class="section-more"><%= link_to t("home.posts_more"), posts_path, class: "btn btn-outline" %></p>
+    <% else %>
+      <p class="section-more"><%= t("blog.empty") %></p>
+    <% end %>
+  </div>
+</section>
+
+<%# ③ コンセプト: 大きなグラデーションの面 + 中央寄せの文章 %>
+<section class="concept" aria-labelledby="about-title">
+  <div class="container concept-inner">
+    <p class="eyebrow"><%= t("home.label_about") %></p>
+    <h2 id="about-title" class="concept-title"><%= t("home.about_title") %></h2>
+    <p class="badge"><%= t("about.years", years: owner_profile.years_of_experience) %></p>
+    <div class="concept-text"><%= multiline owner_profile.headline.presence || owner_profile.random_greeting&.body.to_s.truncate(120) %></div>
+    <p><%= link_to t("home.about_more"), about_path, class: "btn btn-outline" %></p>
+  </div>
+</section>
+
+<%# ④ カット・パーマ: 茶色の面に、2つの円（カテゴリのアイコン）が重なる %>
+<% services = @price_list.map(&:first).select { |c| c.image.attached? }.first(2) %>
+<section class="duo" aria-labelledby="duo-title">
+  <div class="container duo-inner">
+    <p class="eyebrow"><%= t("home.label_services") %></p>
+    <h2 id="duo-title" class="duo-title"><%= t("home.services_title") %></h2>
+    <% if services.any? %>
+      <div class="duo-circles" aria-hidden="true">
+        <% services.each do |category| %>
+          <figure class="duo-circle">
+            <%= salon_image_tag category.image, width: 400, alt: "" %>
+            <figcaption><%= category.name %></figcaption>
+          </figure>
+        <% end %>
+      </div>
+    <% end %>
+    <p class="duo-text"><%= t("home.services_text") %></p>
+    <p><%= link_to t("home.services_button"), "#prices", class: "btn btn-light" %></p>
+  </div>
+</section>
+
+<%# ⑤ 料金表 %>
+<section class="section price-section" id="prices" aria-labelledby="prices-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow"><%= t("home.label_price") %></p>
+      <h2 id="prices-title" class="section-title"><%= t("home.price_title") %></h2>
+    </div>
     <% if @price_list.empty? %>
       <p><%= t("home.price_empty") %></p>
     <% else %>
       <div class="price-grid">
-        <% @price_list.each_with_index do |(category, items), index| %>
-          <article class="price-card <%= "price-card-wide" if [ 0, 3 ].include?(index % 4) %>">
+        <% @price_list.each do |(category, items)| %>
+          <article class="price-card">
+            <% unless category.image.attached? %>
             <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><circle cx="6" cy="6.5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="17.5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.2 8 20 19M8.2 16 20 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <h3 class="price-card-title"><%= category.name %></h3>
+            <% end %>
+            <h3 class="price-card-title">
+              <% if category.image.attached? %>
+                <%# 見出しの文字の横の小さなアイコン（文字の大きさに合わせる）。160px に縮小して読み込むので軽い %>
+                <%= salon_image_tag category.image, width: 160, class: "price-card-icon", alt: "" %>
+              <% end %>
+              <span><%= category.name %></span>
+            </h3>
             <ul class="price-list">
               <% items.each do |item| %>
                 <li>
@@ -52,51 +127,13 @@
   </div>
 </section>
 
-<section class="section section-alt" aria-labelledby="about-title">
-  <div class="container about-summary">
-    <% if owner_profile.photo.attached? %>
-      <%= salon_image_tag owner_profile.photo, width: 480, class: "owner-photo", alt: t("about.photo_alt") %>
-    <% else %>
-      <%= image_tag "owner-placeholder.svg", class: "owner-photo", alt: t("about.photo_alt"), loading: "lazy" %>
+<section class="section visit-band" aria-label="<%= t("nav.location") %>">
+  <div class="container">
+    <% if site_setting.address.present? %>
+      <p class="visit-address"><%= site_setting.address %></p>
     <% end %>
-    <div>
-      <p class="eyebrow"><%= t("home.about_eyebrow") %></p>
-      <h2 id="about-title" class="section-title"><%= t("home.about_title") %></h2>
-      <p class="badge"><%= t("about.years", years: owner_profile.years_of_experience) %></p>
-      <%= multiline owner_profile.headline.presence || owner_profile.greeting.to_s.truncate(120) %>
-      <p><%= link_to t("home.about_more"), about_path, class: "btn btn-outline" %></p>
+    <div class="button-row">
+      <%= render "shared/contact_buttons" %>
     </div>
-  </div>
-</section>
-
-<section class="section" aria-labelledby="posts-title">
-  <div class="container">
-    <p class="eyebrow"><%= t("home.posts_eyebrow") %></p>
-    <h2 id="posts-title" class="section-title"><%= t("home.posts_title") %></h2>
-    <% if @recent_posts.any? %>
-      <div class="post-grid">
-        <%= render partial: "posts/card", collection: @recent_posts, as: :post %>
-      </div>
-      <p><%= link_to t("home.posts_more"), posts_path, class: "btn btn-outline" %></p>
-    <% else %>
-      <p><%= t("blog.empty") %></p>
-    <% end %>
-  </div>
-</section>
-
-<section class="section section-green" aria-labelledby="info-title">
-  <div class="container">
-    <p class="eyebrow"><%= t("home.info_eyebrow") %></p>
-    <h2 id="info-title" class="section-title"><%= t("home.info_title") %></h2>
-    <dl class="info-list">
-      <div>
-        <dt><%= t("home.hours") %></dt>
-        <dd><%= site_setting.hours.present? ? multiline(site_setting.hours) : t("home.info_empty") %></dd>
-      </div>
-      <div>
-        <dt><%= t("home.closed") %></dt>
-        <dd><%= site_setting.closed_days.present? ? multiline(site_setting.closed_days) : t("home.info_empty") %></dd>
-      </div>
-    </dl>
   </div>
 </section>

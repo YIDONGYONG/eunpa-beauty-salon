@@ -83,3 +83,10 @@ trix-editor { background: #fff; min-height: 260px; font-size: 1.125rem; line-hei
   .post-admin-item .item-actions { margin-top: 0; }
   .dash-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* 携帯幅で横スクロールが出ないようにする: fieldset は既定で内容の幅まで広がろうとするため、別に抑える */
+fieldset { min-width: 0; }
+.admin-form input[type="file"], .admin-form input, .admin-form textarea, .admin-form select { max-width: 100%; }
+trix-toolbar, trix-editor { max-width: 100%; }
+trix-toolbar .trix-button-row { flex-wrap: wrap; }
+trix-toolbar .trix-button-group { margin-bottom: 6px; }

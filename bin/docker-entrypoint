@@ -1,11 +1,34 @@
 #!/bin/bash
 set -e
 
-# サーバー起動前に DB を準備（なければ作成 → マイグレーション → シード）。シードは何度実行しても安全です。
+# 開発: サーバー起動前に DB を準備（なければ作成 → マイグレーション → シード）。シードは何度実行しても安全です。
+# 本番: DB が無ければ Litestream のレプリカから復元 → マイグレーション → （任意で）シード →
+#       Litestream が Rails サーバーを子プロセスとして起動し、DB を継続的にレプリケートします。
 if [[ "$*" == *"rails server"* ]]; then
   rm -f tmp/pids/server.pid
-  bin/rails db:prepare
-  bin/rails db:seed
+
+  if [ "$RAILS_ENV" = "production" ]; then
+    DATA_DIR="${DATA_DIR:-/data}"
+    export DATA_DIR
+    mkdir -p "$DATA_DIR"
+
+    if [ -n "$LITESTREAM_REPLICA_URL" ]; then
+      # DB が無く、レプリカがあるときだけ復元（初回起動やバックアップ前は何もしない）
+      litestream restore -config config/litestream.yml -if-db-not-exists -if-replica-exists "$DATA_DIR/production.sqlite3"
+    else
+      echo "[entrypoint] LITESTREAM_REPLICA_URL が未設定です。バックアップなしで起動します。" >&2
+    fi
+
+    bin/rails db:prepare
+    if [ "$RUN_SEED" = "true" ]; then bin/rails db:seed; fi
+
+    if [ -n "$LITESTREAM_REPLICA_URL" ]; then
+      exec litestream replicate -config config/litestream.yml -exec "$*"
+    fi
+  else
+    bin/rails db:prepare
+    bin/rails db:seed
+  fi
 fi
 
 exec "$@"

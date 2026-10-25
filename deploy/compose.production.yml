@@ -1,0 +1,36 @@
+# VM（AWS Lightsail ソウル 1GB）で使う Compose。
+#   web   : Rails + Litestream（外には公開しない）
+#   caddy : HTTPS の入口（80/443 を公開。証明書は自動取得）
+# 使い方: /opt/eunpa に置き、同じ場所に .env（deploy/env.production.example を参照）と Caddyfile を置く
+#   docker compose -f compose.production.yml up -d    （GitHub Actions は `docker compose pull && up -d` を実行）
+services:
+  web:
+    image: ${IMAGE:-ghcr.io/OWNER/REPO}:latest   # OWNER/REPO は GitHub のリポジトリ名に置き換える
+    restart: unless-stopped
+    env_file: .env
+    expose:
+      - "3000"
+    volumes:
+      - /var/lib/eunpa:/data      # SQLite と画像（VM のディスク）
+    mem_limit: 700m               # 1GB の VM で OS と Caddy の分を残す
+    logging: &logging
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }   # ログでディスクを埋めない
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on: [ web ]
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      APP_HOST: ${APP_HOST}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data           # 証明書（消すと再取得になり、取得回数の制限に当たる恐れ）
+    mem_limit: 100m
+    logging: *logging
+
+volumes:
+  caddy_data:

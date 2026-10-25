@@ -4,11 +4,11 @@ module Admin
     before_action :set_item, only: %i[update destroy toggle move_up move_down]
 
     def index
-      @categories = MenuCategory.ordered.includes(:menu_items)
+      @categories = MenuCategory.kept.ordered.includes(:menu_items)
     end
 
     def create
-      category = MenuCategory.find(params.dig(:menu_item, :menu_category_id))
+      category = MenuCategory.kept.find(params.dig(:menu_item, :menu_category_id))
       @item = category.menu_items.new(item_params)
       if @item.save
         respond_with_streams(
@@ -35,7 +35,7 @@ module Admin
     end
 
     def destroy
-      @item.destroy
+      @item.discard!
       respond_with_streams(turbo_stream.remove(@item))
     end
 

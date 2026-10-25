@@ -16,8 +16,8 @@ module Eunpa
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
-    # 多言語: 韓国語（デフォルト）/ 英語 / ベトナム語 / 日本語
-    config.i18n.available_locales = %i[ko en vi ja]
+    # 多言語: 韓国語（デフォルト）/ 英語
+    config.i18n.available_locales = %i[ko en]
     config.i18n.default_locale = :ko
     config.i18n.fallbacks = [ :ko ]
     config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.yml")]

@@ -1,36 +1,16 @@
-# 開発環境: `docker compose up` 一発で Web（Rails）+ DB（PostgreSQL）が起動します。
+# 開発環境: `docker compose up` 一発で Rails（SQLite 内蔵）が起動します。DB コンテナは不要です。
 # アクセス: http://localhost:3001   管理画面: http://localhost:3001/admin
 # （3000番は他の課題と重ならないよう 3001 を使用。変更するには .env に WEB_PORT=好きな番号）
 services:
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: eunpa
-      POSTGRES_PASSWORD: eunpa_dev_password
-      POSTGRES_DB: eunpa_development
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U eunpa -d eunpa_development"]
-      interval: 3s
-      timeout: 3s
-      retries: 20
-
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     command: bin/rails server -b 0.0.0.0 -p 3000
-    depends_on:
-      db:
-        condition: service_healthy
     ports:
       - "${WEB_PORT:-3001}:3000"
     environment:
       RAILS_ENV: development
-      DB_HOST: db
-      DB_USER: eunpa
-      DB_PASSWORD: eunpa_dev_password
-      DB_NAME: eunpa_development
-      DB_TEST_NAME: eunpa_test
       # 以下の値は .env ファイル（.env.example を参照）で変更できます。
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-change-me-please}
@@ -40,10 +20,3 @@ services:
       UPLOAD_MAX_MB: ${UPLOAD_MAX_MB:-5}
     volumes:
       - .:/rails
-      - bundle:/usr/local/bundle
-      - storage:/rails/storage
-
-volumes:
-  db_data:
-  bundle:
-  storage:

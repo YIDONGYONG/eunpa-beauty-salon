@@ -3,7 +3,7 @@
 <% when :text %>
   <%= f.text_area field, rows: 4, lang: locale %>
 <% when :rich %>
-  <%= f.rich_text_area field %>
+  <%= f.rich_text_area field, aria: { label: "본문" } %>
 <% else %>
   <%= f.text_field field, lang: locale %>
 <% end %>

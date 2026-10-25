@@ -6,25 +6,25 @@
     <h1 class="page-title"><%= t("about.title") %></h1>
 
     <div class="owner">
-      <% if owner_profile.photo.attached? %>
+      <% if owner_profile.show_photo_on_home? && owner_profile.photo.attached? %>
         <%= salon_image_tag owner_profile.photo, width: 640, class: "owner-photo", alt: t("about.photo_alt") %>
-      <% else %>
-        <%= image_tag "owner-placeholder.svg", class: "owner-photo", alt: t("about.photo_alt") %>
       <% end %>
       <div>
         <h2 class="section-title"><%= t("about.owner_title") %></h2>
         <p class="owner-name"><%= owner_profile.name %></p>
         <p class="badge"><%= t("about.years", years: owner_profile.years_of_experience) %></p>
-        <%= translation_fallback_notice(owner_profile.name_translated? || owner_profile.greeting_translated?) %>
+        <% greeting = owner_profile.random_greeting %>
+        <%= translation_fallback_notice(owner_profile.name_translated? || greeting&.body_translated?) %>
         <% if owner_profile.headline.present? %>
           <p class="lead"><%= owner_profile.headline %></p>
         <% end %>
       </div>
     </div>
 
-    <% if owner_profile.greeting.present? %>
+    <%# あいさつ文は複数登録でき、表示のたびにランダムで1つ選ばれます %>
+    <% if greeting %>
       <h2 class="section-title"><%= t("about.greeting_title") %></h2>
-      <div class="prose"><%= multiline owner_profile.greeting %></div>
+      <div class="prose"><%= multiline greeting.body %></div>
     <% end %>
 
     <% if owner_profile.career.present? %>
@@ -51,3 +51,4 @@
     <% end %>
   </div>
 </section>
+

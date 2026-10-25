@@ -15,6 +15,8 @@ export default class extends Controller {
 
   loadScript() {
     if (window.naver && window.naver.maps) return Promise.resolve()
+    // キーが無効・URL 未登録のとき NAVER が呼ぶ関数。代わりの表示（地図画像）に切り替える
+    window.navermap_authFailure = () => this.showFallback()
     return new Promise((resolve, reject) => {
       const script = document.createElement("script")
       script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${encodeURIComponent(this.clientIdValue)}`
@@ -29,13 +31,18 @@ export default class extends Controller {
     const position = new naver.maps.LatLng(this.latValue, this.lngValue)
     const map = new naver.maps.Map(this.canvasTarget, {
       center: position,
-      zoom: 16,
+      zoom: 17, // 少し近め（お年寄りにも建物が見分けやすい）
       scaleControl: false,
       mapDataControl: false,
       zoomControl: true,
       zoomControlOptions: { position: naver.maps.Position.TOP_RIGHT }
     })
-    new naver.maps.Marker({ position, map, title: this.titleValue })
+    // 大きな丸いピン + 店名ラベル（小さな標準ピンだと見つけにくい）。店名は HTML エスケープして埋め込む
+    const label = this.titleValue.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c])
+    new naver.maps.Marker({
+      position, map, title: this.titleValue,
+      icon: { content: `<div class="map-pin"><span class="map-pin-label">${label}</span><span class="map-pin-dot"></span></div>`, anchor: new naver.maps.Point(14, 14) }
+    })
   }
 
   showFallback() {

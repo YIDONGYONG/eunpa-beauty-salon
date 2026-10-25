@@ -5,7 +5,12 @@ gem "rails", "~> 8.1.3"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.1"
+gem "sqlite3", ">= 2.1"
+
+# Rails 8 標準の Solid 3 種（Redis 不要）。キャッシュ / ジョブ / WebSocket を SQLite で動かす
+gem "solid_cache"
+gem "solid_queue"
+gem "solid_cable"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -29,14 +34,14 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 
-# 관리자 비밀번호 해시 (has_secure_password)
+# 管理者パスワードのハッシュ化（has_secure_password）
 gem "bcrypt", "~> 3.1"
 
-# 한국어/영어/베트남어/일본어의 날짜·숫자·검증 메시지 번역
+# 韓国語・英語の日付・数値・検証メッセージの翻訳
 gem "rails-i18n", "~> 8.0"
 
 group :development, :test do
-  # .env 파일 로드 (Docker 밖에서 실행할 때)
+  # .env ファイルの読み込み（Docker の外で実行するとき）
   gem "dotenv-rails"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

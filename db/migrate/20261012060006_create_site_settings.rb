@@ -4,7 +4,7 @@ class CreateSiteSettings < ActiveRecord::Migration[8.1]
       t.string :phone
       t.decimal :latitude, precision: 10, scale: 7
       t.decimal :longitude, precision: 10, scale: 7
-      # 4개 언어로 입력하는 텍스트 설정
+      # 4言語で入力するテキスト設定（のちに ko / en の2言語へ縮小。ADR 0003）
       %w[tagline address hours closed_days parking entrance business_info].each do |col|
         %w[ko en vi ja].each { |l| t.text :"#{col}_#{l}" }
       end

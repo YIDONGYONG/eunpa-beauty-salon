@@ -1,11 +1,11 @@
 module ApplicationHelper
-  LOCALE_CODES = { ko: "KO", en: "EN", vi: "VI", ja: "JA" }.freeze
+  LOCALE_CODES = { ko: "KO", en: "EN" }.freeze
 
   def base_url
     ENV["APP_BASE_URL"].presence || request.base_url
   end
 
-  # 価格表記: 「30,000원」/「30,000원부터」（言語別の形式は locale ファイル）
+  # 価格表記: 「30,000ウォン」/「30,000ウォンから」（言語別の形式は locale ファイル）
   def format_price(item)
     amount = number_with_delimiter(item.price, delimiter: ",")
     t(item.price_from? ? "price.from" : "price.won", amount: amount)
@@ -59,6 +59,17 @@ module ApplicationHelper
   # 改行を含むテキストを安全に段落として表示
   def multiline(text)
     simple_format(h(text.to_s), {}, sanitize: false)
+  end
+
+  # 保存済みの添付かどうか。検証エラーでフォームを再表示するとき、未保存（拒否された）添付を
+  # url_for すると例外になるため、管理画面のサムネイル表示はこれで守る。
+  def saved_attachment?(attachment)
+    attachment.attached? && attachment.blob.persisted?
+  end
+
+  # ボタンのクリック数の計測用 data 属性（kind: :call / :directions / :kakao）
+  def track_data(kind)
+    { controller: "track", action: "click->track#send", track_kind_value: kind, track_url_value: clicks_path(locale: nil) }
   end
 
   # ---- NAVER 地図 / 道案内 ----

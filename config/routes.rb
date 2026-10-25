@@ -8,7 +8,8 @@ Rails.application.routes.draw do
     resource :session, only: %i[create destroy]
     resource :password, only: %i[edit update]
     resource :site_setting, only: %i[edit update] do
-      delete "hero_photo", action: :destroy_hero_photo, as: :hero_photo
+      delete "address_photo", action: :destroy_address_photo, as: :address_photo
+      delete "map_image", action: :destroy_map_image, as: :map_image
     end
     resource :owner_profile, only: %i[edit update] do
       delete "photo", action: :destroy_photo, as: :photo
@@ -32,14 +33,24 @@ Rails.application.routes.draw do
     resources :posts, except: :show do
       member { patch :toggle }
     end
+    resources :events, except: :show do
+      member { patch :toggle }
+    end
+    # 削除したデータを元に戻すゴミ箱（論理削除。ADR 0006）
+    resources :trash, only: :index, controller: "trash"
+    patch "trash/:type/:id/restore", to: "trash#restore", as: :restore_trash
+    delete "trash/:type/:id", to: "trash#destroy", as: :purge_trash
   end
+
+  # ---- ボタンのクリック数（個人情報は保存しない）----
+  post "clicks", to: "clicks#create", as: :clicks
 
   # ---- SEO ----
   get "sitemap.xml", to: "sitemaps#show", defaults: { format: :xml }
   get "robots.txt", to: "robots#show", defaults: { format: :text }
 
-  # ---- 公開サイト（/ko /en /vi /ja）----
-  scope "/:locale", locale: /ko|en|vi|ja/ do
+  # ---- 公開サイト（/ko /en）----
+  scope "/:locale", locale: /ko|en/ do
     root "home#show"
     get "about", to: "about#show", as: :about
     resources :posts, path: "blog", only: %i[index show]

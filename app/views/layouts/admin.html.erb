@@ -22,8 +22,10 @@
         <nav class="admin-nav" aria-label="관리자 메뉴">
           <%= link_to "메뉴·가격", admin_menu_items_path %>
           <%= link_to "블로그 글", admin_posts_path %>
+          <%= link_to "이벤트", admin_events_path %>
           <%= link_to "원장님 소개", edit_admin_owner_profile_path %>
           <%= link_to "사이트 설정", edit_admin_site_setting_path %>
+          <%= link_to "휴지통", admin_trash_index_path %>
           <%= link_to "홈페이지 보기", root_path(locale: :ko), target: "_blank", rel: "noopener" %>
           <%= button_to "로그아웃", admin_session_path, method: :delete, class: "admin-link-button", form_class: "inline-form" %>
         </nav>

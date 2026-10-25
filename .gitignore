@@ -1,11 +1,11 @@
-# 환경변수 / 비밀 값
+# 環境変数・秘密の値
 /.env
 /.env.*
 !/.env.example
 /config/master.key
 /config/credentials/*.key
 
-# 로그, 임시 파일, 업로드 파일
+# ログ・一時ファイル・アップロードファイル
 /log/*
 /tmp/*
 !/log/.keep
@@ -20,3 +20,12 @@
 .DS_Store
 /node_modules
 /db/*.sqlite3*
+
+# 個人の写真（公開リポジトリに載せない）。本人の許可を得た写真だけを管理画面からアップロードする
+/db/seed_images/owner.jpg
+/app/assets/images/Owner.JPG
+/app/assets/images/kosumosu.png
+app/assets/images/cut.png
+app/assets/images/perm.png
+app/assets/images/hair.png
+app/assets/images/logo.png

@@ -1,0 +1,11 @@
+# Caddy: HTTPS 証明書（Let's Encrypt）を自動で取得・更新し、Rails コンテナへ転送する。
+# {$APP_HOST} は .env の APP_HOST（例: eunpabeautysalon.duckdns.org）。ポート 80 / 443 を外へ公開する。
+{$APP_HOST} {
+	encode zstd gzip
+	reverse_proxy web:3000
+
+	# 画像・CSS・JS は長めにキャッシュ（Rails 側のヘッダを尊重しつつ圧縮）
+	header {
+		-Server
+	}
+}

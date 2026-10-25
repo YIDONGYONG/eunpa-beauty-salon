@@ -20,6 +20,7 @@ module Positionable
 
   def siblings
     scope = self.class.ordered
+    scope = scope.kept if scope.respond_to?(:kept)
     self.class.position_scope_columns.each { |col| scope = scope.where(col => self[col]) }
     scope
   end

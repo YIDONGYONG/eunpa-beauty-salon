@@ -6,7 +6,7 @@
       <%= image_tag "post-placeholder.svg", alt: "", loading: "lazy" %>
     <% end %>
     <div class="post-card-body">
-      <h3 class="post-card-title"><%= post.title %></h3>
+      <h2 class="post-card-title"><%= post.title %></h2>
       <p class="post-card-date"><%= post_date(post.published_at) %></p>
       <p><%= post.excerpt %></p>
     </div>

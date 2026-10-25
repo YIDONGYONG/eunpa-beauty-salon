@@ -1,0 +1,28 @@
+<%= form_with model: [ :admin, event ], class: "admin-form" do |f| %>
+  <%= render "admin/shared/errors", record: event %>
+  <%= render "admin/shared/translated_field", f: f, attr: :title, label: "제목 (예: 첫 방문 감사 혜택)", required: true %>
+  <%= render "admin/shared/translated_field", f: f, attr: :message, label: "문구 (예: 전화 예약 시 말씀해 주세요)", as: :text %>
+
+  <fieldset class="translated-field">
+    <legend>보이는 기간</legend>
+    <div class="grid-2">
+      <div class="field">
+        <%= f.label :starts_on, "시작일" %>
+        <%= f.date_field :starts_on %>
+      </div>
+      <div class="field">
+        <%= f.label :ends_on, "종료일 (이 날까지 보입니다)" %>
+        <%= f.date_field :ends_on %>
+      </div>
+    </div>
+    <div class="field">
+      <%= f.check_box :published %>
+      <%= f.label :published, "홈 화면에 보이게 하기" %>
+    </div>
+  </fieldset>
+
+  <div class="form-actions">
+    <%= f.submit "저장", class: "btn btn-primary" %>
+    <%= link_to "취소", admin_events_path, class: "btn btn-outline" %>
+  </div>
+<% end %>

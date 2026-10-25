@@ -1,8 +1,8 @@
-# Fixed UI text — English. DRAFT translation: please have a professional translator review.
+# 固定文言（英語）。翻訳は草稿です。公開前に専門家の校閲を受けてください。
 en:
   site:
     name: "Eunpa Hair Salon"
-    default_tagline: "Caring for your hair with over 30 years of experience"
+    default_tagline: "A 30-year veteran owner personally styles hair to suit you, with care."
   skip_to_content: "Skip to main content"
   nav:
     label: "Main menu"
@@ -16,13 +16,12 @@ en:
     label: "Language"
     ko: "한국어"
     en: "English"
-    vi: "Tiếng Việt"
-    ja: "日本語"
   tabbar:
     label: "Quick menu"
     home: "Home"
     prices: "Prices"
-    about: "About"
+    blog: "Blog"
+    location: "Visit"
     call: "Call"
   common:
     call: "Call us"
@@ -36,11 +35,21 @@ en:
     from: "From %{amount} KRW"
   date_format: "%b %-d, %Y"
   home:
-    price_eyebrow: "Fair prices"
     about_eyebrow: "30 years of experience"
     posts_eyebrow: "Hair care stories"
     info_eyebrow: "Visit us"
-    hero_hello: "Welcome"
+    hero_candidates:
+      c1: "For 30 years, with the same steady hands, we have cared for your hair."
+      c2: "Where our 30-year regulars come back. Sit back and relax today, too."
+      c3: "A 30-year veteran owner personally styles hair to suit you, with care."
+    label_topics: "TOPICS"
+    label_about: "ABOUT"
+    label_services: "CUT & PERM"
+    label_price: "MENU & PRICE"
+    services_title: "Focused on two things: cuts and perms"
+    services_text: "With 30 years of experience, we take the time to understand your hair and care for it with sincerity."
+    services_button: "View prices"
+    hero_sub: "Specialists in cuts & perms"
     price_title: "Price List"
     price_note: "Prices may vary depending on hair length and condition. Please feel free to call us."
     price_empty: "Our price list is being prepared."
@@ -77,20 +86,16 @@ en:
   location:
     title: "Location"
     address: "Address"
-    copy_address: "Copy address"
-    copied: "Address copied"
-    copy_failed: "Could not copy. Please select the address and copy it."
     navi: "Navigate with Naver Maps"
     navi_hint: "If the Naver Map app is installed it will open; otherwise you will be taken to Naver Map on the web."
     hours: "Opening hours"
     closed: "Closed"
-    parking: "Parking"
-    entrance: "How to find the entrance"
     map_title: "Map"
     map_unavailable: "The map could not be loaded. Please use the button below to view it on Naver Map."
+    map_image_hint: "The live map could not be loaded, so a map image is shown. Use the buttons below to find directions in NAVER Map."
     open_web: "View on Naver Map"
     empty: "Coming soon."
-    meta_description: "Address, map, phone number, opening hours and parking information for Eunpa Hair Salon."
+    meta_description: "Address, map, phone number, and opening hours for Eunpa Hair Salon."
   footer:
     business_info: "Business information"
     business_info_pending: "Business information is coming soon."
@@ -100,3 +105,11 @@ en:
     title: "Privacy Policy"
     pending: "Our privacy policy is being prepared."
     meta_description: "Eunpa Hair Salon privacy policy"
+  extras:
+    event_label: "Notice"
+    kakao: "Chat on KakaoTalk"
+    address_photo_alt: "Photo of the salon"
+    salon_photo_title: "The salon"
+    salon_photo_empty: "Photos are coming soon."
+  seo:
+    salon_kind: "Haircut & perm salon"

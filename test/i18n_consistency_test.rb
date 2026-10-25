@@ -2,7 +2,7 @@ require "test_helper"
 
 # ハーネス（ガードレール）: 翻訳漏れと、公開画面へのハードコード文言を自動で検出します。
 class I18nConsistencyTest < ActiveSupport::TestCase
-  LOCALES = %w[ko en vi ja].freeze
+  LOCALES = %w[ko en].freeze
 
   def flatten(hash, prefix = nil)
     hash.flat_map do |key, value|
@@ -16,7 +16,7 @@ class I18nConsistencyTest < ActiveSupport::TestCase
     flatten(data.fetch(locale)).sort
   end
 
-  test "en, vi, ja define exactly the same keys as ko" do
+  test "en defines exactly the same keys as ko" do
     base = keys_for("ko")
     (LOCALES - [ "ko" ]).each do |locale|
       keys = keys_for(locale)
@@ -42,7 +42,8 @@ class I18nConsistencyTest < ActiveSupport::TestCase
 
   test "public views contain no hard-coded Korean text (use config/locales)" do
     files = Dir[Rails.root.join("app/views/**/*.erb")].reject do |f|
-      f.include?("/views/admin/") || f.include?("admin") && f.include?("/layouts/")
+      f.include?("/views/admin/") || f.include?("admin") && f.include?("/layouts/") ||
+        f.include?("/views/error_mailer/") # 管理者（開発者）宛のエラー通知メールは公開画面ではない
     end
     offenders = files.flat_map do |file|
       File.readlines(file).each_with_index.filter_map do |line, i|

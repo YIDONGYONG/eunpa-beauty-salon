@@ -1,0 +1,16 @@
+<%# 検索エンジン向けの構造化データ（JSON-LD: HairSalon）。住所・電話・営業時間・座標は「サイト設定」の値 %>
+<%
+  data = {
+    "@context" => "https://schema.org",
+    "@type" => "HairSalon",
+    "name" => t("site.name"),
+    "url" => "#{base_url}/#{I18n.locale}",
+    "telephone" => site_setting.phone.presence,
+    "address" => (site_setting.address.present? ? { "@type" => "PostalAddress", "streetAddress" => site_setting.address, "addressCountry" => "KR" } : nil),
+    "geo" => (site_setting.coordinates? ? { "@type" => "GeoCoordinates", "latitude" => site_setting.latitude.to_f, "longitude" => site_setting.longitude.to_f } : nil),
+    "openingHours" => site_setting.schema_hours.presence,
+    "areaServed" => site_setting.region_name.presence,
+    "sameAs" => [ site_setting.kakao_url.presence ].compact.presence
+  }.compact
+%>
+<script type="application/ld+json"><%= raw json_escape(data.to_json) %></script>

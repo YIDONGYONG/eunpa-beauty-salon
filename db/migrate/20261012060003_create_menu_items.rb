@@ -6,8 +6,8 @@ class CreateMenuItems < ActiveRecord::Migration[8.1]
       t.string :name_en
       t.string :name_vi
       t.string :name_ja
-      t.integer :price, null: false, default: 0 # 원 단위 정수
-      t.boolean :price_from, null: false, default: false # "~부터" 표기
+      t.integer :price, null: false, default: 0 # ウォン単位の整数
+      t.boolean :price_from, null: false, default: false # 「〜から」表記
       t.text :description_ko
       t.text :description_en
       t.text :description_vi

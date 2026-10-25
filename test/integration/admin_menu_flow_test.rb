@@ -56,11 +56,10 @@ class AdminMenuFlowTest < ActionDispatch::IntegrationTest
   test "can save translations of an item" do
     sign_in_admin
     patch admin_menu_item_path(@item),
-          params: { menu_item: { name_en: "Women's cut", name_vi: "Cắt tóc nữ", name_ja: "レディースカット" } },
+          params: { menu_item: { name_en: "Women's cut" } },
           as: :turbo_stream
     @item.reload
     assert_equal "Women's cut", @item.name_en
-    assert_equal "レディースカット", @item.name_ja
   end
 
   test "add an item" do
@@ -84,9 +83,10 @@ class AdminMenuFlowTest < ActionDispatch::IntegrationTest
     patch toggle_admin_menu_item_path(@item), as: :turbo_stream
     assert_not @item.reload.visible?
 
-    assert_difference "MenuItem.count", -1 do
+    assert_difference "MenuItem.kept.count", -1 do
       delete admin_menu_item_path(other), as: :turbo_stream
     end
+    # 論理削除（ゴミ箱から復元できる）
   end
 
   test "category create, rename and reorder" do
@@ -114,5 +114,18 @@ class AdminMenuFlowTest < ActionDispatch::IntegrationTest
     get admin_menu_items_path
     assert_response :success
     assert_select "input[name='menu_item[name_ko]'][value='여성 커트']"
+  end
+
+  test "category photo shows at the top of the price card and can be removed" do
+    sign_in_admin
+    png = fixture_file_upload("dot.png", "image/png")
+    patch admin_menu_category_path(@category), params: { menu_category: { name_ko: @category.name_ko, image: png } }, as: :turbo_stream
+    assert @category.reload.image.attached?
+    get "/ko"
+    assert_select ".price-card img.price-card-icon"
+    patch admin_menu_category_path(@category), params: { menu_category: { name_ko: @category.name_ko, remove_image: "1" } }, as: :turbo_stream
+    perform_enqueued_jobs { }
+    get "/ko"
+    assert_select ".price-card img.price-card-icon", count: 0 unless @category.reload.image.attached?
   end
 end

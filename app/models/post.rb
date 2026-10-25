@@ -2,6 +2,7 @@ class Post < ApplicationRecord
   include Translatable
   include ImageValidation
   include ImageOptimization
+  include SoftDeletable
 
   PER_PAGE = 6
 
@@ -16,7 +17,7 @@ class Post < ApplicationRecord
 
   before_save :stamp_published_at
 
-  scope :published, -> { where(published: true) }
+  scope :published, -> { kept.where(published: true) }
   scope :latest, -> { order(published_at: :desc, id: :desc) }
 
   def self.page(number)

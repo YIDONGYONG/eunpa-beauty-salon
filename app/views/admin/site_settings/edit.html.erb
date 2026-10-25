@@ -6,19 +6,6 @@
   <%= render "admin/shared/errors", record: @setting %>
 
   <fieldset class="translated-field">
-    <legend>첫 화면 배경 사진 (미용실 내부 사진)</legend>
-    <% if @setting.hero_photo.attached? %>
-      <p><%= image_tag url_for(@setting.hero_photo), class: "admin-thumb", alt: "현재 첫 화면 배경 사진" %></p>
-    <% else %>
-      <p class="help">아직 사진이 없어 분홍빛 배경이 보입니다. 가로로 넓은 매장 사진을 올리면 바로 바뀝니다.</p>
-    <% end %>
-    <div class="field">
-      <%= f.label :hero_photo, "사진 올리기 (JPG, PNG, WEBP, 5MB 이하)" %>
-      <%= f.file_field :hero_photo, accept: "image/jpeg,image/png,image/webp" %>
-    </div>
-  </fieldset>
-
-  <fieldset class="translated-field">
     <legend>연락처와 지도 위치</legend>
     <div class="field">
       <%= f.label :phone, "전화번호 (예: 02-1234-5678)" %>
@@ -37,12 +24,67 @@
     <p class="help">위도·경도는 네이버 지도에서 가게 위치를 우클릭하거나 길게 눌러 확인할 수 있습니다.</p>
   </fieldset>
 
-  <%= render "admin/shared/translated_field", f: f, attr: :tagline, label: "한 줄 인사말 (홈 화면 맨 위)" %>
+  <fieldset class="translated-field">
+    <legend>홈 화면 맨 위 문구 (3가지 중 선택하거나 직접 입력)</legend>
+    <% 1.upto(3) do |n| %>
+      <div class="field">
+        <%= f.radio_button :hero_phrase_choice, n %>
+        <%= f.label :"hero_phrase_choice_#{n}", I18n.t("home.hero_candidates.c#{n}", locale: :ko).tr("\n", " "), for: f.field_id(:hero_phrase_choice, n) %>
+      </div>
+    <% end %>
+    <div class="field">
+      <%= f.radio_button :hero_phrase_choice, 0 %>
+      <%= f.label :hero_phrase_choice_0, "아래에 직접 쓴 문구 사용", for: f.field_id(:hero_phrase_choice, 0) %>
+    </div>
+  </fieldset>
+  <%= render "admin/shared/translated_field", f: f, attr: :tagline, label: "직접 쓰는 문구 (위에서 '직접 쓴 문구'를 고른 경우)" %>
+  <%= render "admin/shared/translated_field", f: f, attr: :region_name, label: "지역명 (검색 노출용, 예: 상주)",
+                hint: "페이지 제목·설명에 들어가 \"상주 미용실\"처럼 검색되게 돕습니다." %>
+
+  <fieldset class="translated-field">
+    <legend>검색엔진용 영업시간</legend>
+    <div class="field">
+      <%= f.label :schema_hours, "영문 형식 (예: Mo-Sa 09:00-19:00 / 요일: Mo Tu We Th Fr Sa Su)" %>
+      <%= f.text_field :schema_hours %>
+    </div>
+    <p class="help">네이버·구글 검색에 영업시간이 정확히 나오도록 돕는 값입니다. 위의 "영업시간" 문구와 같은 시간으로 적어 주세요.</p>
+  </fieldset>
+
+  <fieldset class="translated-field">
+    <legend>지도 이미지 (네이버 지도가 안 뜰 때 대신 보임)</legend>
+    <p class="help">네이버 지도 화면에서 가게 위치를 크게 확대한 뒤 캡처해서 올려 주세요. 진짜 지도가 정상으로 뜨면 이 이미지는 보이지 않습니다.</p>
+    <% if saved_attachment?(@setting.map_image) %>
+      <p><%= image_tag url_for(@setting.map_image), class: "admin-thumb", alt: "현재 지도 이미지" %></p>
+    <% end %>
+    <div class="field">
+      <%= f.label :map_image, "지도 이미지 올리기 (JPG, PNG, WEBP, 5MB 이하)" %>
+      <%= f.file_field :map_image, accept: "image/jpeg,image/png,image/webp" %>
+    </div>
+  </fieldset>
+
+  <fieldset class="translated-field">
+    <legend>카카오톡 채널 (선택)</legend>
+    <div class="field">
+      <%= f.label :kakao_url, "카카오톡 채널 주소 (https:// 로 시작, 비우면 버튼이 보이지 않습니다)" %>
+      <%= f.url_field :kakao_url, placeholder: "https://pf.kakao.com/..." %>
+    </div>
+  </fieldset>
+
+  <fieldset class="translated-field">
+    <legend>미용실 사진 (주소 아래 박스)</legend>
+    <p class="help">"찾아오시는 길" 화면의 주소 바로 아래 "미용실 사진" 박스에 보입니다. 아직 올리지 않으면 빈 그림과 "사진을 곧 올려 드리겠습니다"가 보입니다. 가게 건물이나 입구를 찍은 사진을 올려 주세요.</p>
+    <% if saved_attachment?(@setting.address_photo) %>
+      <p><%= image_tag url_for(@setting.address_photo), class: "admin-thumb", alt: "현재 주소 사진" %></p>
+    <% end %>
+    <div class="field">
+      <%= f.label :address_photo, "사진 올리기 (JPG, PNG, WEBP, 5MB 이하)" %>
+      <%= f.file_field :address_photo, accept: "image/jpeg,image/png,image/webp" %>
+    </div>
+  </fieldset>
+
   <%= render "admin/shared/translated_field", f: f, attr: :address, label: "주소", as: :text %>
   <%= render "admin/shared/translated_field", f: f, attr: :hours, label: "영업시간", as: :text %>
   <%= render "admin/shared/translated_field", f: f, attr: :closed_days, label: "휴무일", as: :text %>
-  <%= render "admin/shared/translated_field", f: f, attr: :parking, label: "주차 안내", as: :text %>
-  <%= render "admin/shared/translated_field", f: f, attr: :entrance, label: "입구 찾는 법", as: :text %>
   <%= render "admin/shared/translated_field", f: f, attr: :business_info, label: "사업자 정보 (화면 맨 아래에 표시)", as: :text,
                 hint: "상호, 대표자, 사업자등록번호 등을 입력하세요." %>
 
@@ -52,7 +94,12 @@
   </div>
 <% end %>
 
-<% if @setting.hero_photo.attached? %>
-  <%= button_to "첫 화면 사진 삭제", hero_photo_admin_site_setting_path, method: :delete, class: "btn btn-danger",
-                form: { data: { turbo_confirm: "첫 화면 배경 사진을 삭제할까요?" } } %>
+<% if saved_attachment?(@setting.map_image) %>
+  <%= button_to "지도 이미지 삭제", map_image_admin_site_setting_path, method: :delete, class: "btn btn-danger",
+                form: { data: { turbo_confirm: "지도 이미지를 삭제할까요?" } } %>
+<% end %>
+
+<% if saved_attachment?(@setting.address_photo) %>
+  <%= button_to "미용실 사진 삭제", address_photo_admin_site_setting_path, method: :delete, class: "btn btn-danger",
+                form: { data: { turbo_confirm: "미용실 사진을 삭제할까요?" } } %>
 <% end %>

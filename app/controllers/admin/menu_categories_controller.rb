@@ -16,6 +16,7 @@ module Admin
     end
 
     def update
+      @category.image.purge_later if params.dig(:menu_category, :remove_image) == "1"
       if @category.update(category_params)
         respond_with_streams(head_stream(saved: true))
       else
@@ -24,7 +25,7 @@ module Admin
     end
 
     def destroy
-      @category.destroy
+      @category.discard!
       respond_with_streams(categories_stream)
     end
 
@@ -52,7 +53,7 @@ module Admin
 
     def categories_stream
       turbo_stream.update("categories", partial: "admin/menu_items/categories",
-                                         locals: { categories: MenuCategory.ordered.includes(:menu_items) })
+                                         locals: { categories: MenuCategory.kept.ordered.includes(:menu_items) })
     end
 
     def set_category
@@ -67,7 +68,7 @@ module Admin
     end
 
     def category_params
-      params.require(:menu_category).permit(:name_ko, :name_en, :name_vi, :name_ja, :visible)
+      params.require(:menu_category).permit(:name_ko, :name_en, :visible, :image)
     end
   end
 end

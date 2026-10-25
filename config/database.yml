@@ -1,20 +1,38 @@
+# SQLite 構成（運用も SQLite。理由は docs/adr/0001-sqlite.md）
+# - WAL モード + busy_timeout で、読み取りが書き込みを待たない
+# - 本番は用途別に 4 ファイルへ分割（primary / cache / queue / cable）。
+#   Litestream でバックアップするのは primary のみ（cache は再生成可能、queue / cable は一時データ）
+# - 保存先は DATA_DIR（既定 storage/）。Docker では永続ボリュームをここに置く
 default: &default
-  adapter: postgresql
-  encoding: unicode
-  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: <%= ENV["DB_HOST"] %>
-  username: <%= ENV["DB_USER"] %>
-  password: <%= ENV["DB_PASSWORD"] %>
+  adapter: sqlite3
+  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 3 } %>
+  timeout: 5000 # busy_timeout（ミリ秒）
+  pragmas:
+    journal_mode: wal
+    synchronous: normal
+    foreign_keys: true
 
 development:
   <<: *default
-  database: <%= ENV.fetch("DB_NAME") { "eunpa_development" } %>
+  database: <%= ENV.fetch("DATA_DIR") { "storage" } %>/development.sqlite3
 
 test:
   <<: *default
-  database: <%= ENV.fetch("DB_TEST_NAME") { "eunpa_test" } %>
+  database: storage/test<%= ENV["TEST_ENV_NUMBER"] %>.sqlite3
 
-# 本番サーバーは未定のため、DATABASE_URL 環境変数で接続します。
 production:
-  <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
+  primary:
+    <<: *default
+    database: <%= ENV.fetch("DATA_DIR") { "storage" } %>/production.sqlite3
+  cache:
+    <<: *default
+    database: <%= ENV.fetch("DATA_DIR") { "storage" } %>/production_cache.sqlite3
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *default
+    database: <%= ENV.fetch("DATA_DIR") { "storage" } %>/production_queue.sqlite3
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: <%= ENV.fetch("DATA_DIR") { "storage" } %>/production_cable.sqlite3
+    migrations_paths: db/cable_migrate

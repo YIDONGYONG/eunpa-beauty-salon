@@ -3,7 +3,7 @@ module Admin
     before_action :set_post, only: %i[edit update destroy toggle]
 
     def index
-      @posts = Post.order(created_at: :desc)
+      @posts = Post.kept.order(created_at: :desc)
     end
 
     def new
@@ -32,8 +32,8 @@ module Admin
     end
 
     def destroy
-      @post.destroy
-      redirect_to admin_posts_path, notice: "글을 삭제했습니다.", status: :see_other
+      @post.discard!
+      redirect_to admin_posts_path, notice: "글을 삭제했습니다. (휴지통에서 되돌릴 수 있습니다)", status: :see_other
     end
 
     # 公開／非公開の切り替え
@@ -46,7 +46,7 @@ module Admin
     private
 
     def set_post
-      @post = Post.find(params[:id])
+      @post = Post.kept.find(params[:id])
     end
 
     def post_params

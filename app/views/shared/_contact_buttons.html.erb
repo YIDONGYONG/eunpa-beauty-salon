@@ -1,8 +1,13 @@
 <% if site_setting.phone.present? %>
-  <%= link_to site_setting.phone_href, class: "btn btn-primary" do %>
-    <span aria-hidden="true">📞</span> <%= t("common.call") %> <span class="btn-sub"><%= site_setting.phone %></span>
+  <%= link_to site_setting.phone_href, class: "btn btn-primary", data: track_data(:call) do %>
+    <span aria-hidden="true">📞</span> <%= t("common.call") %>
   <% end %>
 <% end %>
-<%= link_to location_path, class: "btn btn-secondary" do %>
+<%= link_to location_path, class: "btn btn-secondary", data: track_data(:directions) do %>
   <span aria-hidden="true">📍</span> <%= t("common.directions") %>
+<% end %>
+<% if site_setting.kakao? %>
+  <%= link_to site_setting.kakao_url, class: "btn btn-kakao", target: "_blank", rel: "noopener", data: track_data(:kakao) do %>
+    <span aria-hidden="true">💬</span> <%= t("extras.kakao") %>
+  <% end %>
 <% end %>

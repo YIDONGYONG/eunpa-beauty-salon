@@ -9,7 +9,7 @@
 | `.claude/hooks/protect_files.sh` | 비밀 파일·`schema.rb`·기존 마이그레이션 수정 차단 |
 | `.claude/hooks/after_edit.sh` | 수정 직후 rubocop 자동 교정, locale/뷰 수정 시 번역 일관성 검사 |
 | `.claude/skills/verify` | 완료 전 검증 절차(`bin/verify`) |
-| `.claude/skills/add-translated-content` | 4개 언어 필드/문구 추가 절차 |
+| `.claude/skills/add-translated-content` | 2개 언어(ko/en) 필드/문구 추가 절차 |
 | `bin/verify` | rubocop → brakeman → 테스트 한 번에 실행 |
 | `test/i18n_consistency_test.rb` | 번역 키 누락 · 변수 불일치 · 공개 뷰 한글 하드코딩 검출 |
 

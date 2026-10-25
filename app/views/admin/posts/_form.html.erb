@@ -20,13 +20,13 @@
 
   <%= render "admin/shared/translated_field", f: f, attr: :title, label: "제목", required: true %>
 
-  <% names = { ko: "한국어 (기본)", en: "영어 (English)", vi: "베트남어 (Tiếng Việt)", ja: "일본어 (日本語)" } %>
+  <% names = { ko: "한국어 (기본)", en: "영어 (English)" } %>
   <fieldset class="translated-field">
     <legend>본문</legend>
     <% Translatable::LOCALES.each do |locale| %>
       <details class="more-langs" <%= "open" if locale == :ko || post.public_send(:"content_#{locale}").present? %>>
         <summary>본문 — <%= names[locale] %></summary>
-        <%= f.rich_text_area :"content_#{locale}" %>
+        <%= f.rich_text_area :"content_#{locale}", aria: { label: "블로그 본문 (#{names[locale]})" } %>
       </details>
     <% end %>
     <p class="help">다른 언어 본문을 비워 두면 한국어 본문이 대신 표시됩니다.</p>

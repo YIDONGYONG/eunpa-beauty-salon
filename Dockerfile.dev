@@ -1,0 +1,24 @@
+# 開発用イメージ（`docker compose up` で使用）。本番用は Dockerfile を参照
+ARG RUBY_VERSION=3.4
+FROM ruby:${RUBY_VERSION}-slim
+
+ENV LANG=C.UTF-8 \
+    BUNDLE_PATH=/usr/local/bundle \
+    RAILS_ENV=development
+
+# libvips: 画像リサイズ（Active Storage）/ curl: ヘルスチェック / sqlite3: DB 確認用 CLI
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git curl libvips libyaml-dev pkg-config sqlite3 && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /rails
+
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+COPY . .
+RUN chmod +x bin/* bin/docker-entrypoint
+
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+EXPOSE 3000
+CMD ["bin/rails", "server", "-b", "0.0.0.0", "-p", "3000"]

@@ -11,6 +11,10 @@
     <strong>블로그 글 관리</strong>
     <span>글 쓰기·수정·공개 설정 (게시 중 <%= @counts[:published_posts] %>개 / 전체 <%= @counts[:posts] %>개)</span>
   <% end %>
+  <%= link_to admin_events_path, class: "dash-card" do %>
+    <strong>이벤트·안내 배너</strong>
+    <span>첫 방문 혜택 등을 기간을 정해 홈에 보여 줍니다</span>
+  <% end %>
   <%= link_to edit_admin_owner_profile_path, class: "dash-card" do %>
     <strong>원장님 소개·사진</strong>
     <span>인사말, 원장님 사진, 매장 사진</span>
@@ -19,8 +23,20 @@
     <strong>사이트 설정</strong>
     <span>주소, 전화번호, 영업시간, 휴무일, 주차 안내, 지도 위치</span>
   <% end %>
+  <%= link_to admin_trash_index_path, class: "dash-card" do %>
+    <strong>휴지통</strong>
+    <span>삭제한 항목을 되돌립니다 (현재 <%= @counts[:trash] %>개)</span>
+  <% end %>
   <%= link_to edit_admin_password_path, class: "dash-card" do %>
     <strong>비밀번호 변경</strong>
     <span>관리자 비밀번호를 바꿉니다</span>
   <% end %>
 </div>
+
+<h2>최근 30일 버튼 클릭 수</h2>
+<p class="help">손님이 홈페이지에서 누른 횟수입니다. (누가 눌렀는지는 저장하지 않습니다)</p>
+<ul class="click-stats">
+  <li>전화하기 <strong><%= @clicks.fetch("call", 0) %></strong>번</li>
+  <li>길 찾기 <strong><%= @clicks.fetch("directions", 0) %></strong>번</li>
+  <li>카카오톡 <strong><%= @clicks.fetch("kakao", 0) %></strong>번</li>
+</ul>

@@ -15,7 +15,7 @@ module Admin
 
     def destroy_image
       profile = OwnerProfile.instance
-      profile.gallery_images.attachments.find(params[:attachment_id]).purge_later
+      ActiveStorage::Attachment.where(record: profile).find(params[:attachment_id]).purge_later
       redirect_to edit_admin_owner_profile_path, notice: "사진을 삭제했습니다."
     end
 
@@ -28,8 +28,9 @@ module Admin
 
     def profile_params
       langs = Translatable::LOCALES
-      keys = %i[name headline greeting career].product(langs).map { |k, l| :"#{k}_#{l}" }
-      params.require(:owner_profile).permit(:years_of_experience, :photo, *keys, gallery_images: [])
+      keys = %i[name headline career].product(langs).map { |k, l| :"#{k}_#{l}" }
+      params.require(:owner_profile).permit(:years_of_experience, :photo, :show_photo_on_home, *keys, gallery_images: [],
+                                            greetings_attributes: %i[id body_ko body_en visible])
     end
   end
 end

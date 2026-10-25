@@ -1,6 +1,7 @@
 class MenuItem < ApplicationRecord
   include Translatable
   include Positionable
+  include SoftDeletable
 
   translates :name, :description
   positioned_within :menu_category_id
@@ -13,7 +14,7 @@ class MenuItem < ApplicationRecord
 
   scope :visible, -> { where(visible: true) }
 
-  # 管理者が「30,000」や「30000원」のように入力しても、数字だけを残します。
+  # 管理者が「30,000」や「30000ウォン」のように入力しても、数字だけを残します。
   def price=(value)
     super(value.is_a?(String) ? value.gsub(/[^\d]/, "").presence : value)
   end

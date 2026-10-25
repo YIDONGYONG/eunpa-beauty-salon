@@ -7,7 +7,7 @@
     <details class="more-langs">
       <summary>분류 이름 번역</summary>
       <div class="grid-2">
-        <% { en: "영어", vi: "베트남어", ja: "일본어" }.each do |locale, label| %>
+        <% { en: "영어" }.each do |locale, label| %>
           <div class="field">
             <%= f.label :"name_#{locale}", label, for: "category_name_#{locale}_#{category.id}" %>
             <%= f.text_field :"name_#{locale}", id: "category_name_#{locale}_#{category.id}", lang: locale %>
@@ -15,6 +15,15 @@
         <% end %>
       </div>
     </details>
+    <div class="field">
+      <% if saved_attachment?(category.image) %>
+        <p><%= image_tag url_for(category.image), class: "admin-thumb", alt: "현재 분류 사진" %></p>
+        <p><%= f.check_box :remove_image, { id: "remove_image_#{category.id}" }, "1", "0" %>
+           <%= f.label :remove_image, "사진 지우기", for: "remove_image_#{category.id}" %></p>
+      <% end %>
+      <%= f.label :image, "분류 이름 옆에 보일 작은 그림 (선택, 정사각형 JPG·PNG·WEBP 5MB 이하)", for: "category_image_#{category.id}" %>
+      <%= f.file_field :image, id: "category_image_#{category.id}", accept: "image/jpeg,image/png,image/webp" %>
+    </div>
     <% if category.errors.any? %>
       <p class="flash flash-alert" role="alert"><%= category.errors.full_messages.to_sentence %></p>
     <% end %>

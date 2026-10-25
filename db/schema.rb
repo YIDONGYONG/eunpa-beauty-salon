@@ -10,10 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_12_060006) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_catalog.plpgsql"
-
+ActiveRecord::Schema[8.1].define(version: 2026_10_25_090001) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -60,69 +57,91 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_060006) do
     t.index ["email"], name: "index_admin_users_on_email", unique: true
   end
 
+  create_table "click_events", force: :cascade do |t|
+    t.string "kind", null: false
+    t.string "locale", default: "ko", null: false
+    t.string "page"
+    t.datetime "created_at", null: false
+    t.index ["kind", "created_at"], name: "index_click_events_on_kind_and_created_at"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "title_ko", null: false
+    t.string "title_en"
+    t.text "message_ko"
+    t.text "message_en"
+    t.date "starts_on"
+    t.date "ends_on"
+    t.boolean "published", default: true, null: false
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["published", "starts_on", "ends_on"], name: "index_events_on_published_and_starts_on_and_ends_on"
+  end
+
   create_table "menu_categories", force: :cascade do |t|
     t.string "name_ko", null: false
     t.string "name_en"
-    t.string "name_vi"
-    t.string "name_ja"
     t.integer "position", default: 0, null: false
     t.boolean "visible", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_menu_categories_on_discarded_at"
     t.index ["position"], name: "index_menu_categories_on_position"
   end
 
   create_table "menu_items", force: :cascade do |t|
-    t.bigint "menu_category_id", null: false
+    t.integer "menu_category_id", null: false
     t.string "name_ko", null: false
     t.string "name_en"
-    t.string "name_vi"
-    t.string "name_ja"
     t.integer "price", default: 0, null: false
     t.boolean "price_from", default: false, null: false
     t.text "description_ko"
     t.text "description_en"
-    t.text "description_vi"
-    t.text "description_ja"
     t.integer "position", default: 0, null: false
     t.boolean "visible", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_menu_items_on_discarded_at"
     t.index ["menu_category_id", "position"], name: "index_menu_items_on_menu_category_id_and_position"
     t.index ["menu_category_id"], name: "index_menu_items_on_menu_category_id"
+  end
+
+  create_table "owner_greetings", force: :cascade do |t|
+    t.integer "owner_profile_id", null: false
+    t.text "body_ko", null: false
+    t.text "body_en"
+    t.integer "position", default: 0, null: false
+    t.boolean "visible", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_profile_id"], name: "index_owner_greetings_on_owner_profile_id"
   end
 
   create_table "owner_profiles", force: :cascade do |t|
     t.text "name_ko"
     t.text "name_en"
-    t.text "name_vi"
-    t.text "name_ja"
     t.text "headline_ko"
     t.text "headline_en"
-    t.text "headline_vi"
-    t.text "headline_ja"
-    t.text "greeting_ko"
-    t.text "greeting_en"
-    t.text "greeting_vi"
-    t.text "greeting_ja"
     t.text "career_ko"
     t.text "career_en"
-    t.text "career_vi"
-    t.text "career_ja"
     t.integer "years_of_experience", default: 30, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "show_photo_on_home", default: false, null: false
   end
 
   create_table "posts", force: :cascade do |t|
     t.string "title_ko", null: false
     t.string "title_en"
-    t.string "title_vi"
-    t.string "title_ja"
     t.boolean "published", default: false, null: false
     t.datetime "published_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_posts_on_discarded_at"
     t.index ["published", "published_at"], name: "index_posts_on_published_and_published_at"
   end
 
@@ -132,37 +151,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_060006) do
     t.decimal "longitude", precision: 10, scale: 7
     t.text "tagline_ko"
     t.text "tagline_en"
-    t.text "tagline_vi"
-    t.text "tagline_ja"
     t.text "address_ko"
     t.text "address_en"
-    t.text "address_vi"
-    t.text "address_ja"
     t.text "hours_ko"
     t.text "hours_en"
-    t.text "hours_vi"
-    t.text "hours_ja"
     t.text "closed_days_ko"
     t.text "closed_days_en"
-    t.text "closed_days_vi"
-    t.text "closed_days_ja"
     t.text "parking_ko"
     t.text "parking_en"
-    t.text "parking_vi"
-    t.text "parking_ja"
     t.text "entrance_ko"
     t.text "entrance_en"
-    t.text "entrance_vi"
-    t.text "entrance_ja"
     t.text "business_info_ko"
     t.text "business_info_en"
-    t.text "business_info_vi"
-    t.text "business_info_ja"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "region_name_ko"
+    t.string "region_name_en"
+    t.string "kakao_url"
+    t.integer "hero_phrase_choice", default: 3, null: false
+    t.string "schema_hours", default: "Mo-Sa 09:00-19:00"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "menu_items", "menu_categories"
+  add_foreign_key "owner_greetings", "owner_profiles"
 end

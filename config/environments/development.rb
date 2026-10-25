@@ -1,6 +1,9 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # 一時的な公開リンク（Cloudflare クイックトンネル）で見せるときに、そのホスト名を許可する。
+  config.hosts << ".trycloudflare.com"
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Make code changes take effect immediately without server restart.

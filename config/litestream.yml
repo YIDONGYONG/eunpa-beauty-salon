@@ -1,0 +1,13 @@
+# Litestream: SQLite の primary DB を S3 互換ストレージ（AWS S3 / GCS など）へ継続的にレプリケート（ADR 0002）
+#  - 複製するのは primary のみ。cache（再生成可能）と queue / cable（一時データ）は対象外
+#  - 認証: AWS S3 は LITESTREAM_ACCESS_KEY_ID / LITESTREAM_SECRET_ACCESS_KEY（バケット限定の IAM ユーザー）。
+#         GCS を使う場合は VM のサービスアカウント（鍵ファイル不要）
+#  - 値は環境変数。バケットが決まったら LITESTREAM_REPLICA_URL に入れるだけ
+#      例: s3://BUCKET_NAME/eunpa/production   /   gcs://BUCKET_NAME/eunpa/production
+#    テストでは file:///replica/production のようなローカル先でも同じ手順で復元を試せます
+dbs:
+  - path: ${DATA_DIR}/production.sqlite3
+    replica:
+      url: ${LITESTREAM_REPLICA_URL}
+      sync-interval: 10s
+      retention: 72h
