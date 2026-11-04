@@ -12,7 +12,7 @@ class PublicPagesTest < ActionDispatch::IntegrationTest
   end
 
   test "both locales render every public page" do
-    %w[ko en].each do |locale|
+    %w[ko en ja].each do |locale|
       [ "/#{locale}", "/#{locale}/about", "/#{locale}/blog", "/#{locale}/blog/#{@post.id}", "/#{locale}/location", "/#{locale}/privacy" ].each do |path|
         get path
         assert_response :success, "#{path} should render"
@@ -22,7 +22,7 @@ class PublicPagesTest < ActionDispatch::IntegrationTest
   end
 
   test "root redirects using cookie, then browser language, then Korean" do
-    get "/", headers: { "Accept-Language" => "ja,en;q=0.8" }
+    get "/", headers: { "Accept-Language" => "fr,en;q=0.8" }
     assert_redirected_to "/en"
 
     get "/", headers: { "Accept-Language" => "fr" }
@@ -60,7 +60,7 @@ class PublicPagesTest < ActionDispatch::IntegrationTest
 
   test "pages include hreflang alternates and meta description" do
     get "/ko/about"
-    assert_select "link[rel=alternate][hreflang]", count: 3 # 2言語 + x-default
+    assert_select "link[rel=alternate][hreflang]", count: 4 # 3言語 + x-default
     assert_select "meta[name=description][content]"
     assert_select "meta[property='og:title']"
   end
@@ -83,7 +83,7 @@ class PublicPagesTest < ActionDispatch::IntegrationTest
   test "sitemap lists every language and robots.txt blocks admin" do
     get "/sitemap.xml"
     assert_response :success
-    %w[ko en].each { |l| assert_includes response.body, "/#{l}/blog/#{@post.id}" }
+    %w[ko en ja].each { |l| assert_includes response.body, "/#{l}/blog/#{@post.id}" }
     get "/robots.txt"
     assert_includes response.body, "Disallow: /admin"
     assert_includes response.body, "sitemap.xml"

@@ -2,7 +2,7 @@
 en:
   site:
     name: "Eunpa Hair Salon"
-    default_tagline: "A 30-year veteran owner personally styles hair to suit you, with care."
+    default_tagline: "A 43-year veteran owner personally styles hair to suit you, with care."
   skip_to_content: "Skip to main content"
   nav:
     label: "Main menu"
@@ -16,6 +16,7 @@ en:
     label: "Language"
     ko: "한국어"
     en: "English"
+    ja: "日本語"
   tabbar:
     label: "Quick menu"
     home: "Home"
@@ -35,19 +36,19 @@ en:
     from: "From %{amount} KRW"
   date_format: "%b %-d, %Y"
   home:
-    about_eyebrow: "30 years of experience"
+    about_eyebrow: "43 years of experience"
     posts_eyebrow: "Hair care stories"
     info_eyebrow: "Visit us"
     hero_candidates:
-      c1: "For 30 years, with the same steady hands, we have cared for your hair."
-      c2: "Where our 30-year regulars come back. Sit back and relax today, too."
-      c3: "A 30-year veteran owner personally styles hair to suit you, with care."
+      c1: "For 43 years, with the same steady hands, we have cared for your hair."
+      c2: "Where our 43-year regulars come back. Sit back and relax today, too."
+      c3: "A 43-year veteran owner personally styles hair to suit you, with care."
     label_topics: "TOPICS"
     label_about: "ABOUT"
     label_services: "CUT & PERM"
     label_price: "MENU & PRICE"
     services_title: "Focused on two things: cuts and perms"
-    services_text: "With 30 years of experience, we take the time to understand your hair and care for it with sincerity."
+    services_text: "With 43 years of experience, we take the time to understand your hair and care for it with sincerity."
     services_button: "View prices"
     hero_sub: "Specialists in cuts & perms"
     price_title: "Price List"
@@ -60,8 +61,9 @@ en:
     info_title: "Hours & Days Off"
     hours: "Opening hours"
     closed: "Closed"
+    parking: "Parking"
     info_empty: "Coming soon."
-    meta_description: "Eunpa Hair Salon is a neighborhood salon run by an owner with over 30 years of experience, offering cuts and perms. See our prices and how to find us."
+    meta_description: "Eunpa Hair Salon is a neighborhood salon run by an owner with over 43 years of experience, offering cuts and perms. See our prices and how to find us."
   about:
     title: "About Us"
     owner_title: "Meet the Owner"
@@ -71,7 +73,7 @@ en:
     gallery_title: "Photos of the Salon"
     gallery_empty: "Photos of the salon are coming soon."
     photo_alt: "Photo of the owner"
-    meta_description: "Meet the owner of Eunpa Hair Salon, with over 30 years of experience, and see photos of the salon."
+    meta_description: "Meet the owner of Eunpa Hair Salon, with over 43 years of experience, and see photos of the salon."
   blog:
     title: "Blog"
     lead: "Helpful hair care tips, from seasonal care to caring for your hair after a perm."
@@ -90,6 +92,7 @@ en:
     navi_hint: "If the Naver Map app is installed it will open; otherwise you will be taken to Naver Map on the web."
     hours: "Opening hours"
     closed: "Closed"
+    parking: "Parking"
     map_title: "Map"
     map_unavailable: "The map could not be loaded. Please use the button below to view it on Naver Map."
     map_image_hint: "The live map could not be loaded, so a map image is shown. Use the buttons below to find directions in NAVER Map."

@@ -10,9 +10,9 @@
 - 시드: `bin/rails db:seed` (여러 번 실행해도 안전)
 
 ## 구조 규칙
-- 언어는 `ko`(기본) `en` 두 개뿐 (ADR 0003). 공개 주소는 `/:locale/...`, 관리자는 `/admin`(한국어 고정, locale 없음)
-- 공개 화면 문구는 `config/locales/*.yml` 만 사용 (뷰에 한글 직접 입력 금지, 2개 파일 키·`%{변수}` 동일)
-- DB 번역 필드는 `_ko/_en` 컬럼 + `Translatable` 모듈. 비어 있으면 한국어로 대체
+- 언어는 `ko`(기본) `en` `ja` 세 개 (ADR 0003, 2026-11 일본어 추가). 공개 주소는 `/:locale/...`, 관리자는 `/admin`(한국어 고정, locale 없음)
+- 공개 화면 문구는 `config/locales/*.yml` 만 사용 (뷰에 한글 직접 입력 금지, 3개 파일 키·`%{변수}` 동일)
+- DB 번역 필드는 `_ko/_en/_ja` 컬럼 + `Translatable` 모듈. 비어 있으면 한국어로 대체
 - 순서 변경은 `Positionable`, 업로드는 `ImageValidation`(형식·크기 제한) + `ImageOptimization`(자동 축소)
 - 주소·전화·좌표·영업시간은 `SiteSetting`(관리자 수정). 코드에 하드코딩 금지
 - 가격은 정수(원) 저장, 화면은 `format_price` (`30,000원`)
@@ -32,7 +32,7 @@
 - 서버·도메인 값을 코드에 넣기 (배포 파일은 `deploy/`·`Dockerfile`·`.github/workflows/deploy.yml`에 있고, 값은 환경변수 플레이스홀더로만 분리)
 - 삭제 기능을 `destroy` 로 구현 (논리 삭제 `discard!` 사용, 휴지통에서 복구 — ADR 0006)
 - 이미 쓰고 있는 Litestream 대상(primary DB) 외 파일을 "백업된다"고 말하기 (이미지는 별도 rsync)
-- 영어 번역을 "최종"이라고 말하기 — 항상 "초안, 전문 검수 필요"로 보고
+- 영어·일본어 번역을 "최종"이라고 말하기 — 항상 "초안, 전문 검수 필요"로 보고
 - 테스트를 삭제하거나 약화해서 통과시키기
 
 ## 가드레일(자동)

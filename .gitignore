@@ -29,3 +29,6 @@ app/assets/images/cut.png
 app/assets/images/perm.png
 app/assets/images/hair.png
 app/assets/images/logo.png
+app/assets/images/makeup.png
+# 분류 아이콘(출처·이용 조건 확인 전까지 공개하지 않음). 시드는 파일이 없으면 아이콘 없이 진행합니다.
+/db/seed_images/category-*.png

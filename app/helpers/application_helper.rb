@@ -1,5 +1,5 @@
 module ApplicationHelper
-  LOCALE_CODES = { ko: "KO", en: "EN" }.freeze
+  LOCALE_CODES = { ko: "KO", en: "EN", ja: "JA" }.freeze
 
   def base_url
     ENV["APP_BASE_URL"].presence || request.base_url

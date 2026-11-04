@@ -5,7 +5,7 @@ class ClicksController < ApplicationController
   skip_forgery_protection # 個人情報のない件数記録のみ。sendBeacon は CSRF トークンを付けられない
 
   def create
-    ClickEvent.create(kind: params[:kind].to_s, locale: params[:lang].to_s.presence_in(%w[ko en]) || "ko",
+    ClickEvent.create(kind: params[:kind].to_s, locale: params[:lang].to_s.presence_in(%w[ko en ja]) || "ko",
                       page: params[:page].to_s.first(40), created_at: Time.current)
     head :no_content
   end

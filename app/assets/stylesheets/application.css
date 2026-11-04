@@ -28,6 +28,8 @@
   --font: "Noto Sans KR", "Noto Sans", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
   --font-serif: "Noto Serif KR", "Noto Serif", "Batang", Georgia, serif;
 }
+html:lang(ja) { --font: "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans KR", system-ui, sans-serif;
+  --font-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif KR", serif; }
 html:lang(en) { --font: "Noto Sans", "Noto Sans KR", system-ui, sans-serif;
   --font-serif: "Noto Serif", "Noto Serif KR", Georgia, serif; }
 

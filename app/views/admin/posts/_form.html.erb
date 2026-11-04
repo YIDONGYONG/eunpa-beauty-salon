@@ -20,7 +20,7 @@
 
   <%= render "admin/shared/translated_field", f: f, attr: :title, label: "제목", required: true %>
 
-  <% names = { ko: "한국어 (기본)", en: "영어 (English)" } %>
+  <% names = { ko: "한국어 (기본)", en: "영어 (English)", ja: "일본어 (日本語)" } %>
   <fieldset class="translated-field">
     <legend>본문</legend>
     <% Translatable::LOCALES.each do |locale| %>

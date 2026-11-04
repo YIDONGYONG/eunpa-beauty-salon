@@ -27,7 +27,7 @@ module Admin
 
     def setting_params
       langs = Translatable::LOCALES
-      text_keys = %i[tagline region_name address hours closed_days business_info]
+      text_keys = %i[tagline region_name address hours closed_days parking business_info]
       params.require(:site_setting).permit(:phone, :latitude, :longitude, :address_photo, :map_image, :kakao_url, :hero_phrase_choice, :schema_hours,
                                            *text_keys.product(langs).map { |k, l| :"#{k}_#{l}" })
     end

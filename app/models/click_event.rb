@@ -4,7 +4,7 @@ class ClickEvent < ApplicationRecord
   KINDS = %w[call directions kakao].freeze
 
   validates :kind, inclusion: { in: KINDS }
-  validates :locale, inclusion: { in: %w[ko en] }
+  validates :locale, inclusion: { in: %w[ko en ja] }
 
   # { "call" => 12, "directions" => 5 } 形式で、直近 days 日の件数
   def self.counts_since(days)

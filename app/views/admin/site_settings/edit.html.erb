@@ -38,6 +38,8 @@
     </div>
   </fieldset>
   <%= render "admin/shared/translated_field", f: f, attr: :tagline, label: "직접 쓰는 문구 (위에서 '직접 쓴 문구'를 고른 경우)" %>
+  <%= render "admin/shared/translated_field", f: f, attr: :parking, label: "주차 안내", as: :text,
+                hint: "\"찾아오시는 길\" 화면의 영업시간 아래에 보입니다. 비워 두면 표시되지 않습니다." %>
   <%= render "admin/shared/translated_field", f: f, attr: :region_name, label: "지역명 (검색 노출용, 예: 상주)",
                 hint: "페이지 제목·설명에 들어가 \"상주 미용실\"처럼 검색되게 돕습니다." %>
 

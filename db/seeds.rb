@@ -27,20 +27,25 @@ end
 # ---------------------------------------------------------------- メニュー / 価格
 menu = [
   {
-    names: { ko: "커트", en: "Haircut" },
+    names: { ko: "커트", en: "Haircut", ja: "カット" },
     items: [
-      { names: { ko: "여성 커트", en: "Women's haircut" }, price: 15_000 },
-      { names: { ko: "남성 커트", en: "Men's haircut" }, price: 12_000 },
-      { names: { ko: "어린이 커트", en: "Children's haircut" }, price: 9_000 }
+      { names: { ko: "여성 커트", en: "Women's haircut", ja: "女性カット" }, price: 13_000, from: true },
+      { names: { ko: "남성 커트", en: "Men's haircut", ja: "男性カット" }, price: 13_000, from: true }
     ]
   },
   {
-    names: { ko: "파마", en: "Perm" },
+    names: { ko: "파마", en: "Perm", ja: "パーマ" },
     items: [
-      { names: { ko: "일반 파마", en: "Regular perm" }, price: 40_000, from: true },
-      { names: { ko: "셋팅 파마", en: "Setting perm" }, price: 55_000, from: true },
-      { names: { ko: "뿌리 볼륨 파마", en: "Root volume perm" }, price: 30_000, from: true,
-        desc: { ko: "정수리와 뿌리 부분만 볼륨을 살려 드립니다.", en: "Adds volume to the crown and roots only." } }
+      { names: { ko: "일반 파마", en: "Regular perm", ja: "一般パーマ" }, price: 50_000, from: true },
+      { names: { ko: "특수 파마", en: "Special perm", ja: "特殊パーマ" }, price: 100_000, from: true,
+        desc: { ko: "10만원 ~ 20만원 · 긴 머리는 추가 요금이 있습니다.", en: "100,000 – 200,000 KRW. Extra charge for long hair.",
+                ja: "10万ウォン〜20万ウォン。長い髪は追加料金がかかります。" } }
+    ]
+  },
+  {
+    names: { ko: "화장", en: "Makeup", ja: "メイク" },
+    items: [
+      { names: { ko: "혼주화장", en: "Wedding parents' makeup", ja: "婚礼ご両親のメイク" }, price: 150_000 }
     ]
   }
 ]
@@ -52,10 +57,10 @@ menu.each do |cat|
     category.save!
   end
 
-  # 料金カードの画像（db/seed_images/category-*.webp。なければ何もしない）
-  image = Rails.root.join("db/seed_images", { "커트" => "category-cut.webp", "파마" => "category-perm.webp" }.fetch(category.name_ko, "-"))
+  # 料金カードの画像（db/seed_images/category-*.png。なければ何もしない）
+  image = Rails.root.join("db/seed_images", { "커트" => "category-cut.png", "파마" => "category-perm.png", "화장" => "category-makeup.png" }.fetch(category.name_ko, "-"))
   if image.exist? && !category.image.attached?
-    category.image.attach(io: File.open(image), filename: image.basename.to_s, content_type: "image/webp")
+    category.image.attach(io: File.open(image), filename: image.basename.to_s, content_type: "image/png")
   end
 
   cat[:items].each do |it|
@@ -72,12 +77,12 @@ end
 profile = OwnerProfile.instance
 if profile.headline_ko.blank?
   profile.update!(
-    years_of_experience: 30,
+    years_of_experience: 43,
     name_ko: "원장님", name_en: "The Owner",
-    headline_ko: "30년 넘게 한자리에서 이웃의 머리를 가꿔 왔습니다.",
-    headline_en: "For over 30 years, I have cared for my neighbors' hair in the same place.",
-    career_ko: "미용 경력 30년 이상\n커트와 파마를 전문으로 합니다.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
-    career_en: "Over 30 years in hairdressing\nSpecializing in cuts and perms.\n(Placeholder text. Please edit in the admin page.)"
+    headline_ko: "43년 넘게 한자리에서 이웃의 머리를 가꿔 왔습니다.",
+    headline_en: "For over 43 years, I have cared for my neighbors' hair in the same place.",
+    career_ko: "미용 경력 43년 이상\n커트와 파마를 전문으로 합니다.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
+    career_en: "Over 43 years in hairdressing\nSpecializing in cuts and perms.\n(Placeholder text. Please edit in the admin page.)"
   )
 end
 
@@ -86,10 +91,10 @@ if profile.greetings.none?
   [
     [ "안녕하세요, 은파미용실입니다.\n오랜 시간 찾아 주시는 단골 손님들 덕분에 지금까지 올 수 있었습니다.\n머리 모양은 물론 두피와 머릿결 고민까지 편하게 말씀해 주세요. 한 분 한 분 정성껏 해 드리겠습니다.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
       "Hello, and welcome to Eunpa Hair Salon.\nWe have come this far thanks to our many loyal customers who have visited us over the years.\nPlease feel free to tell us about your hairstyle, scalp or hair concerns. We will take care of each guest with sincerity.\n(Placeholder text. Please edit in the admin page.)" ],
-    [ "30년 동안 같은 자리에서 머리를 만져 왔습니다.\n처음 오시는 분도, 오래된 단골님도 내 집처럼 편안하게 앉으세요.\n어떤 머리가 어울릴지 천천히 여쭤보고, 꼼꼼하게 해 드리겠습니다.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
-      "For over 30 years I have been doing hair in this same place.\nWhether it is your first visit or you have been with us for years, please sit back and relax as if you were at home.\nWe will take our time to learn what suits you, and do it with care.\n(Placeholder text. Please edit in the admin page.)" ],
-    [ "머리가 마음에 드시면 하루가 달라집니다.\n커트와 파마, 한 가지만 잘하자는 마음으로 30년을 해 왔습니다.\n불편한 점이 있으면 언제든 편하게 말씀해 주세요.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
-      "When you like your hair, your whole day feels different.\nFor 30 years I have focused on doing cuts and perms well.\nIf anything feels uncomfortable, please tell us anytime.\n(Placeholder text. Please edit in the admin page.)" ]
+    [ "43년 동안 같은 자리에서 머리를 만져 왔습니다.\n처음 오시는 분도, 오래된 단골님도 내 집처럼 편안하게 앉으세요.\n어떤 머리가 어울릴지 천천히 여쭤보고, 꼼꼼하게 해 드리겠습니다.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
+      "For over 43 years I have been doing hair in this same place.\nWhether it is your first visit or you have been with us for years, please sit back and relax as if you were at home.\nWe will take our time to learn what suits you, and do it with care.\n(Placeholder text. Please edit in the admin page.)" ],
+    [ "머리가 마음에 드시면 하루가 달라집니다.\n커트와 파마, 한 가지만 잘하자는 마음으로 43년을 해 왔습니다.\n불편한 점이 있으면 언제든 편하게 말씀해 주세요.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
+      "When you like your hair, your whole day feels different.\nFor 43 years I have focused on doing cuts and perms well.\nIf anything feels uncomfortable, please tell us anytime.\n(Placeholder text. Please edit in the admin page.)" ]
   ].each_with_index do |(ko, en), index|
     profile.greetings.create!(body_ko: ko, body_en: en, position: index)
   end
@@ -106,17 +111,20 @@ setting = SiteSetting.instance
 if setting.address_ko.blank?
   setting.update!(
     phone: "054-535-6353",           # NAVER プレイスの掲載情報
-    region_name_ko: "상주", region_name_en: "Sangju",
+    region_name_ko: "상주", region_name_en: "Sangju", region_name_ja: "尚州",
     hero_phrase_choice: 3,           # 1〜3: 候補（config/locales の home.hero_candidates）/ 0: tagline を使う
     latitude: 36.4126275, longitude: 128.1626006, # NAVER 地図の店舗座標
-    tagline_ko: "30년 경력 원장이 직접,\n어울리는 머리를 꼼꼼하게 해드립니다.",
-    tagline_en: "A 30-year veteran owner personally styles hair to suit you, with care.",
+    tagline_ko: "43년 경력 원장이 직접,\n어울리는 머리를 꼼꼼하게 해드립니다.",
+    tagline_en: "A 43-year veteran owner personally styles hair to suit you, with care.",
     address_ko: "경북 상주시 왕산로 160",
     address_en: "160 Wangsan-ro, Sangju-si, Gyeongsangbuk-do",
-    hours_ko: "월~토 오전 9시 ~ 오후 7시",
-    hours_en: "Mon–Sat 9:00 AM – 7:00 PM",
+    hours_ko: "오전 9시 ~ 오후 7시",
+    hours_en: "9:00 AM – 7:00 PM", hours_ja: "午前9時〜午後7時",
+    parking_ko: "중앙시장 공영주차장을 이용해 주세요.\n1시간 30분까지 무료이며, 초과 요금은 미용실에서 부담합니다.",
+    parking_en: "Please use the Jungang Market public parking lot.\nParking is free for up to 1 hour 30 minutes; any excess fee is paid by the salon.",
+    parking_ja: "中央市場公営駐車場をご利用ください。\n1時間30分まで無料です。超過分の料金は美容室が負担いたします。",
     closed_days_ko: "일요일 휴무",
-    closed_days_en: "Closed on Sundays",
+    closed_days_en: "Closed on Sundays", closed_days_ja: "日曜定休",
     business_info_ko: "상호: 은파미용실 · 대표: (입력 예정) · 사업자등록번호: (입력 예정)",
     business_info_en: "Business name: Eunpa Hair Salon · Representative: (to be added) · Business registration no.: (to be added)",
   )

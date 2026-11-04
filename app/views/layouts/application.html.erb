@@ -27,7 +27,7 @@
     <meta property="og:title" content="<%= title %>">
     <meta property="og:description" content="<%= description %>">
     <meta property="og:url" content="<%= base_url %><%= request.path %>">
-    <meta property="og:locale" content="<%= { ko: 'ko_KR', en: 'en_US' }[I18n.locale] %>">
+    <meta property="og:locale" content="<%= { ko: 'ko_KR', en: 'en_US', ja: 'ja_JP' }[I18n.locale] %>">
     <meta property="og:image" content="<%= content_for(:og_image).presence || "#{base_url}/og-image.png" %>">
     <meta name="twitter:card" content="summary_large_image">
 

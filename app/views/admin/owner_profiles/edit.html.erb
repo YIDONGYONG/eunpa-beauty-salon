@@ -41,11 +41,15 @@
         <%= g.label :body_ko, "인사말 #{g.index.to_i + 1} (한국어)" %>
         <%= g.text_area :body_ko, rows: 4 %>
       </div>
-      <details class="more-langs" <%= "open" if g.object.body_en.present? %>>
-        <summary>영어 번역 입력하기</summary>
+      <details class="more-langs" <%= "open" if g.object.body_en.present? || g.object.body_ja.present? %>>
+        <summary>영어·일본어 번역 입력하기</summary>
         <div class="field">
           <%= g.label :body_en, "인사말 #{g.index.to_i + 1} (영어)" %>
           <%= g.text_area :body_en, rows: 4 %>
+        </div>
+        <div class="field">
+          <%= g.label :body_ja, "인사말 #{g.index.to_i + 1} (일본어)" %>
+          <%= g.text_area :body_ja, rows: 4 %>
         </div>
       </details>
       <div class="field">

@@ -48,7 +48,7 @@ module Admin
     end
 
     def event_params
-      params.require(:event).permit(:title_ko, :title_en, :message_ko, :message_en, :starts_on, :ends_on, :published)
+      params.require(:event).permit(:title_ko, :title_en, :title_ja, :message_ko, :message_en, :message_ja, :starts_on, :ends_on, :published)
     end
   end
 end

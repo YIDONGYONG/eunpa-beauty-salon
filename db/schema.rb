@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_25_090001) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_04_100001) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -76,6 +76,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_090001) do
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title_ja"
+    t.text "message_ja"
     t.index ["published", "starts_on", "ends_on"], name: "index_events_on_published_and_starts_on_and_ends_on"
   end
 
@@ -87,6 +89,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_090001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "discarded_at"
+    t.string "name_ja"
     t.index ["discarded_at"], name: "index_menu_categories_on_discarded_at"
     t.index ["position"], name: "index_menu_categories_on_position"
   end
@@ -104,6 +107,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_090001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "discarded_at"
+    t.string "name_ja"
+    t.text "description_ja"
     t.index ["discarded_at"], name: "index_menu_items_on_discarded_at"
     t.index ["menu_category_id", "position"], name: "index_menu_items_on_menu_category_id_and_position"
     t.index ["menu_category_id"], name: "index_menu_items_on_menu_category_id"
@@ -117,6 +122,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_090001) do
     t.boolean "visible", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "body_ja"
     t.index ["owner_profile_id"], name: "index_owner_greetings_on_owner_profile_id"
   end
 
@@ -131,6 +137,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_090001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "show_photo_on_home", default: false, null: false
+    t.text "name_ja"
+    t.text "headline_ja"
+    t.text "career_ja"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -141,6 +150,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_090001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "discarded_at"
+    t.string "title_ja"
     t.index ["discarded_at"], name: "index_posts_on_discarded_at"
     t.index ["published", "published_at"], name: "index_posts_on_published_and_published_at"
   end
@@ -170,6 +180,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_090001) do
     t.string "kakao_url"
     t.integer "hero_phrase_choice", default: 3, null: false
     t.string "schema_hours", default: "Mo-Sa 09:00-19:00"
+    t.text "tagline_ja"
+    t.text "address_ja"
+    t.text "hours_ja"
+    t.text "closed_days_ja"
+    t.text "parking_ja"
+    t.text "entrance_ja"
+    t.text "business_info_ja"
+    t.string "region_name_ja"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

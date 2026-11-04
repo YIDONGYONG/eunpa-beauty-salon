@@ -2,7 +2,7 @@ require "test_helper"
 
 # ハーネス（ガードレール）: 翻訳漏れと、公開画面へのハードコード文言を自動で検出します。
 class I18nConsistencyTest < ActiveSupport::TestCase
-  LOCALES = %w[ko en].freeze
+  LOCALES = %w[ko en ja].freeze
 
   def flatten(hash, prefix = nil)
     hash.flat_map do |key, value|

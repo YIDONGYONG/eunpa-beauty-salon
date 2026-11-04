@@ -7,7 +7,7 @@ class OwnerProfile < ApplicationRecord
   translates :name, :headline, :career
 
   has_many :greetings, -> { ordered }, class_name: "OwnerGreeting", dependent: :destroy
-  accepts_nested_attributes_for :greetings, reject_if: ->(attrs) { attrs[:body_ko].blank? && attrs[:body_en].blank? }
+  accepts_nested_attributes_for :greetings, reject_if: ->(attrs) { attrs[:body_ko].blank? && attrs[:body_en].blank? && attrs[:body_ja].blank? }
 
   has_one_attached :photo
   has_many_attached :gallery_images

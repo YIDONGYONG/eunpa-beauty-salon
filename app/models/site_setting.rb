@@ -12,7 +12,7 @@ class SiteSetting < ApplicationRecord
   optimize_images :address_photo
   validates_image :address_photo
 
-  translates :tagline, :region_name, :address, :hours, :closed_days, :business_info
+  translates :tagline, :region_name, :address, :hours, :closed_days, :parking, :business_info
 
   validates :latitude, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }, allow_nil: true
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, allow_nil: true

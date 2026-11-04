@@ -50,7 +50,7 @@ Rails.application.routes.draw do
   get "robots.txt", to: "robots#show", defaults: { format: :text }
 
   # ---- 公開サイト（/ko /en）----
-  scope "/:locale", locale: /ko|en/ do
+  scope "/:locale", locale: /ko|en|ja/ do
     root "home#show"
     get "about", to: "about#show", as: :about
     resources :posts, path: "blog", only: %i[index show]

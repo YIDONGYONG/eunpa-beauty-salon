@@ -30,7 +30,7 @@ module Admin
       langs = Translatable::LOCALES
       keys = %i[name headline career].product(langs).map { |k, l| :"#{k}_#{l}" }
       params.require(:owner_profile).permit(:years_of_experience, :photo, :show_photo_on_home, *keys, gallery_images: [],
-                                            greetings_attributes: %i[id body_ko body_en visible])
+                                            greetings_attributes: %i[id body_ko body_en body_ja visible])
     end
   end
 end

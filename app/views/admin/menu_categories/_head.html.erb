@@ -7,7 +7,7 @@
     <details class="more-langs">
       <summary>분류 이름 번역</summary>
       <div class="grid-2">
-        <% { en: "영어" }.each do |locale, label| %>
+        <% { en: "영어", ja: "일본어" }.each do |locale, label| %>
           <div class="field">
             <%= f.label :"name_#{locale}", label, for: "category_name_#{locale}_#{category.id}" %>
             <%= f.text_field :"name_#{locale}", id: "category_name_#{locale}_#{category.id}", lang: locale %>

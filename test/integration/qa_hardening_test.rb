@@ -191,7 +191,7 @@ class QaHardeningTest < ActionDispatch::IntegrationTest
     OwnerGreeting.delete_all
     SiteSetting.delete_all
     OwnerProfile.delete_all
-    %w[ko en].each do |l|
+    %w[ko en ja].each do |l|
       [ "/#{l}", "/#{l}/about", "/#{l}/blog", "/#{l}/location", "/#{l}/privacy" ].each do |path|
         get path
         assert_response :success, "#{path} が空のデータで失敗"

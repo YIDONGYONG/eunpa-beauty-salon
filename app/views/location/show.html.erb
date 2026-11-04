@@ -62,7 +62,8 @@
           <% end %>
         </dd>
       </div>
-      <% { hours: :hours, closed: :closed_days }.each do |label, attr| %>
+      <% { hours: :hours, closed: :closed_days, parking: :parking }.each do |label, attr| %>
+        <% next if attr == :parking && site_setting.parking.blank? %>
         <div>
           <dt><%= t("location.#{label}") %></dt>
           <dd><%= site_setting.public_send(attr).present? ? multiline(site_setting.public_send(attr)) : t("location.empty") %></dd>

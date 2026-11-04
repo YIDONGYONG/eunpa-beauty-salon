@@ -29,6 +29,12 @@
         <dt><%= t("home.closed") %></dt>
         <dd><%= site_setting.closed_days.present? ? multiline(site_setting.closed_days) : t("home.info_empty") %></dd>
       </div>
+      <% if site_setting.parking.present? %>
+        <div>
+          <dt><%= t("home.parking") %></dt>
+          <dd><%= multiline(site_setting.parking) %></dd>
+        </div>
+      <% end %>
     </dl>
   </div>
 </section>

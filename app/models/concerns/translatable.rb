@@ -1,4 +1,4 @@
-# 2言語（ko/en）で入力するDBコンテンツを扱う共通モジュールです（ADR 0003）。
+# 3言語（ko/en/ja）で入力するDBコンテンツを扱う共通モジュールです（ADR 0003）。
 #
 # カラムは `name_ko`、`name_en` のように言語ごとに分かれており、
 # `translates :name` を宣言すると、現在の言語（I18n.locale）の値を返す `name` メソッドが
@@ -6,7 +6,7 @@
 module Translatable
   extend ActiveSupport::Concern
 
-  LOCALES = %i[ko en].freeze
+  LOCALES = %i[ko en ja].freeze
 
   class_methods do
     def translates(*attrs)

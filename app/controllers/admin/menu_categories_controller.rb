@@ -68,7 +68,7 @@ module Admin
     end
 
     def category_params
-      params.require(:menu_category).permit(:name_ko, :name_en, :visible, :image)
+      params.require(:menu_category).permit(:name_ko, :name_en, :name_ja, :visible, :image)
     end
   end
 end
