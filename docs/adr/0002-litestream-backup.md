@@ -10,7 +10,7 @@ SQLite は「ファイル」なので、ディスクが壊れるとデータが�
 - 複製するのは **primary のみ**。cache は再生成できる、queue / cable は一時データのため対象外（`config/litestream.yml`）。
 - 認証は **そのバケットだけ**に権限を絞った IAM ユーザーのキー（`.env` に保存。AWS ルートのキーは使わない）。
 - コンテナ起動時に DB が無ければ自動で復元（`bin/docker-entrypoint`）。
-- **画像ファイル（Active Storage）は Litestream の対象外。** `/var/lib/eunpa/files` を別途バックアップする（Runbook 参照: 日次の `gcloud storage rsync`）。
+- **画像ファイル（Active Storage）は Litestream の対象外。** `/var/lib/eunpa/files` を別途バックアップする（docs/ops-setup.md 参照: 日次の `gcloud storage rsync`）。
 
 ## 復元テスト / 복원 테스트
 `deploy/restore-test.sh` で「ディスク消失 → 再起動 → 自動復元」を実機（Docker）で確認済み。結果は docs/runbook.md に記録。S3 では URL を `s3://...` に変えるだけ（GCS も同様）。

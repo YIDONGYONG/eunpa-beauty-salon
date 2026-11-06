@@ -47,7 +47,7 @@
 | 3 | 何を一番伝えたいか？ | 30年の経験、料金公開、電話・道案内 | ◎ | ホームの文言候補3つ（管理画面で選択/自由入力）、料金表、電話/道案内ボタン |
 | 4 | 予算は？ | 月 数ドル（無料枠を活用） | ◎ | 1GB の小型サーバー、PostgreSQL・Redis なし（ADR 0001, 0004） |
 | 5 | 規模・アクセス量は？ | 町の1店舗。読み取り中心、書き込みは管理者1人 | ○ | SQLite（WAL）。同時書き込みが増えたら PostgreSQL へ（ADR 0001） |
-| 6 | 新規顧客はどう探す？ | NAVER 検索・地図が中心 | ○ | NAVER プレイス登録を最優先、サイトは JSON-LD / sitemap / OG / 地域名（Runbook §7） |
+| 6 | 新規顧客はどう探す？ | NAVER 検索・地図が中心 | ○ | NAVER プレイス登録を最優先、サイトは JSON-LD / sitemap / OG / 地域名（ops-setup §4） |
 | 7 | 言語は？ | 韓国語 + 英語 | ◎ | 2言語に限定（当初4言語から削減）。英語は任意入力・草稿（ADR 0003） |
 | 8 | 停止してよい時間は？ | 数時間〜半日程度なら許容と想定 | △ | **単一サーバー**。冗長化しない代わりに復旧手順を整備（§3, Runbook） |
 | 9 | データを失ってよい範囲は？ | 直近数十秒は許容、写真は日次 | △ | DB は Litestream（約10秒）、画像は日次 rsync（ADR 0002） |
@@ -66,7 +66,7 @@
 |---|---|---|
 | 性能 | モバイル LCP 3 秒前後 | Lighthouse 92（/ko）、LCP 3.0s（ローカル測定） |
 | 可用性 | 数時間以内の復旧 | 手順は整備、**所要時間は未計測** |
-| バックアップ RPO | DB 約10秒 / 画像 24時間 | DB は Litestream で連続複製。画像は日次同期を Runbook に記載（**cron は未設定**） |
+| バックアップ RPO | DB 約10秒 / 画像 24時間 | DB は Litestream で連続複製。画像は日次同期を ops-setup に記載（**cron は未設定**） |
 | セキュリティ | OWASP 基本対策 | CSRF・CSP(nonce)・ログイン試行制限・アップロード検証・Brakeman 警告 0 |
 | アクセシビリティ | WCAG AA | Lighthouse Accessibility 98〜100 |
 | コスト | 月 約 $5 | Lightsail 1GB（**ソウルの料金は要確認**）＋ドメイン $0（DuckDNS） |
@@ -95,7 +95,7 @@ flowchart LR
     P --- IMG[(画像 /data/files)]
   end
   LS -->|WAL を約10秒ごと| S3[(AWS S3 ソウル<br/>primary のみ)]
-  IMG -.->|日次 sync（Runbook）| S3
+  IMG -.->|日次 sync（ops-setup）| S3
   GH[GitHub Actions<br/>テスト→ビルド→GHCR] -->|pull + up -d| V
   UP[UptimeRobot] -.->|/up を監視| CD
   P -.->|例外メール| M[SMTP]
@@ -180,7 +180,7 @@ erDiagram
 |---|---|---|---|---|
 | R1 | サーバー1台（単一障害点） | 障害中サイトが止まる | 自動再起動、UptimeRobot、Runbook、1コマンドでロールバック | 冗長化はしない。許容停止時間を院長と合意（§1-2 #8） |
 | R2 | SQLite は書き込みが直列 | 同時編集・増設に弱い | WAL + busy_timeout、管理者1人前提 | 複数人編集/複数台になったら PostgreSQL へ（ADR 0001） |
-| R3 | 画像は Litestream の対象外 | ディスク消失で写真が消える | 日次 sync を Runbook に記載 | **cron 未設定**。配備時に設定してテストする |
+| R3 | 画像は Litestream の対象外 | ディスク消失で写真が消える | 日次 sync を ops-setup に記載 | **cron 未設定**。配備時に設定してテストする |
 | R4 | DuckDNS（無料サブドメイン） | ドメイン評価が育たず、サービス停止の可能性。Cloudflare を前に置けない | プレイス（地図）を主にして検索依存を下げる | 独自ドメイン（年 約 $10）へ移行 |
 | R5 | DDoS／トラフィック急増 | 帯域超過の課金・停止 | ファイアウォールで 80/443 のみ、メモリ上限、予算アラート | 大規模攻撃は防げない（Cloudflare 不可）。予算アラートは「通知」であり自動停止ではない |
 | R6 | 非エンジニアの誤操作 | データ消失 | 論理削除＋ゴミ箱、確認ダイアログ | 完全削除はゴミ箱内のみ |
@@ -339,11 +339,11 @@ GitHub Actions（`.github/workflows/ci.yml`）は push / PR のたびに Brakema
 
 - Litestream が DB を約10秒ごとに S3 へ複製し、DB が無ければコンテナ起動時に自動復元します。**画像ファイルは別途バックアップ（rsync）が必要**です。
 - **復元テスト（2026-10-23、ローカルの file:// 先）**: 成功（`deploy/restore-test.sh`）。実際の S3 バケットでのテストは **未実施**（バケット未作成）。
-- 障害対応 Runbook・パッチ担当と周期: [docs/runbook.md](docs/runbook.md)
+- 障害対応 Runbook（要約）: [docs/runbook.md](docs/runbook.md) / セットアップ・パッチ担当と周期: [docs/ops-setup.md](docs/ops-setup.md)
 
 ## 11. SEO と分析
 - ページタイトルに地域名（サイト設定の値）と「커트·파마 전문 미용실」を含め、JSON-LD `HairSalon`、sitemap.xml、robots.txt、hreflang、OG を出力
-- **地域検索（「근처 미용실」）の要は NAVER プレイスへの登録**です。サーチアドバイザ・Google Search Console の登録、プレイスとの相互リンク: [docs/runbook.md §7](docs/runbook.md)
+- **地域検索（「근처 미용실」）の要は NAVER プレイスへの登録**です。サーチアドバイザ・Google Search Console の登録、プレイスとの相互リンク: [docs/ops-setup.md §4](docs/ops-setup.md)
 - 分析: ボタンのクリック数は自前で集計（個人情報なし）、ページ閲覧の分析は必要になったら導入（独自ドメインがあれば Cloudflare Web Analytics 等） → [ADR 0007](docs/adr/0007-analytics-clicks.md)
 
 ## 12. セキュリティ

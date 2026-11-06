@@ -100,7 +100,7 @@ docker compose up -d --build  # DB 생성·마이그레이션·시드 자동 실
 - 영어·일본어 번역은 **초안**이며 공개 전 전문 검수가 필요합니다.
 - 배포 전이라 신규 고객 확보 효과는 아직 검증하지 못했습니다. (측정 방법은 4장)
 - 무료 서브도메인(DuckDNS)은 정식 운영 시 독립 도메인으로 교체합니다.
-- Litestream은 DB만 백업합니다. 업로드 이미지 백업은 【해결 방법과 상태】 ([runbook](docs/runbook.md))
+- Litestream은 DB만 백업합니다. 업로드 이미지 백업은 【해결 방법과 상태】 ([ops-setup](docs/ops-setup.md))
 
 ## 8. 문서
 
@@ -110,7 +110,7 @@ docker compose up -d --build  # DB 생성·마이그레이션·시드 자동 실
 | [docs/market-research.md](docs/market-research.md) | 주변 2km 가격·경쟁 조사 |
 | [docs/utm-tracking.md](docs/utm-tracking.md) | 유입 경로 측정 설계 |
 | [docs/adr/](docs/adr/) | 기술 선택 기록 |
-| [docs/runbook.md](docs/runbook.md) · [docs/server-cost.md](docs/server-cost.md) | 운영 절차 · 서버 비용 |
+| [docs/runbook.md](docs/runbook.md) · [docs/ops-setup.md](docs/ops-setup.md) · [docs/server-cost.md](docs/server-cost.md) | 장애 대응 요약 · 설정 절차 · 서버 비용 |
 | [docs/harness.md](docs/harness.md) · [docs/ai-usage.md](docs/ai-usage.md) · [CLAUDE.md](CLAUDE.md) | 자동 검증 · AI 활용 기록 · 작업 규칙 |
 
 ---
