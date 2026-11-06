@@ -47,7 +47,7 @@ class AdminContentTest < ActionDispatch::IntegrationTest
   end
 
   test "edit owner profile and greetings; a random visible greeting is shown" do
-    patch admin_owner_profile_path, params: { owner_profile: { years_of_experience: 35,
+    patch admin_owner_profile_path, params: { owner_profile: { career_start_year: Date.current.year - 35,
       greetings_attributes: { "0" => { body_ko: "반갑습니다 원장입니다", visible: "1" },
                               "1" => { body_ko: "숨긴 인사말", visible: "0" } } } }
     get "/ko/about"

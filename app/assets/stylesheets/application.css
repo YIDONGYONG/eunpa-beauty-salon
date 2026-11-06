@@ -147,20 +147,20 @@ p { margin: 0 0 1em; }
 }
 
 /* ---------- ヒーロー（ロゴ + やわらかなグラデーション） ---------- */
-.hero { position: relative; padding-block: 36px 56px; text-align: center; overflow: hidden;
+.hero { position: relative; padding-block: 16px 32px; text-align: center; overflow: hidden;
   background:
     radial-gradient(60% 50% at 12% 10%, rgba(255, 255, 255, .75) 0, transparent 70%),
     radial-gradient(55% 55% at 90% 20%, rgba(236, 196, 214, .75) 0, transparent 70%),
     radial-gradient(60% 50% at 70% 100%, rgba(245, 205, 190, .8) 0, transparent 70%),
     linear-gradient(170deg, #FCEDE9 0%, #F6D8D8 55%, #EFD0DB 100%); }
 .hero-inner { display: flex; flex-direction: column; align-items: center; }
-.hero-logo { display: block; width: min(86%, 360px); height: auto; margin: 0 auto 8px; }
+.hero-logo { display: block; width: min(52%, 200px); height: auto; margin: 0 auto 4px; }
 .hero-owner-photo { display: block; width: 200px; height: 200px; margin: 4px auto 12px; border-radius: 50%; object-fit: cover; object-position: center 25%; border: 4px solid #FFF8F5; box-shadow: var(--shadow-strong); }
-.hero-title { max-width: 18em; font-family: var(--font-serif); font-size: 1.75rem; font-weight: 400; line-height: 1.6; letter-spacing: .04em; margin: 8px auto .4em; }
+.hero-title { max-width: 18em; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; line-height: 1.5; letter-spacing: .02em; margin: 4px auto .3em; }
 html:lang(ko) .hero-title { word-break: keep-all; }
-.hero-sub { margin: 0; font-size: 1.125rem; color: var(--text-muted); letter-spacing: .24em; }
-.hero .button-row { margin: 28px 0 0; width: 100%; max-width: 420px; }
-.hero .btn { min-height: 60px; font-size: 1.25rem; letter-spacing: .04em; }
+.hero-sub { margin: 0; font-size: 1.125rem; line-height: 1.5; color: var(--text-muted); letter-spacing: .24em; }
+.hero .button-row { gap: 8px; margin: 16px 0 0; width: 100%; max-width: 420px; }
+.hero .btn { min-height: 52px; font-size: 1.1875rem; letter-spacing: .04em; }
 
 /* ---------- 営業時間カード（ヒーロー直下） ---------- */
 .info-strip { padding-block: 32px 8px; }
@@ -192,20 +192,9 @@ html:lang(ko) .hero-title { word-break: keep-all; }
 .duo-inner { text-align: center; max-width: 760px; }
 .duo .eyebrow { color: #F3D9D3; }
 .duo-title { color: #FFF3EE; font-size: 1.75rem; font-weight: 400; letter-spacing: .06em; line-height: 1.6; }
-.duo-circles { display: flex; justify-content: center; margin: 28px 0 24px; }
-.duo-circle { position: relative; margin: 0; width: 160px; height: 160px; border-radius: 50%; overflow: hidden; border: 3px solid #FFF3EE; background: #FFF8F5; }
-.duo-circle + .duo-circle { margin-left: -28px; }
-.duo-circle img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.duo-circle figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 6px 0 8px; background: rgba(110, 74, 71, .78); color: #FFF3EE; font-family: var(--font-serif); font-size: 1.0625rem; letter-spacing: .1em; }
 .duo-text { max-width: 28em; margin: 0 auto 20px; color: #FFF3EE; }
 
 /* ---------- 来店案内バンド（フッターと同じ色で一続きに） ---------- */
-.visit-band { background: var(--mauve); color: #FFF; text-align: center; }
-.visit-address { margin: 0 0 20px; font-family: var(--font-serif); font-size: 1.75rem; font-weight: 400; letter-spacing: .06em; line-height: 1.5; color: #FFF; }
-.visit-band .btn-primary { background: #FFF8F5; color: var(--rose-800); box-shadow: none; }
-.visit-band .btn-primary:hover { background: #fff; color: var(--rose-800); }
-.visit-band .btn-secondary { background: transparent; color: #fff; border-color: #fff; }
-.visit-band .btn-secondary:hover { background: rgba(255, 255, 255, .18); color: #fff; }
 
 /* ---------- セクション ---------- */
 .section { padding-block: 48px; }
@@ -299,12 +288,12 @@ html:lang(ko) .hero-title { word-break: keep-all; }
 .footer-business { margin-bottom: 12px; }
 .copyright { font-size: 1rem; margin: 0; }
 
-.mobile-bar { position: fixed; inset: auto 0 0 0; z-index: 50; display: flex; justify-content: space-around; align-items: stretch; gap: 4px;
+.mobile-bar { position: fixed; inset: auto 0 0 0; z-index: 50; display: flex; justify-content: space-around; align-items: stretch; gap: 2px;
   padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
   background: rgba(251,234,230,.94); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   border-top: 1px solid var(--line); box-shadow: 0 -10px 30px rgba(138, 53, 72, .1); }
 .mobile-bar .tab { flex: 1 1 0; min-width: 0; min-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  padding: 6px 4px; border-radius: 16px; color: var(--text-muted); font-size: 1.125rem; font-weight: 500; line-height: 1.25; text-align: center; text-decoration: none; }
+  padding: 6px 1px; border-radius: 16px; color: var(--text-muted); font-size: .9375rem; letter-spacing: -.04em; font-weight: 500; line-height: 1.25; text-align: center; text-decoration: none; }
 .mobile-bar .tab-icon { width: 26px; height: 26px; flex: none; }
 .mobile-bar .tab[aria-current="page"] { color: var(--rose-700); font-weight: 700; background: var(--pink-100); }
 .mobile-bar .tab-call { background: var(--rose-700); color: #fff; font-weight: 700; }
@@ -313,7 +302,9 @@ html:lang(ko) .hero-title { word-break: keep-all; }
 @media (min-width: 768px) {
   h1, .page-title { font-size: 2.25rem; }
   .hero { padding-block: 56px 80px; }
-  .hero-logo { width: 460px; }
+  .hero-logo { width: 460px; margin-bottom: 8px; }
+  .hero .button-row { margin-top: 28px; }
+  .hero .btn { min-height: 60px; font-size: 1.25rem; }
   .hero-title { font-size: 2.25rem; }
   .hero .button-row { max-width: 640px; }
   .topic-grid { grid-template-columns: repeat(4, 1fr); gap: 28px; }
@@ -321,10 +312,7 @@ html:lang(ko) .hero-title { word-break: keep-all; }
   .topic-title { font-size: 1.1875rem; }
   .concept, .duo { padding-block: 104px; }
   .concept-title, .duo-title { font-size: 2.125rem; }
-  .duo-circle { width: 220px; height: 220px; }
-  .duo-circle + .duo-circle { margin-left: -44px; }
-  .visit-address { font-size: 2.25rem; }
-  .section { padding-block: 72px; }
+        .section { padding-block: 72px; }
   .button-row { flex-direction: row; justify-content: center; flex-wrap: wrap; }
   .button-row .btn { width: auto; min-width: 220px; }
   .location-actions { justify-content: flex-start; }
@@ -376,6 +364,8 @@ html:lang(ko) .hero-title { word-break: keep-all; }
 .event-title { margin: 0; font-weight: 700; color: #5A3E0A; }
 .event-label { display: inline-block; margin-right: 8px; padding: 2px 12px; background: #5A3E0A; color: #fff; border-radius: var(--radius-pill); font-size: 1rem; }
 .event-message { margin: 6px 0 0; color: #3F3208; }
+.btn-naver { background: #03C75A; color: #14201A; border-color: #03C75A; }
+.btn-naver:hover { background: #02B351; color: #14201A; }
 .btn-kakao { background: #FEE500; color: #2A2523; border-color: #FEE500; }
 .btn-kakao:hover { background: #F2D900; color: #2A2523; }
 .address-photo { display: block; width: 100%; max-width: 640px; margin-top: 12px; border-radius: var(--radius); border: 1px solid var(--line); }

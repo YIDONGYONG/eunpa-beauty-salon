@@ -13,7 +13,7 @@ class ImageOptimizationTest < ActiveSupport::TestCase
     Vips::Image.black(3200, 2400).add(120).cast(:uchar).write_to_file(big.path)
     upload = ActionDispatch::Http::UploadedFile.new(tempfile: big, filename: "big.jpg", type: "image/jpeg")
 
-    profile = OwnerProfile.new(years_of_experience: 30)
+    profile = OwnerProfile.new(career_start_year: 1996)
     profile.photo = upload
     profile.save!
 
@@ -28,7 +28,7 @@ class ImageOptimizationTest < ActiveSupport::TestCase
     Vips::Image.black(800, 600).add(90).cast(:uchar).write_to_file(jpg.path)
     upload = ActionDispatch::Http::UploadedFile.new(tempfile: jpg, filename: "photo.jpg", type: "image/jpeg")
 
-    profile = OwnerProfile.new(years_of_experience: 30)
+    profile = OwnerProfile.new(career_start_year: 1996)
     profile.photo = upload
     profile.save!
 

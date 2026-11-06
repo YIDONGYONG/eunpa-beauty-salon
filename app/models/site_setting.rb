@@ -18,6 +18,7 @@ class SiteSetting < ApplicationRecord
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, allow_nil: true
   validates :phone, length: { maximum: 30 }
   validates :hero_phrase_choice, inclusion: { in: 0..3 }
+  validates :naver_booking_url, format: { with: %r{\Ahttps://\S+\z}, message: "은 https:// 로 시작하는 주소여야 합니다" }, allow_blank: true
   validates :kakao_url, format: { with: %r{\Ahttps://\S+\z}, message: "은 https:// 로 시작하는 주소여야 합니다" }, allow_blank: true
 
   def self.instance
@@ -32,10 +33,15 @@ class SiteSetting < ApplicationRecord
   # ホームの最初の文言。1〜3: 候補から選ぶ / 0: 管理画面で入力した tagline
   def hero_phrase
     if hero_phrase_choice.to_i.between?(1, 3)
-      I18n.t("home.hero_candidates.c#{hero_phrase_choice}")
+      I18n.t("home.hero_candidates.c#{hero_phrase_choice}", years: OwnerProfile.current_years)
     else
-      tagline.presence || I18n.t("home.hero_candidates.c3")
+      tagline.presence || I18n.t("home.hero_candidates.c3", years: OwnerProfile.current_years)
     end
+  end
+
+  # NAVER 予約ボタンは、予約ページの URL が入っているときだけ表示する
+  def booking?
+    naver_booking_url.present?
   end
 
   def kakao?

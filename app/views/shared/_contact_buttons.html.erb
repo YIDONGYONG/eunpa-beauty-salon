@@ -3,6 +3,12 @@
     <span aria-hidden="true">📞</span> <%= t("common.call") %>
   <% end %>
 <% end %>
+<%# 電話と道案内の間に NAVER 予約（URL が設定されているときだけ） %>
+<% if site_setting.booking? %>
+  <%= link_to site_setting.naver_booking_url, class: "btn btn-naver", target: "_blank", rel: "noopener", data: track_data(:booking) do %>
+    <span aria-hidden="true">🗓</span> <%= t("extras.booking") %>
+  <% end %>
+<% end %>
 <%= link_to location_path, class: "btn btn-secondary", data: track_data(:directions) do %>
   <span aria-hidden="true">📍</span> <%= t("common.directions") %>
 <% end %>

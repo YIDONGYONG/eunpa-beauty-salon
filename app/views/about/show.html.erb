@@ -1,5 +1,5 @@
 <% page_title t("about.title") %>
-<% page_description t("about.meta_description") %>
+<% page_description t("about.meta_description", years: career_years) %>
 
 <section class="section">
   <div class="container">
@@ -12,7 +12,7 @@
       <div>
         <h2 class="section-title"><%= t("about.owner_title") %></h2>
         <p class="owner-name"><%= owner_profile.name %></p>
-        <p class="badge"><%= t("about.years", years: owner_profile.years_of_experience) %></p>
+        <p class="badge"><%= t("about.years", years: career_years) %></p>
         <% greeting = owner_profile.random_greeting %>
         <%= translation_fallback_notice(owner_profile.name_translated? || greeting&.body_translated?) %>
         <% if owner_profile.headline.present? %>

@@ -1,8 +1,17 @@
 <% page_title t("privacy.title") %>
 <% page_description t("privacy.meta_description") %>
 <section class="section">
-  <div class="container narrow">
+  <div class="container narrow prose">
     <h1 class="page-title"><%= t("privacy.title") %></h1>
-    <p><%= t("privacy.pending") %></p>
+    <p><%= t("privacy.lead") %></p>
+    <% (1..5).each do |n| %>
+      <h2><%= t("privacy.s#{n}") %></h2>
+      <p><%= t("privacy.b#{n}") %></p>
+    <% end %>
+    <h2><%= t("privacy.s6") %></h2>
+    <p><%= t("privacy.b6") %><% if site_setting.phone.present? %> <%= t("privacy.phone") %>: <%= link_to site_setting.phone, site_setting.phone_href %><% end %></p>
+    <h2><%= t("privacy.s7") %></h2>
+    <p><%= t("privacy.b7", link: link_to("Flaticon", "https://www.flaticon.com", target: "_blank", rel: "noopener")).html_safe %></p>
+    <p class="hint"><%= t("privacy.date") %></p>
   </div>
 </section>

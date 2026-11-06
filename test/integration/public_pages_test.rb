@@ -41,7 +41,7 @@ class PublicPagesTest < ActionDispatch::IntegrationTest
   test "home shows prices in 30,000원 format and hides hidden items" do
     get "/ko"
     assert_select ".price-value", text: "30,000원"
-    assert_select ".price-value", text: "40,000원부터"
+    assert_select ".price-value", text: "40,000원~"
     assert_select ".price-name", text: "숨김 메뉴", count: 0
   end
 

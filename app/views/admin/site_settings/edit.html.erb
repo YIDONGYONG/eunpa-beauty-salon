@@ -65,6 +65,15 @@
   </fieldset>
 
   <fieldset class="translated-field">
+    <legend>네이버 예약 (선택)</legend>
+    <div class="field">
+      <%= f.label :naver_booking_url, "네이버 스마트플레이스 예약 주소 (https:// 로 시작, 비우면 버튼이 보이지 않습니다)" %>
+      <%= f.url_field :naver_booking_url, placeholder: "https://booking.naver.com/booking/..." %>
+      <p class="hint">넣으면 홈 화면의 「전화하기」와 「길 찾기」 사이에 「네이버 예약」 버튼이 나타납니다.</p>
+    </div>
+  </fieldset>
+
+  <fieldset class="translated-field">
     <legend>카카오톡 채널 (선택)</legend>
     <div class="field">
       <%= f.label :kakao_url, "카카오톡 채널 주소 (https:// 로 시작, 비우면 버튼이 보이지 않습니다)" %>

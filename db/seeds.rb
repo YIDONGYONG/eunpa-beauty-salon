@@ -77,12 +77,12 @@ end
 profile = OwnerProfile.instance
 if profile.headline_ko.blank?
   profile.update!(
-    years_of_experience: 43,
+    career_start_year: Date.current.year - 43, # 開始年から年数を自動計算（開始年は確認のうえ管理画面で修正）
     name_ko: "원장님", name_en: "The Owner",
-    headline_ko: "43년 넘게 한자리에서 이웃의 머리를 가꿔 왔습니다.",
-    headline_en: "For over 43 years, I have cared for my neighbors' hair in the same place.",
-    career_ko: "미용 경력 43년 이상\n커트와 파마를 전문으로 합니다.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
-    career_en: "Over 43 years in hairdressing\nSpecializing in cuts and perms.\n(Placeholder text. Please edit in the admin page.)"
+    headline_ko: "{{years}}년 넘게 한자리에서 이웃의 머리를 가꿔 왔습니다.",
+    headline_en: "For over {{years}} years, I have cared for my neighbors' hair in the same place.",
+    career_ko: "미용 경력 {{years}}년 이상\n커트와 파마를 전문으로 합니다.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
+    career_en: "Over {{years}} years in hairdressing\nSpecializing in cuts and perms.\n(Placeholder text. Please edit in the admin page.)"
   )
 end
 
@@ -91,10 +91,10 @@ if profile.greetings.none?
   [
     [ "안녕하세요, 은파미용실입니다.\n오랜 시간 찾아 주시는 단골 손님들 덕분에 지금까지 올 수 있었습니다.\n머리 모양은 물론 두피와 머릿결 고민까지 편하게 말씀해 주세요. 한 분 한 분 정성껏 해 드리겠습니다.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
       "Hello, and welcome to Eunpa Hair Salon.\nWe have come this far thanks to our many loyal customers who have visited us over the years.\nPlease feel free to tell us about your hairstyle, scalp or hair concerns. We will take care of each guest with sincerity.\n(Placeholder text. Please edit in the admin page.)" ],
-    [ "43년 동안 같은 자리에서 머리를 만져 왔습니다.\n처음 오시는 분도, 오래된 단골님도 내 집처럼 편안하게 앉으세요.\n어떤 머리가 어울릴지 천천히 여쭤보고, 꼼꼼하게 해 드리겠습니다.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
-      "For over 43 years I have been doing hair in this same place.\nWhether it is your first visit or you have been with us for years, please sit back and relax as if you were at home.\nWe will take our time to learn what suits you, and do it with care.\n(Placeholder text. Please edit in the admin page.)" ],
-    [ "머리가 마음에 드시면 하루가 달라집니다.\n커트와 파마, 한 가지만 잘하자는 마음으로 43년을 해 왔습니다.\n불편한 점이 있으면 언제든 편하게 말씀해 주세요.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
-      "When you like your hair, your whole day feels different.\nFor 43 years I have focused on doing cuts and perms well.\nIf anything feels uncomfortable, please tell us anytime.\n(Placeholder text. Please edit in the admin page.)" ]
+    [ "{{years}}년 동안 같은 자리에서 머리를 만져 왔습니다.\n처음 오시는 분도, 오래된 단골님도 내 집처럼 편안하게 앉으세요.\n어떤 머리가 어울릴지 천천히 여쭤보고, 꼼꼼하게 해 드리겠습니다.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
+      "For over {{years}} years I have been doing hair in this same place.\nWhether it is your first visit or you have been with us for years, please sit back and relax as if you were at home.\nWe will take our time to learn what suits you, and do it with care.\n(Placeholder text. Please edit in the admin page.)" ],
+    [ "머리가 마음에 드시면 하루가 달라집니다.\n커트와 파마, 한 가지만 잘하자는 마음으로 {{years}}년을 해 왔습니다.\n불편한 점이 있으면 언제든 편하게 말씀해 주세요.\n(임시 문구입니다. 관리자 화면에서 수정해 주세요.)",
+      "When you like your hair, your whole day feels different.\nFor {{years}} years I have focused on doing cuts and perms well.\nIf anything feels uncomfortable, please tell us anytime.\n(Placeholder text. Please edit in the admin page.)" ]
   ].each_with_index do |(ko, en), index|
     profile.greetings.create!(body_ko: ko, body_en: en, position: index)
   end
@@ -114,10 +114,10 @@ if setting.address_ko.blank?
     region_name_ko: "상주", region_name_en: "Sangju", region_name_ja: "尚州",
     hero_phrase_choice: 3,           # 1〜3: 候補（config/locales の home.hero_candidates）/ 0: tagline を使う
     latitude: 36.4126275, longitude: 128.1626006, # NAVER 地図の店舗座標
-    tagline_ko: "43년 경력 원장이 직접,\n어울리는 머리를 꼼꼼하게 해드립니다.",
-    tagline_en: "A 43-year veteran owner personally styles hair to suit you, with care.",
-    address_ko: "경북 상주시 왕산로 160",
-    address_en: "160 Wangsan-ro, Sangju-si, Gyeongsangbuk-do",
+    tagline_ko: "{{years}}년 경력 원장이 직접,\n어울리는 머리를 꼼꼼하게 해드립니다.",
+    tagline_en: "A {{years}}-year veteran owner personally styles hair to suit you, with care.",
+    address_ko: "경상북도 상주시 왕산로 (남성동) 160번지 은파미용실",
+    address_en: "Eunpa Hair Salon, 160 Wangsan-ro (Namseong-dong), Sangju-si, Gyeongsangbuk-do",
     hours_ko: "오전 9시 ~ 오후 7시",
     hours_en: "9:00 AM – 7:00 PM", hours_ja: "午前9時〜午後7時",
     parking_ko: "중앙시장 공영주차장을 이용해 주세요.\n1시간 30분까지 무료이며, 초과 요금은 미용실에서 부담합니다.",
@@ -125,8 +125,8 @@ if setting.address_ko.blank?
     parking_ja: "中央市場公営駐車場をご利用ください。\n1時間30分まで無料です。超過分の料金は美容室が負担いたします。",
     closed_days_ko: "일요일 휴무",
     closed_days_en: "Closed on Sundays", closed_days_ja: "日曜定休",
-    business_info_ko: "상호: 은파미용실 · 대표: (입력 예정) · 사업자등록번호: (입력 예정)",
-    business_info_en: "Business name: Eunpa Hair Salon · Representative: (to be added) · Business registration no.: (to be added)",
+    business_info_ko: "상호: 은파미용실 · 대표: 안창숙 · 사업자등록번호: 511-01-34782",
+    business_info_en: "Business name: Eunpa Hair Salon · Representative: Ahn Chang-suk · Business registration no.: 511-01-34782",
   )
 end
 

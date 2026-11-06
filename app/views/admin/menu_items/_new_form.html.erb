@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="field field-from">
-        <label class="check"><%= f.check_box :price_from, id: "new_item_from_#{category.id}" %> "~부터" 표기</label>
+        <label class="check"><%= f.check_box :price_from, id: "new_item_from_#{category.id}" %> "~" 표기 (예: 50,000원~)</label>
       </div>
     </div>
     <% if item.errors.any? %>

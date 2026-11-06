@@ -1,4 +1,4 @@
-<% page_description t("home.meta_description") %>
+<% page_description t("home.meta_description", years: career_years) %>
 
 <%# ① ヒーロー: 新ロゴ + 最初の文言 + 大きなボタン（写真は使わず、やわらかなグラデーション） %>
 <section class="hero">
@@ -39,57 +39,7 @@
   </div>
 </section>
 
-<%# ② TOPICS: 最近のブログ（小さなカードが横に並ぶ） %>
-<section class="section topics" aria-labelledby="topics-title">
-  <div class="container">
-    <div class="section-head">
-      <p class="eyebrow"><%= t("home.label_topics") %></p>
-      <h2 id="topics-title" class="section-title"><%= t("home.posts_title") %></h2>
-    </div>
-    <% if @recent_posts.any? %>
-      <div class="topic-grid">
-        <%= render partial: "posts/topic", collection: @recent_posts, as: :post %>
-      </div>
-      <p class="section-more"><%= link_to t("home.posts_more"), posts_path, class: "btn btn-outline" %></p>
-    <% else %>
-      <p class="section-more"><%= t("blog.empty") %></p>
-    <% end %>
-  </div>
-</section>
-
-<%# ③ コンセプト: 大きなグラデーションの面 + 中央寄せの文章 %>
-<section class="concept" aria-labelledby="about-title">
-  <div class="container concept-inner">
-    <p class="eyebrow"><%= t("home.label_about") %></p>
-    <h2 id="about-title" class="concept-title"><%= t("home.about_title") %></h2>
-    <p class="badge"><%= t("about.years", years: owner_profile.years_of_experience) %></p>
-    <div class="concept-text"><%= multiline owner_profile.headline.presence || owner_profile.random_greeting&.body.to_s.truncate(120) %></div>
-    <p><%= link_to t("home.about_more"), about_path, class: "btn btn-outline" %></p>
-  </div>
-</section>
-
-<%# ④ カット・パーマ: 茶色の面に、2つの円（カテゴリのアイコン）が重なる %>
-<% services = @price_list.map(&:first).select { |c| c.image.attached? }.first(2) %>
-<section class="duo" aria-labelledby="duo-title">
-  <div class="container duo-inner">
-    <p class="eyebrow"><%= t("home.label_services") %></p>
-    <h2 id="duo-title" class="duo-title"><%= t("home.services_title") %></h2>
-    <% if services.any? %>
-      <div class="duo-circles" aria-hidden="true">
-        <% services.each do |category| %>
-          <figure class="duo-circle">
-            <%= salon_image_tag category.image, width: 400, alt: "" %>
-            <figcaption><%= category.name %></figcaption>
-          </figure>
-        <% end %>
-      </div>
-    <% end %>
-    <p class="duo-text"><%= t("home.services_text") %></p>
-    <p><%= link_to t("home.services_button"), "#prices", class: "btn btn-light" %></p>
-  </div>
-</section>
-
-<%# ⑤ 料金表 %>
+<%# ② 料金表（営業時間の直下） %>
 <section class="section price-section" id="prices" aria-labelledby="prices-title">
   <div class="container">
     <div class="section-head">
@@ -133,13 +83,41 @@
   </div>
 </section>
 
-<section class="section visit-band" aria-label="<%= t("nav.location") %>">
+<%# ③ 美容室紹介・コンセプト: 大きなグラデーションの面 + 中央寄せの文章 %>
+<section class="concept" aria-labelledby="about-title">
+  <div class="container concept-inner">
+    <p class="eyebrow"><%= t("home.label_about") %></p>
+    <h2 id="about-title" class="concept-title"><%= t("home.about_title") %></h2>
+    <p class="badge"><%= t("about.years", years: career_years) %></p>
+    <div class="concept-text"><%= multiline owner_profile.headline.presence || owner_profile.random_greeting&.body.to_s.truncate(120) %></div>
+    <p><%= link_to t("home.about_more"), about_path, class: "btn btn-outline" %></p>
+  </div>
+</section>
+
+<%# ④ カット・パーマ（茶色の面）%>
+<section class="duo" aria-labelledby="duo-title">
+  <div class="container duo-inner">
+    <p class="eyebrow"><%= t("home.label_services") %></p>
+    <h2 id="duo-title" class="duo-title"><%= t("home.services_title") %></h2>
+    <p class="duo-text"><%= t("home.services_text", years: career_years) %></p>
+    <p><%= link_to t("home.services_button"), "#prices", class: "btn btn-light" %></p>
+  </div>
+</section>
+
+<%# ⑤ TOPICS: 最近のブログ（小さなカードが横に並ぶ） %>
+<section class="section topics" aria-labelledby="topics-title">
   <div class="container">
-    <% if site_setting.address.present? %>
-      <p class="visit-address"><%= site_setting.address %></p>
-    <% end %>
-    <div class="button-row">
-      <%= render "shared/contact_buttons" %>
+    <div class="section-head">
+      <p class="eyebrow"><%= t("home.label_topics") %></p>
+      <h2 id="topics-title" class="section-title"><%= t("home.posts_title") %></h2>
     </div>
+    <% if @recent_posts.any? %>
+      <div class="topic-grid">
+        <%= render partial: "posts/topic", collection: @recent_posts, as: :post %>
+      </div>
+      <p class="section-more"><%= link_to t("home.posts_more"), posts_path, class: "btn btn-outline" %></p>
+    <% else %>
+      <p class="section-more"><%= t("blog.empty") %></p>
+    <% end %>
   </div>
 </section>

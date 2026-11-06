@@ -25,8 +25,10 @@
   <fieldset class="translated-field">
     <legend>경력</legend>
     <div class="field">
-      <%= f.label :years_of_experience, "경력 (년)" %>
-      <%= f.number_field :years_of_experience, min: 1, max: 80 %>
+      <%= f.label :career_start_year, "미용 일을 시작한 해 (예: 1983)" %>
+      <%= f.number_field :career_start_year, min: 1930, max: Date.current.year %>
+      <p class="hint">화면에는 "○○년 경력"으로 나오며, 해가 바뀌면 자동으로 늘어납니다. (지금은 <%= @profile.years_of_experience %>년)
+        문장 안에 <code>{{years}}</code> 라고 쓰면 그 자리에 경력 년수가 들어갑니다.</p>
     </div>
   </fieldset>
 

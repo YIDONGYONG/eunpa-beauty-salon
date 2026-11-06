@@ -334,6 +334,25 @@ class QaHardeningTest < ActionDispatch::IntegrationTest
     assert_not_equal 7, SiteSetting.instance.reload.hero_phrase_choice
   end
 
+  test "naver booking button shows only when url is set, between call and directions" do
+    SiteSetting.instance.update!(phone: "054-535-6353", naver_booking_url: nil)
+    get "/ko"
+    assert_select "a.btn-naver", 0
+    SiteSetting.instance.update!(naver_booking_url: "https://booking.naver.com/booking/13/bizes/1")
+    get "/ko"
+    assert_select "a.btn-naver[href=?]", "https://booking.naver.com/booking/13/bizes/1"
+    body = response.body
+    assert body.index("btn-primary") < body.index("btn-naver")
+    assert body.index("btn-naver") < body.index("btn-secondary")
+  end
+
+  test "naver booking url must be https" do
+    sign_in_admin
+    patch admin_site_setting_path, params: { site_setting: { naver_booking_url: "javascript:alert(1)" } }
+    assert_response :unprocessable_entity
+    assert_nil SiteSetting.instance.reload.naver_booking_url
+  end
+
   test "kakao url must be https" do
     sign_in_admin
     patch admin_site_setting_path, params: { site_setting: { kakao_url: "javascript:alert(1)" } }

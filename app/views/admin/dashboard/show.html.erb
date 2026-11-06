@@ -38,5 +38,6 @@
 <ul class="click-stats">
   <li>전화하기 <strong><%= @clicks.fetch("call", 0) %></strong>번</li>
   <li>길 찾기 <strong><%= @clicks.fetch("directions", 0) %></strong>번</li>
+  <li>네이버 예약 <strong><%= @clicks.fetch("booking", 0) %></strong>번</li>
   <li>카카오톡 <strong><%= @clicks.fetch("kakao", 0) %></strong>번</li>
 </ul>

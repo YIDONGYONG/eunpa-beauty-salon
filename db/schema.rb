@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_04_100001) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_06_110001) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -95,7 +95,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_04_100001) do
   end
 
   create_table "menu_items", force: :cascade do |t|
-    t.integer "menu_category_id", null: false
+    t.bigint "menu_category_id", null: false
     t.string "name_ko", null: false
     t.string "name_en"
     t.integer "price", default: 0, null: false
@@ -133,13 +133,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_04_100001) do
     t.text "headline_en"
     t.text "career_ko"
     t.text "career_en"
-    t.integer "years_of_experience", default: 30, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "show_photo_on_home", default: false, null: false
     t.text "name_ja"
     t.text "headline_ja"
     t.text "career_ja"
+    t.integer "career_start_year"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -188,6 +188,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_04_100001) do
     t.text "entrance_ja"
     t.text "business_info_ja"
     t.string "region_name_ja"
+    t.string "naver_booking_url"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

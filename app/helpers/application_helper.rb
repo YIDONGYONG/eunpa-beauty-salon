@@ -46,7 +46,7 @@ module ApplicationHelper
       else
         attachment
       end
-    image_tag source, loading: "lazy", decoding: "async", **options
+    image_tag source, loading: "lazy", decoding: "async", data: { controller: "img-retry", action: "error->img-retry#retry" }, **options
   end
 
   # 現在の言語の翻訳がなく韓国語を表示する場合の案内文
@@ -57,8 +57,13 @@ module ApplicationHelper
   end
 
   # 改行を含むテキストを安全に段落として表示
+  # 本文中の {{years}} は、経歴の年数（毎年自動で増える）に置き換える
   def multiline(text)
-    simple_format(h(text.to_s), {}, sanitize: false)
+    simple_format(h(text.to_s.gsub("{{years}}", career_years.to_s)), {}, sanitize: false)
+  end
+
+  def career_years
+    @career_years ||= OwnerProfile.current_years
   end
 
   # 保存済みの添付かどうか。検証エラーでフォームを再表示するとき、未保存（拒否された）添付を
@@ -67,7 +72,7 @@ module ApplicationHelper
     attachment.attached? && attachment.blob.persisted?
   end
 
-  # ボタンのクリック数の計測用 data 属性（kind: :call / :directions / :kakao）
+  # ボタンのクリック数の計測用 data 属性（kind: :call / :directions / :kakao / :booking）
   def track_data(kind)
     { controller: "track", action: "click->track#send", track_kind_value: kind, track_url_value: clicks_path(locale: nil) }
   end
