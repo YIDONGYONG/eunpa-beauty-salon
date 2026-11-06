@@ -1,4 +1,4 @@
-# SQLite 構成（運用も SQLite。理由は docs/adr/0001-sqlite.md）
+# SQLite 構成（運用も SQLite。理由は docs/decisions.md）
 # - WAL モード + busy_timeout で、読み取りが書き込みを待たない
 # - 本番は用途別に 4 ファイルへ分割（primary / cache / queue / cable）。
 #   Litestream でバックアップするのは primary のみ（cache は再生成可能、queue / cable は一時データ）

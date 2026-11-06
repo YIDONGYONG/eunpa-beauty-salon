@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Litestream の「復元テスト」: 本番イメージを使い、ディスク消失 → レプリカから復元できることを確かめる。
-# 複製先はローカルの file:// （S3 / GCS と同じ手順・設定。違うのは URL だけ）。結果は docs/runbook.md に記録する。
+# 複製先はローカルの file:// （S3 / GCS と同じ手順・設定。違うのは URL だけ）。結果は docs/operations.md に記録する。
 #   使い方: deploy/restore-test.sh [イメージ名]   例: deploy/restore-test.sh eunpa-prod
 set -euo pipefail
 IMAGE="${1:-eunpa-prod}"

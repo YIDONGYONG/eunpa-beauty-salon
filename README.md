@@ -48,7 +48,7 @@ Ruby 3.4 / Rails 8.1 (Hotwire) · 순수 CSS · SQLite · Solid Queue/Cache/Cabl
 | PostgreSQL | 불채택 | 이 규모에서는 메모리·운영 부담이 큼 (동시 쓰기가 늘면 전환 검토) |
 | 자체 예약·후기·쿠폰 | 불채택 | 개인정보 취급·운영 부담. 네이버 서비스 활용 |
 
-상세한 이유와 대안은 [ADR](docs/adr/)에 있습니다.
+상세한 이유와 대안은 [기술 결정 기록](docs/decisions.md)에 있습니다.
 
 ```mermaid
 flowchart LR
@@ -66,9 +66,9 @@ flowchart LR
 | 단계 | 내용 | 상태 |
 |---|---|---|
 | 가설 | 가격과 경력을 방문 전에 공개하면 처음 찾는 손님의 불안이 줄어 연락·방문이 늘어난다 | - |
-| 경쟁 분석 | 반경 2km 미용실 【N】곳의 가격·강점 비교 → 가격과 강점 표현의 근거 ([market-research.md](docs/market-research.md)) | 【조사 중 / 완료】 |
+| 경쟁 분석 | 반경 2km 미용실 【N】곳의 가격·강점 비교 → 가격과 강점 표현의 근거 ([planning.md 부록](docs/planning.md)) | 【조사 중 / 완료】 |
 | 시책 | 네이버 플레이스 운영 · 네이버 쿠폰(커트·파마 할인, 증정품) · 인스타그램 링크 | 【시험 운영 전 / 중】 |
-| 계측 | UTM 유입 경로별 방문 수 + 전화·길 찾기 클릭 수 + 「어떻게 알고 오셨어요?」 수기 기록 (**개인 식별 정보 저장 없음**) ([utm-tracking.md](docs/utm-tracking.md)) | 클릭 집계 구현 완료 / UTM 【구현 예정】 |
+| 계측 | UTM 유입 경로별 방문 수 + 전화·길 찾기 클릭 수 + 「어떻게 알고 오셨어요?」 수기 기록 (**개인 식별 정보 저장 없음**) | 클릭 집계 구현 완료 / UTM 【구현 예정】 |
 | 결과 | 【실측값만 기재. 예: ○월 ○일~○일, 유입 ○건, 전화 클릭 ○건, 신규 내점 ○건】 | 【배포 후】 |
 | 개선 | 【결과를 보고 바꾼 점과 전후 비교】 | 【배포 후】 |
 
@@ -100,18 +100,16 @@ docker compose up -d --build  # DB 생성·마이그레이션·시드 자동 실
 - 영어·일본어 번역은 **초안**이며 공개 전 전문 검수가 필요합니다.
 - 배포 전이라 신규 고객 확보 효과는 아직 검증하지 못했습니다. (측정 방법은 4장)
 - 무료 서브도메인(DuckDNS)은 정식 운영 시 독립 도메인으로 교체합니다.
-- Litestream은 DB만 백업합니다. 업로드 이미지 백업은 【해결 방법과 상태】 ([ops-setup](docs/ops-setup.md))
+- Litestream은 DB만 백업합니다. 업로드 이미지 백업은 【해결 방법과 상태】 ([operations](docs/operations.md))
 
 ## 8. 문서
 
 | 문서 | 내용 |
 |---|---|
-| [docs/planning.md](docs/planning.md) | 기획 기록 (과제, 사용자, 경쟁, 가치, 우려사항, 사업 관점) |
-| [docs/market-research.md](docs/market-research.md) | 주변 2km 가격·경쟁 조사 |
-| [docs/utm-tracking.md](docs/utm-tracking.md) | 유입 경로 측정 설계 |
-| [docs/adr/](docs/adr/) | 기술 선택 기록 |
-| [docs/runbook.md](docs/runbook.md) · [docs/ops-setup.md](docs/ops-setup.md) · [docs/server-cost.md](docs/server-cost.md) | 장애 대응 요약 · 설정 절차 · 서버 비용 |
-| [docs/harness.md](docs/harness.md) · [docs/ai-usage.md](docs/ai-usage.md) · [CLAUDE.md](CLAUDE.md) | 자동 검증 · AI 활용 기록 · 작업 규칙 |
+| [docs/planning.md](docs/planning.md) | 기획 기록 (과제, 사용자, 경쟁, 가치, 우려사항, 사업 관점) + 상주시 가격 조사 |
+| [docs/decisions.md](docs/decisions.md) | 기술 선택 기록 (ADR 11건) |
+| [docs/operations.md](docs/operations.md) | 장애 대응 · 복원 테스트 · 메모리 측정 · 설정 절차 · 서버 비용 |
+| [docs/development.md](docs/development.md) · [CLAUDE.md](CLAUDE.md) | 자동 검증 · AI 활용 기록 · 이미지 출처 · 작업 규칙 |
 
 ---
 

@@ -10,7 +10,7 @@
 
 🔗 デモ: 未公開（本番サーバー未作成。ローカル／一時リンクで動作確認済み）
 
-> **このリポジトリの読み方（面接官の方へ）**: ①§0 サマリー（30秒）→ ②§1 要件定義（ヒアリングの観点と設計への反映）→ ③§2 アーキテクチャ → ④§3 トレードオフとリスク → ⑤§4 検証結果と**未検証の項目** → ⑥§5 想定質問。判断の根拠はすべて [docs/adr/](docs/adr/) にあります。
+> **このリポジトリの読み方（面接官の方へ）**: ①§0 サマリー（30秒）→ ②§1 要件定義（ヒアリングの観点と設計への反映）→ ③§2 アーキテクチャ → ④§3 トレードオフとリスク → ⑤§4 検証結果と**未検証の項目** → ⑥§5 想定質問。判断の根拠はすべて [docs/decisions.md](docs/decisions.md) にあります。
 
 ## 0. 30秒サマリー
 
@@ -33,7 +33,7 @@
 |---|---|---|
 | お客様（40〜70代） | 料金・場所・営業時間をスマホで確認したい。小さい文字や複雑な操作は苦手 | 本文18px以上・ボタン48px以上・コントラスト AA、下部固定メニュー、「電話／道案内」の大きなボタン |
 | 院長（非エンジニア） | 料金・休業・写真を自分で直したい。壊したり消したりが怖い | 韓国語の管理画面、料金の**その場編集**、**ゴミ箱で復元**、確認ダイアログ |
-| 開発者（運用担当 1人） | 手間と費用をかけず、止まらず、壊れても戻したい | 単一サーバー + 連続バックアップ + Runbook、自動デプロイ |
+| 開発者（運用担当 1人） | 手間と費用をかけず、止まらず、壊れても戻したい | 単一サーバー + 連続バックアップ + 運用ドキュメント、自動デプロイ |
 | 検索エンジン／地図 | 「근처 미용실」「은파미용실」で見つけてもらいたい | NAVER プレイスが主、サイトは JSON-LD・sitemap・タイトルに地域名で補強 |
 
 ### 1-2. ヒアリング項目 → 回答・前提 → 設計への反映
@@ -47,12 +47,12 @@
 | 3 | 何を一番伝えたいか？ | 30年の経験、料金公開、電話・道案内 | ◎ | ホームの文言候補3つ（管理画面で選択/自由入力）、料金表、電話/道案内ボタン |
 | 4 | 予算は？ | 月 数ドル（無料枠を活用） | ◎ | 1GB の小型サーバー、PostgreSQL・Redis なし（ADR 0001, 0004） |
 | 5 | 規模・アクセス量は？ | 町の1店舗。読み取り中心、書き込みは管理者1人 | ○ | SQLite（WAL）。同時書き込みが増えたら PostgreSQL へ（ADR 0001） |
-| 6 | 新規顧客はどう探す？ | NAVER 検索・地図が中心 | ○ | NAVER プレイス登録を最優先、サイトは JSON-LD / sitemap / OG / 地域名（ops-setup §4） |
+| 6 | 新規顧客はどう探す？ | NAVER 検索・地図が中心 | ○ | NAVER プレイス登録を最優先、サイトは JSON-LD / sitemap / OG / 地域名（operations.md 付録A §4） |
 | 7 | 言語は？ | 韓国語 + 英語 | ◎ | 2言語に限定（当初4言語から削減）。英語は任意入力・草稿（ADR 0003） |
-| 8 | 停止してよい時間は？ | 数時間〜半日程度なら許容と想定 | △ | **単一サーバー**。冗長化しない代わりに復旧手順を整備（§3, Runbook） |
+| 8 | 停止してよい時間は？ | 数時間〜半日程度なら許容と想定 | △ | **単一サーバー**。冗長化しない代わりに復旧手順を整備（§3, 運用ドキュメント） |
 | 9 | データを失ってよい範囲は？ | 直近数十秒は許容、写真は日次 | △ | DB は Litestream（約10秒）、画像は日次 rsync（ADR 0002） |
 | 10 | 個人情報は？ | 会員・予約・コメントなし | ◎ | 保存するのはクリック数のみ（Cookie・IP なし）。同意バナー不要（ADR 0007） |
-| 11 | 誰が保守するか？ | 開発者1人（院長は管理画面のみ） | ○ | Runbook・ADR・自動デプロイ・Dependabot で属人化を減らす |
+| 11 | 誰が保守するか？ | 開発者1人（院長は管理画面のみ） | ○ | 運用ドキュメント・ADR・自動デプロイ・Dependabot で属人化を減らす |
 | 12 | ドメインは？ | まずは無料サブドメイン（DuckDNS） | ◎ | Caddy で HTTPS。Cloudflare は使えない点をリスクとして明記（§3） |
 
 > ⚠️ #8・#9 は実際の合意が取れていない想定値です。本番前に院長と確認して「許容停止時間」「許容データ損失」を数字で決め、§3 の対策水準を見直します。
@@ -66,11 +66,11 @@
 |---|---|---|
 | 性能 | モバイル LCP 3 秒前後 | Lighthouse 92（/ko）、LCP 3.0s（ローカル測定） |
 | 可用性 | 数時間以内の復旧 | 手順は整備、**所要時間は未計測** |
-| バックアップ RPO | DB 約10秒 / 画像 24時間 | DB は Litestream で連続複製。画像は日次同期を ops-setup に記載（**cron は未設定**） |
+| バックアップ RPO | DB 約10秒 / 画像 24時間 | DB は Litestream で連続複製。画像は日次同期を operations.md に記載（**cron は未設定**） |
 | セキュリティ | OWASP 基本対策 | CSRF・CSP(nonce)・ログイン試行制限・アップロード検証・Brakeman 警告 0 |
 | アクセシビリティ | WCAG AA | Lighthouse Accessibility 98〜100 |
 | コスト | 月 約 $5 | Lightsail 1GB（**ソウルの料金は要確認**）＋ドメイン $0（DuckDNS） |
-| 保守性 | 1人で運用可能 | ADR 11本、Runbook、CI（rubocop/brakeman/audit/test） |
+| 保守性 | 1人で運用可能 | ADR 11本、運用ドキュメント、CI（rubocop/brakeman/audit/test） |
 
 ## 2. アーキテクチャ設計
 
@@ -95,7 +95,7 @@ flowchart LR
     P --- IMG[(画像 /data/files)]
   end
   LS -->|WAL を約10秒ごと| S3[(AWS S3 ソウル<br/>primary のみ)]
-  IMG -.->|日次 sync（ops-setup）| S3
+  IMG -.->|日次 sync（operations.md）| S3
   GH[GitHub Actions<br/>テスト→ビルド→GHCR] -->|pull + up -d| V
   UP[UptimeRobot] -.->|/up を監視| CD
   P -.->|例外メール| M[SMTP]
@@ -164,23 +164,23 @@ erDiagram
 | 領域 | 選択 | 理由 / 採用しなかった代替案 |
 |---|---|---|
 | フレームワーク | Ruby on Rails **8.1.4**（2026-10 時点の最新安定版。rubygems で確認）+ Hotwire | 少ないコードで管理画面を作れ、Turbo で「その場編集」を JS の自前実装なしに実現。SPA（React 等）は過剰 |
-| DB | **SQLite**（WAL, busy_timeout） | 読み取り中心・書き込みは管理者1人。メモリ 1GB に PostgreSQL は不要 → [ADR 0001](docs/adr/0001-sqlite.md) |
+| DB | **SQLite**（WAL, busy_timeout） | 読み取り中心・書き込みは管理者1人。メモリ 1GB に PostgreSQL は不要 → [ADR 0001](docs/decisions.md) |
 | キャッシュ/ジョブ/WebSocket | Solid Cache / Queue / Cable（Redis なし） | Rails 標準。Queue は Puma 内で動かしコンテナ1つを維持 |
-| バックアップ | **Litestream → AWS S3** | ファイル DB の連続複製。日次ダンプより損失が小さい → [ADR 0002](docs/adr/0002-litestream-backup.md) |
-| 運用 | **Docker**（Rails+Litestream）+ Caddy、ビルドは GitHub Actions | 1GB の VM ではビルドしない。Kamal / Kubernetes は1台には過剰 → [ADR 0004](docs/adr/0004-docker-operations.md) |
+| バックアップ | **Litestream → AWS S3** | ファイル DB の連続複製。日次ダンプより損失が小さい → [ADR 0002](docs/decisions.md) |
+| 運用 | **Docker**（Rails+Litestream）+ Caddy、ビルドは GitHub Actions | 1GB の VM ではビルドしない。Kamal / Kubernetes は1台には過剰 → [ADR 0004](docs/decisions.md) |
 | 前段 | **Caddy**（自動 HTTPS） | DuckDNS の無料アドレスは Cloudflare の背後に置けないため。独自ドメインがあれば Cloudflare を追加 |
-| CSS / テスト | 純粋な CSS / Minitest | アクセシビリティの数値を変数で一元管理 → [ADR 0011](docs/adr/0011-pure-css-minitest.md) |
-| 画像 | Active Storage + libvips、WebP | [ADR 0008](docs/adr/0008-image-webp.md) |
-| 多言語 | 韓国語 + 英語の2言語のみ | 校閲コストに対する効果 → [ADR 0003](docs/adr/0003-locales-ko-en.md) |
-| 管理画面 | 自作 | Web ビルダーとの比較 → [ADR 0010](docs/adr/0010-custom-admin-vs-web-builder.md) |
+| CSS / テスト | 純粋な CSS / Minitest | アクセシビリティの数値を変数で一元管理 → [ADR 0011](docs/decisions.md) |
+| 画像 | Active Storage + libvips、WebP | [ADR 0008](docs/decisions.md) |
+| 多言語 | 韓国語 + 英語の2言語のみ | 校閲コストに対する効果 → [ADR 0003](docs/decisions.md) |
+| 管理画面 | 自作 | Web ビルダーとの比較 → [ADR 0010](docs/decisions.md) |
 
 ## 3. トレードオフ・リスクと対策
 
 | # | リスク | 影響 | 現在の対策 | 残るリスク／次の一手 |
 |---|---|---|---|---|
-| R1 | サーバー1台（単一障害点） | 障害中サイトが止まる | 自動再起動、UptimeRobot、Runbook、1コマンドでロールバック | 冗長化はしない。許容停止時間を院長と合意（§1-2 #8） |
+| R1 | サーバー1台（単一障害点） | 障害中サイトが止まる | 自動再起動、UptimeRobot、運用ドキュメント、1コマンドでロールバック | 冗長化はしない。許容停止時間を院長と合意（§1-2 #8） |
 | R2 | SQLite は書き込みが直列 | 同時編集・増設に弱い | WAL + busy_timeout、管理者1人前提 | 複数人編集/複数台になったら PostgreSQL へ（ADR 0001） |
-| R3 | 画像は Litestream の対象外 | ディスク消失で写真が消える | 日次 sync を ops-setup に記載 | **cron 未設定**。配備時に設定してテストする |
+| R3 | 画像は Litestream の対象外 | ディスク消失で写真が消える | 日次 sync を operations.md に記載 | **cron 未設定**。配備時に設定してテストする |
 | R4 | DuckDNS（無料サブドメイン） | ドメイン評価が育たず、サービス停止の可能性。Cloudflare を前に置けない | プレイス（地図）を主にして検索依存を下げる | 独自ドメイン（年 約 $10）へ移行 |
 | R5 | DDoS／トラフィック急増 | 帯域超過の課金・停止 | ファイアウォールで 80/443 のみ、メモリ上限、予算アラート | 大規模攻撃は防げない（Cloudflare 不可）。予算アラートは「通知」であり自動停止ではない |
 | R6 | 非エンジニアの誤操作 | データ消失 | 論理削除＋ゴミ箱、確認ダイアログ | 完全削除はゴミ箱内のみ |
@@ -251,7 +251,7 @@ CSRF、管理者の bcrypt 認証とログイン試行制限、アップロー�
 </details>
 
 <details><summary>Q7. AI をどう使った？ 何を自分で判断した？</summary>
-実装の大半を Claude Code と対話して作成。判断は自分で行った: 言語を2つに絞る、Cloudflare を使えない構成のリスクを受け入れる、サーバーは Lightsail にする等。検証は自動テスト・実機（Docker）での復元テスト・メモリ測定・Lighthouse で行い、**未検証の範囲を明記**した（[docs/ai-usage.md](docs/ai-usage.md)）。
+実装の大半を Claude Code と対話して作成。判断は自分で行った: 言語を2つに絞る、Cloudflare を使えない構成のリスクを受け入れる、サーバーは Lightsail にする等。検証は自動テスト・実機（Docker）での復元テスト・メモリ測定・Lighthouse で行い、**未検証の範囲を明記**した（[docs/development.md](docs/development.md)）。
 </details>
 
 <details><summary>Q8. 一番難しかったことは？</summary>
@@ -323,7 +323,7 @@ GitHub Actions（`.github/workflows/ci.yml`）は push / PR のたびに Brakema
 
 ## 9. 配備構成とコスト
 
-`.github/workflows/deploy.yml`: main への push → テスト → イメージ作成 → GHCR → （有効化時のみ）VM で pull して再起動。**サーバー・ドメインが未定のため値はすべてプレースホルダー**で、リポジトリ変数 `DEPLOY_ENABLED=true` のときだけ配備ジョブが動きます。手順は [docs/runbook.md](docs/runbook.md)。
+`.github/workflows/deploy.yml`: main への push → テスト → イメージ作成 → GHCR → （有効化時のみ）VM で pull して再起動。**サーバー・ドメインが未定のため値はすべてプレースホルダー**で、リポジトリ変数 `DEPLOY_ENABLED=true` のときだけ配備ジョブが動きます。手順は [docs/operations.md](docs/operations.md)。
 
 | 項目 | 月額（見込み） | 備考 |
 |---|---|---|
@@ -333,18 +333,18 @@ GitHub Actions（`.github/workflows/ci.yml`）は push / PR のたびに Brakema
 | ドメイン `eunpabeautysalon.duckdns.org`（DuckDNS）/ UptimeRobot 無料 | $0 | 無料アドレスは信頼感・検索で不利（独自ドメインは年 約 $10） |
 | 予算アラート | 月 $3〜5 に設定 | 超過前にメール |
 
-**限界と拡張計画**: サーバーが1台なので障害時はその間サイトが止まります（復旧は Runbook）。DuckDNS の無料アドレスのため Cloudflare（CDN・DDoS 緩和）は使えません。書き込みが直列のため、管理者の同時編集やサーバー増設が必要になったら **PostgreSQL へ移行**します（ADR 0001）。料金・条件は変わりえます。
+**限界と拡張計画**: サーバーが1台なので障害時はその間サイトが止まります（復旧は 運用ドキュメント）。DuckDNS の無料アドレスのため Cloudflare（CDN・DDoS 緩和）は使えません。書き込みが直列のため、管理者の同時編集やサーバー増設が必要になったら **PostgreSQL へ移行**します（ADR 0001）。料金・条件は変わりえます。
 
 ## 10. バックアップ・復元・運用
 
 - Litestream が DB を約10秒ごとに S3 へ複製し、DB が無ければコンテナ起動時に自動復元します。**画像ファイルは別途バックアップ（rsync）が必要**です。
 - **復元テスト（2026-10-23、ローカルの file:// 先）**: 成功（`deploy/restore-test.sh`）。実際の S3 バケットでのテストは **未実施**（バケット未作成）。
-- 障害対応 Runbook（要約）: [docs/runbook.md](docs/runbook.md) / セットアップ・パッチ担当と周期: [docs/ops-setup.md](docs/ops-setup.md)
+- 障害対応・セットアップ・パッチ担当と周期: [docs/operations.md](docs/operations.md)
 
 ## 11. SEO と分析
 - ページタイトルに地域名（サイト設定の値）と「커트·파마 전문 미용실」を含め、JSON-LD `HairSalon`、sitemap.xml、robots.txt、hreflang、OG を出力
-- **地域検索（「근처 미용실」）の要は NAVER プレイスへの登録**です。サーチアドバイザ・Google Search Console の登録、プレイスとの相互リンク: [docs/ops-setup.md §4](docs/ops-setup.md)
-- 分析: ボタンのクリック数は自前で集計（個人情報なし）、ページ閲覧の分析は必要になったら導入（独自ドメインがあれば Cloudflare Web Analytics 等） → [ADR 0007](docs/adr/0007-analytics-clicks.md)
+- **地域検索（「근처 미용실」）の要は NAVER プレイスへの登録**です。サーチアドバイザ・Google Search Console の登録、プレイスとの相互リンク: [docs/operations.md 付録A §4](docs/operations.md)
+- 分析: ボタンのクリック数は自前で集計（個人情報なし）、ページ閲覧の分析は必要になったら導入（独自ドメインがあれば Cloudflare Web Analytics 等） → [ADR 0007](docs/decisions.md)
 
 ## 12. セキュリティ
 CSRF、管理者認証（bcrypt・ログイン試行制限）、アップロードの形式・サイズ制限、CSP とセキュリティヘッダ、秘密値はリポジトリに含めない（`.env`・`config/master.key` は除外し、イメージにも入れない）、Brakeman・bundler-audit・Dependabot。
@@ -357,7 +357,7 @@ CSRF、管理者認証（bcrypt・ログイン試行制限）、アップロー�
 - 今後: 本番サーバーへの配備と S3 での復元テスト（RTO の計測）、画像バックアップの cron、院長による操作確認、独自ドメイン、英語の校閲、（要望があれば）予約・口コミ連携
 
 ## 15. AI の利用
-[docs/ai-usage.md](docs/ai-usage.md) — 利用範囲と検証方法（自動テスト・実機確認・未検証の項目）
+[docs/development.md](docs/development.md) — 利用範囲と検証方法（自動テスト・実機確認・未検証の項目）
 
 ## 16. 開発ルール（Claude Code）
-`CLAUDE.md`、`.claude/`、`bin/verify` — 詳細は [docs/harness.md](docs/harness.md)
+`CLAUDE.md`、`.claude/`、`bin/verify` — 詳細は [docs/development.md](docs/development.md)
