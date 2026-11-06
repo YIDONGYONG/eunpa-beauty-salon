@@ -154,8 +154,8 @@ erDiagram
   events { string title_ko "message_ko/en" date starts_on date ends_on bool published }
   owner_profiles { text name_ko "headline/career ko·en" int years_of_experience }
   owner_greetings { text body_ko "body_en" int position bool visible }
-  site_settings { string phone decimal latitude decimal longitude text address_ko "hours·closed_days ko·en" int hero_phrase_choice string kakao_url string region_name_ko string schema_hours }
-  click_events { string kind "call/directions/kakao" string locale datetime created_at }
+  site_settings { string phone decimal latitude decimal longitude text address_ko "hours·closed_days ko·en" int hero_phrase_choice string region_name_ko string schema_hours }
+  click_events { string kind "call/directions/booking" string locale datetime created_at }
 ```
 設計の要点: 翻訳は `_ko` / `_en` 列＋空なら韓国語にフォールバック（`Translatable`）／価格は整数（ウォン）／「削除」は `discarded_at`（`SoftDeletable`）／`owner_profiles` と `site_settings` は常に1件／ブログ本文は Action Text、画像は Active Storage。
 
@@ -262,7 +262,7 @@ CSRF、管理者の bcrypt 認証とログイン試行制限、アップロー�
 
 | 画面 | 内容 |
 |---|---|
-| ホーム | 新ロゴと最初の文言（3候補から選択／自由入力）、院長の写真の枠（管理画面で「보이기」にすると文言の上に表示）、大きな「電話／道案内／カカオトーク」ボタン、初回来店特典バナー（期間後に自動で非表示）、営業時間・休業日、料金表（カテゴリごとの小さなアイコン付き）、紹介の要約、最新ブログ（モバイルは1列） |
+| ホーム | 新ロゴと最初の文言（3候補から選択／自由入力）、院長の写真の枠（管理画面で「보이기」にすると文言の上に表示）、大きな「電話／道案内」ボタン、初回来店特典バナー（期間後に自動で非表示）、営業時間・休業日、料金表（カテゴリごとの小さなアイコン付き）、紹介の要約、最新ブログ（モバイルは1列） |
 | 紹介 | 院長紹介（あいさつ文3件から **表示のたびにランダム**）、店内写真 |
 | ブログ | 美容情報（新しい順・ページネーション）。韓国語のみ必須、英語は任意 |
 | アクセス | NAVER 地図（キーが無い／失敗時は**地図の画像**に自動で切替）、「NAVER ナビで道案内」（アプリ → なければ Web）、電話、住所、**「미용실 사진」ボックス**（写真を上げるまでは空の枠）、営業時間・休業日 |

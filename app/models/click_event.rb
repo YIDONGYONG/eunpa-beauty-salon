@@ -1,7 +1,7 @@
 # 「電話」「道案内」などのボタンのクリック数を数えます。
 # Cookie・IP・端末情報は保存しません（個人を特定できない件数だけ。ADR 0007）。
 class ClickEvent < ApplicationRecord
-  KINDS = %w[call directions kakao booking].freeze
+  KINDS = %w[call directions booking].freeze
 
   validates :kind, inclusion: { in: KINDS }
   validates :locale, inclusion: { in: %w[ko en ja] }

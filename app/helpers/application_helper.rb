@@ -72,7 +72,7 @@ module ApplicationHelper
     attachment.attached? && attachment.blob.persisted?
   end
 
-  # ボタンのクリック数の計測用 data 属性（kind: :call / :directions / :kakao / :booking）
+  # ボタンのクリック数の計測用 data 属性（kind: :call / :directions / :booking）
   def track_data(kind)
     { controller: "track", action: "click->track#send", track_kind_value: kind, track_url_value: clicks_path(locale: nil) }
   end

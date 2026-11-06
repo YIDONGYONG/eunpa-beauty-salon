@@ -128,7 +128,7 @@ SNS를 활용해 지역에 알리기
 
 | 지표 | 방법 | 상태 |
 |---|---|---|
-| 전화·길 찾기·카카오톡 클릭 수 | `click_events` | 구현 완료 |
+| 전화·길 찾기·예약 클릭 수 | `click_events` | 구현 완료 |
 | 유입 경로별 방문 수 | UTM 파라미터 + 세션 단위 집계 | 【구현 예정】 |
 | 유입별 전환율 | 유입 수 대비 클릭 수 | 【구현 예정】 |
 | 신규 내점 경로 | 「어떻게 알고 오셨어요?」 수기 기록 | 【오픈 후】 |
@@ -160,7 +160,7 @@ IP·User-Agent·쿠키 기반 식별자는 저장하지 않으며, 세션 안에
 - 홈 · 미용실 소개 · 블로그 · 찾아오시는 길
 - 가격표 공개와 관리자의 직접 수정 (한 화면 인라인 편집)
 - 한국어 · 영어 · 일본어 표시 (영어·일본어는 초안)
-- 네이버 지도 길 안내, 전화·카카오톡 상담 버튼, 클릭 수 집계
+- 네이버 지도 길 안내, 전화·네이버 예약 버튼, 클릭 수 집계
 - 구조화 데이터(JSON-LD), 이미지 자동 축소·WebP 변환
 
 ## 정식 릴리스 이후
@@ -247,7 +247,7 @@ erDiagram
     date ends_on
   }
   click_events {
-    string kind "call / directions / kakao"
+    string kind "call / directions / booking"
     string locale
     string source "UTM 도입 시 추가 예정"
     string campaign "UTM 도입 시 추가 예정"

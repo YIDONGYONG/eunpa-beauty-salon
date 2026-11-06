@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_06_110001) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_06_120001) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -177,7 +177,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_06_110001) do
     t.datetime "updated_at", null: false
     t.string "region_name_ko"
     t.string "region_name_en"
-    t.string "kakao_url"
     t.integer "hero_phrase_choice", default: 3, null: false
     t.string "schema_hours", default: "Mo-Sa 09:00-19:00"
     t.text "tagline_ja"

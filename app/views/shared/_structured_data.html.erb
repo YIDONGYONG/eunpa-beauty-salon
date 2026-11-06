@@ -9,8 +9,7 @@
     "address" => (site_setting.address.present? ? { "@type" => "PostalAddress", "streetAddress" => site_setting.address, "addressCountry" => "KR" } : nil),
     "geo" => (site_setting.coordinates? ? { "@type" => "GeoCoordinates", "latitude" => site_setting.latitude.to_f, "longitude" => site_setting.longitude.to_f } : nil),
     "openingHours" => site_setting.schema_hours.presence,
-    "areaServed" => site_setting.region_name.presence,
-    "sameAs" => [ site_setting.kakao_url.presence ].compact.presence
+    "areaServed" => site_setting.region_name.presence
   }.compact
 %>
 <script type="application/ld+json"><%= raw json_escape(data.to_json) %></script>

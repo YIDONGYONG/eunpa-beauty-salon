@@ -19,7 +19,6 @@ class SiteSetting < ApplicationRecord
   validates :phone, length: { maximum: 30 }
   validates :hero_phrase_choice, inclusion: { in: 0..3 }
   validates :naver_booking_url, format: { with: %r{\Ahttps://\S+\z}, message: "은 https:// 로 시작하는 주소여야 합니다" }, allow_blank: true
-  validates :kakao_url, format: { with: %r{\Ahttps://\S+\z}, message: "은 https:// 로 시작하는 주소여야 합니다" }, allow_blank: true
 
   def self.instance
     first || create!(phone: "")
@@ -42,10 +41,6 @@ class SiteSetting < ApplicationRecord
   # NAVER 予約ボタンは、予約ページの URL が入っているときだけ表示する
   def booking?
     naver_booking_url.present?
-  end
-
-  def kakao?
-    kakao_url.present?
   end
 
   def coordinates?

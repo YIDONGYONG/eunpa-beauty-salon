@@ -74,14 +74,6 @@
   </fieldset>
 
   <fieldset class="translated-field">
-    <legend>카카오톡 채널 (선택)</legend>
-    <div class="field">
-      <%= f.label :kakao_url, "카카오톡 채널 주소 (https:// 로 시작, 비우면 버튼이 보이지 않습니다)" %>
-      <%= f.url_field :kakao_url, placeholder: "https://pf.kakao.com/..." %>
-    </div>
-  </fieldset>
-
-  <fieldset class="translated-field">
     <legend>미용실 사진 (주소 아래 박스)</legend>
     <p class="help">"찾아오시는 길" 화면의 주소 바로 아래 "미용실 사진" 박스에 보입니다. 아직 올리지 않으면 빈 그림과 "사진을 곧 올려 드리겠습니다"가 보입니다. 가게 건물이나 입구를 찍은 사진을 올려 주세요.</p>
     <% if saved_attachment?(@setting.address_photo) %>

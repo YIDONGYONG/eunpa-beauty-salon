@@ -358,7 +358,7 @@ html:lang(ko) .hero-title { word-break: keep-all; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
 
-/* ---------- お知らせ（初回特典）/ カカオ / 入口写真 ---------- */
+/* ---------- お知らせ（初回特典）/ 入口写真 ---------- */
 .event-banner { padding-block: 0 24px; }
 .event-box { padding: 18px 24px; background: #FFF6E5; border: 1px solid #E9CFA0; border-radius: var(--radius); }
 .event-title { margin: 0; font-weight: 700; color: #5A3E0A; }
@@ -366,8 +366,6 @@ html:lang(ko) .hero-title { word-break: keep-all; }
 .event-message { margin: 6px 0 0; color: #3F3208; }
 .btn-naver { background: #03C75A; color: #14201A; border-color: #03C75A; }
 .btn-naver:hover { background: #02B351; color: #14201A; }
-.btn-kakao { background: #FEE500; color: #2A2523; border-color: #FEE500; }
-.btn-kakao:hover { background: #F2D900; color: #2A2523; }
 .address-photo { display: block; width: 100%; max-width: 640px; margin-top: 12px; border-radius: var(--radius); border: 1px solid var(--line); }
 .before-after { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 14px; grid-template-columns: 1fr; }
 .before-after img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); }

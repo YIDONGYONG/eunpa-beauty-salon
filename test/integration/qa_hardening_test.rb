@@ -202,7 +202,7 @@ class QaHardeningTest < ActionDispatch::IntegrationTest
   end
 
   test "pages render when optional settings are blank" do
-    SiteSetting.instance.update!(phone: "", address_ko: nil, hours_ko: nil, closed_days_ko: nil, latitude: nil, longitude: nil, kakao_url: nil)
+    SiteSetting.instance.update!(phone: "", address_ko: nil, hours_ko: nil, closed_days_ko: nil, latitude: nil, longitude: nil)
     [ "/ko", "/ko/location", "/en", "/en/location" ].each do |path|
       get path
       assert_response :success, path
@@ -351,13 +351,5 @@ class QaHardeningTest < ActionDispatch::IntegrationTest
     patch admin_site_setting_path, params: { site_setting: { naver_booking_url: "javascript:alert(1)" } }
     assert_response :unprocessable_entity
     assert_nil SiteSetting.instance.reload.naver_booking_url
-  end
-
-  test "kakao url must be https" do
-    sign_in_admin
-    patch admin_site_setting_path, params: { site_setting: { kakao_url: "javascript:alert(1)" } }
-    assert_response :unprocessable_entity
-    patch admin_site_setting_path, params: { site_setting: { kakao_url: "http://insecure.example" } }
-    assert_response :unprocessable_entity
   end
 end
