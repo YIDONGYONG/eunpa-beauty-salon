@@ -2,7 +2,8 @@
 #   web   : Rails + Litestream（外には公開しない）
 #   caddy : HTTPS の入口（80/443 を公開。証明書は自動取得）
 # 使い方: /opt/eunpa に置き、同じ場所に .env（deploy/env.production.example を参照）と Caddyfile を置く
-#   docker compose -f compose.production.yml up -d    （GitHub Actions は `docker compose pull && up -d` を実行）
+#   このファイルは VM の /opt/eunpa に「compose.yaml」という名前で置く（GitHub Actions は `docker compose pull && up -d` をファイル名の指定なしで実行するため）
+#   docker compose up -d
 services:
   web:
     image: ${IMAGE:-ghcr.io/OWNER/REPO}:latest   # OWNER/REPO は GitHub のリポジトリ名に置き換える
