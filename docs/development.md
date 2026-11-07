@@ -1,45 +1,45 @@
-# 개발 방식 (자동 검증 · AI 활용 · 이미지 출처)
+# 開発の進め方（自動検証・AI の活用・画像の出典）
 
-## 개발 하네스 (Claude Code용 작업 환경)
+## 開発ハーネス（Claude Code 用の作業環境）
 
-이 프로젝트를 Claude Code로 수정할 때 실수를 줄이기 위한 규칙과 자동 점검입니다.
+このプロジェクトを Claude Code で修正するときに、ミスを減らすためのルールと自動チェックです。
 
-| 파일 | 역할 |
+| ファイル | 役割 |
 | --- | --- |
-| `CLAUDE.md` | 프로젝트 규칙(구조, 번역, 접근성, 금지 사항, 명령). Claude가 매번 읽습니다 |
-| `.claude/settings.json` | 허용/금지 명령, 훅 연결 (`.env` 읽기 금지, `docker compose down -v` 금지 등) |
-| `.claude/hooks/protect_files.sh` | 비밀 파일·`schema.rb`·기존 마이그레이션 수정 차단 |
-| `.claude/hooks/after_edit.sh` | 수정 직후 rubocop 자동 교정, locale/뷰 수정 시 번역 일관성 검사 |
-| `.claude/skills/verify` | 완료 전 검증 절차(`bin/verify`) |
-| `.claude/skills/add-translated-content` | 2개 언어(ko/en) 필드/문구 추가 절차 |
-| `bin/verify` | rubocop → brakeman → 테스트 한 번에 실행 |
-| `test/i18n_consistency_test.rb` | 번역 키 누락 · 변수 불일치 · 공개 뷰 한글 하드코딩 검출 |
+| `CLAUDE.md` | プロジェクトのルール（構造、翻訳、アクセシビリティ、禁止事項、コマンド）。Claude が毎回読む（韓国語） |
+| `.claude/settings.json` | 許可・禁止するコマンドと、フックの接続（`.env` の読み取り禁止、`docker compose down -v` の禁止など） |
+| `.claude/hooks/protect_files.sh` | 秘密のファイル・`schema.rb`・既存のマイグレーションの変更をブロック |
+| `.claude/hooks/after_edit.sh` | 編集の直後に RuboCop で自動修正し、ロケール・ビューを編集したときは翻訳の一貫性を検査 |
+| `.claude/skills/verify` | 完了前の検証手順（`bin/verify`） |
+| `.claude/skills/add-translated-content` | 多言語（ko/en/ja）の項目・文言を追加する手順 |
+| `bin/verify` | RuboCop → Brakeman → テストを一度に実行 |
+| `test/i18n_consistency_test.rb` | 翻訳キーの漏れ、変数の不一致、公開ビューへの韓国語の直書きを検出 |
 
-훅은 `jq` 가 설치된 환경에서 동작합니다(macOS: `brew install jq`).
+フックは `jq` がインストールされた環境で動作します（macOS: `brew install jq`）。
 
-## AI の利用と検証 / AI 사용과 검증
+## AI の利用と検証
 
-### 使った部分 / 사용한 부분
-- 実装の大半（モデル・コントローラ・ビュー・CSS・マイグレーション・Dockerfile・CI・ドキュメント）を Claude Code（Anthropic）と対話しながら作成。
-- 画像（ブログのカバー）はプログラム（Pillow）で生成。ロゴは依頼者が用意した画像を最適化して使用。
+### 使った部分
+- 実装の大半（モデル・コントローラ・ビュー・CSS・マイグレーション・Dockerfile・CI・ドキュメント）を、Claude Code（Anthropic）と対話しながら作成した。
+- 画像（ブログのカバー）はプログラム（Pillow）で生成した。ロゴは依頼者が用意した画像を最適化して使用している。
 
-### 検証方法 / 검증 방법
-- **自動**: Minitest（`bin/rails test`）、RuboCop、Brakeman、bundler-audit（CI で毎回）。翻訳キー漏れと公開ビューへの韓国語直書きは `test/i18n_consistency_test.rb` が検出。
-- **実機**: 本番イメージをビルドして起動し、`deploy/restore-test.sh`（バックアップ → ディスク消失 → 自動復元）と `deploy/measure-memory.sh`（メモリ）を実行。Lighthouse（モバイル）を測定。
-- **人による確認**: 画面（モバイル 390px・PC）をブラウザで確認。
-- **未検証**: S3 本番バケットでの復元、実際の VM でのデプロイ、英語の文言（草稿・要校閲）、NAVER 地図の実キー動作。
-- **判断は自分で**: ADR に採用理由と代替案を書き、AI の提案を鵜呑みにしないようにした（例: Kamal を採用しない理由）。
+### 検証方法
+- **自動**: Minitest（`bin/rails test`）、RuboCop、Brakeman、bundler-audit（CI で毎回）。翻訳キーの漏れと、公開ビューへの韓国語の直書きは、`test/i18n_consistency_test.rb` が検出する。
+- **実機**: 本番イメージをビルドして起動し、`deploy/restore-test.sh`（バックアップ → ディスク消失 → 自動復元）と `deploy/measure-memory.sh`（メモリ）を実行した。Lighthouse（モバイル）を測定した。
+- **人による確認**: 画面（モバイル 390px・PC）をブラウザで確認した。
+- **未検証**: S3 の本番バケットでの復元、実際の VM でのデプロイ、英語・日本語の文言（草稿・要校閲）、NAVER 地図の実キーでの動作。
+- **判断は自分で行う**: ADR に採用理由と代替案を書き、AI の提案を鵜呑みにしないようにした（例: Kamal を採用しない理由）。
 
-## 사용한 외부 이미지·아이콘의 출처
+## 使用した外部の画像・アイコンの出典
 
-Flaticon 무료 라이선스는 **저작자 표시가 필수**입니다. 개인정보 처리방침 페이지(`/ko/privacy`)의 "이미지 출처" 항목에 Flaticon 링크를 넣었습니다. 아이콘마다 저작자 이름을 함께 적어야 하므로 아래 표를 채우고, 해당 항목을 `Icon by 저작자 from Flaticon` 형태로 보완하세요.
+Flaticon の無料ライセンスでは、**作者のクレジット表示が必須**です。プライバシーポリシーのページ（`/ko/privacy` など）の「画像の出典」の項目に、Flaticon へのリンクを入れています。アイコンごとに作者名も併記する必要があるため、下の表を埋めたうえで、該当の項目を `Icon by 作者 from Flaticon` の形に補ってください。
 
-| 파일 | 용도 | 저작자 | Flaticon 페이지 URL | 받은 날 | 라이선스 |
+| ファイル | 用途 | 作者 | Flaticon のページ URL | 入手日 | ライセンス |
 |---|---|---|---|---|---|
-| `db/seed_images/category-cut.png` | 가격표 커트 아이콘 | 【TODO】 | 【TODO】 | 【TODO】 | Flaticon 무료(저작자 표시) |
-| `db/seed_images/category-perm.png` | 가격표 파마 아이콘 | 【TODO】 | 【TODO】 | 【TODO】 | 〃 |
-| `db/seed_images/category-makeup.png` | 가격표 화장 아이콘 | 【TODO】 | 【TODO】 | 【TODO】 | 〃 |
-| `app/assets/images/cut.png` `perm.png` `hair.png` | 【TODO: 사용처】 | 【TODO】 | 【TODO】 | 【TODO】 | 〃 |
+| `db/seed_images/category-cut.png` | 料金表の「カット」のアイコン | 【TODO】 | 【TODO】 | 【TODO】 | Flaticon 無料（クレジット表示が必要） |
+| `db/seed_images/category-perm.png` | 料金表の「パーマ」のアイコン | 【TODO】 | 【TODO】 | 【TODO】 | 同上 |
+| `db/seed_images/category-makeup.png` | 料金表の「メイク」のアイコン | 【TODO】 | 【TODO】 | 【TODO】 | 同上 |
+| `app/assets/images/cut.png` `perm.png` `hair.png` | 【TODO: 使用場所】 | 【TODO】 | 【TODO】 | 【TODO】 | 同上 |
 
-- 다운로드한 zip의 `license` 파일은 저장소 밖(개인 보관함)에 보관합니다.
-- 유료(Premium)로 바꾸면 표시 의무가 달라질 수 있으니 그때 라이선스를 다시 확인합니다.
+- ダウンロードした zip の `license` ファイルは、リポジトリの外（個人の保管場所）に保管する。
+- 有料（Premium）に切り替えると表示の義務が変わることがあるので、そのときにライセンスを再確認する。

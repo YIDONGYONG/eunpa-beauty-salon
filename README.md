@@ -51,7 +51,7 @@
 | 純粋な CSS + Minitest | アクセシビリティの数値（文字サイズ・コントラスト）を変数で一元管理。依存を最小限に | CSS フレームワーク・RSpec |
 | 自作の管理画面 | 院長専用の UI（1画面でインライン編集） | Web ビルダー（比較のうえ決定） |
 
-各決定の背景と詳細: [docs/decisions.md](docs/decisions.md)（韓国語・日本語混在）
+各決定の背景と詳細: [docs/decisions.md](docs/decisions.md)
 
 ## 6. システム構成・DB設計
 
@@ -128,7 +128,7 @@ docker compose up -d --build  # DB 作成・マイグレーション・シード
 
 | ドキュメント | 内容 |
 |---|---|
-| [docs/planning.md](docs/planning.md) | 企画記録、競合・価格の調査、ビジネス視点（韓国語） |
+| [docs/planning.md](docs/planning.md) | 企画記録、競合・価格の調査、ビジネス視点 |
 | [docs/decisions.md](docs/decisions.md) | 技術選定の記録（ADR 11件） |
 | [docs/operations.md](docs/operations.md) | 障害対応、復元テスト、メモリ測定、セットアップ手順、費用 |
-| [docs/development.md](docs/development.md) · [CLAUDE.md](CLAUDE.md) | 自動検証、AI の活用、画像の出典、作業ルール（韓国語） |
+| [docs/development.md](docs/development.md) · [CLAUDE.md](CLAUDE.md) | 自動検証、AI の活用、画像の出典、作業ルール（CLAUDE.md は韓国語） |
