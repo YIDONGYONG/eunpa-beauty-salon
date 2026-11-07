@@ -20,7 +20,7 @@
 | 誰のため | お客様（40〜70代、スマホ中心）／院長（非エンジニア）／運用する開発者（1人） |
 | 規模 | 町の1店舗。読み取り中心、書き込みは管理者1人。同時アクセスは少数 |
 | 技術 | Rails 8.1 + Hotwire / SQLite（WAL）+ Solid Queue・Cache・Cable / Litestream → S3 / Docker 1台構成（+ Caddy） |
-| コスト目標 | **月 約 $5**（AWS Lightsail ソウル 1GB。料金は契約前に再確認） |
+| コスト目標 | **月 約 $7**（AWS Lightsail ソウル 1GB・IPv4。消費税別。料金は契約前に再確認） |
 | 設計の軸 | ① 目的に対して過剰な技術を入れない ② 非エンジニアが壊せない・戻せる ③ 判断の理由と代替案を ADR に残す |
 | 実測 | メモリ 約 266MiB（上限 700MB 内）／ Lighthouse モバイル 87〜94（Accessibility 100, SEO 100）／ テスト 93 件成功 |
 | 正直な未達 | 本番サーバーへの配備・S3 での復元テストは**未実施**（§4 参照） |
@@ -69,7 +69,7 @@
 | バックアップ RPO | DB 約10秒 / 画像 24時間 | DB は Litestream で連続複製。画像は日次同期を operations.md に記載（**cron は未設定**） |
 | セキュリティ | OWASP 基本対策 | CSRF・CSP(nonce)・ログイン試行制限・アップロード検証・Brakeman 警告 0 |
 | アクセシビリティ | WCAG AA | Lighthouse Accessibility 98〜100 |
-| コスト | 月 約 $5 | Lightsail 1GB（**ソウルの料金は要確認**）＋ドメイン $0（DuckDNS） |
+| コスト | 月 約 $7 | Lightsail 1GB（**ソウルの料金は要確認**）＋ドメイン $0（DuckDNS） |
 | 保守性 | 1人で運用可能 | ADR 11本、運用ドキュメント、CI（rubocop/brakeman/audit/test） |
 
 ## 2. アーキテクチャ設計
@@ -327,11 +327,11 @@ GitHub Actions（`.github/workflows/ci.yml`）は push / PR のたびに Brakema
 
 | 項目 | 月額（見込み） | 備考 |
 |---|---|---|
-| AWS Lightsail ソウル 1GB | 約 $5 | ソウルの料金は **未確認**。契約前に料金ページで確認。停止中も課金される |
+| AWS Lightsail ソウル 1GB（IPv4） | $7 | 公式料金ページで確認（消費税別）。ソウルの最終料金は **契約画面で確認**。契約前に料金ページで確認。停止中も課金される |
 | S3（バックアップ） | 少額 | 容量が小さくごく安価な見込み（未確認） |
 | GitHub Actions / GHCR | $0 | 無料範囲 |
 | ドメイン `eunpabeautysalon.duckdns.org`（DuckDNS）/ UptimeRobot 無料 | $0 | 無料アドレスは信頼感・検索で不利（独自ドメインは年 約 $10） |
-| 予算アラート | 月 $3〜5 に設定 | 超過前にメール |
+| 予算アラート | 月 $10 に設定 | 超過前にメール |
 
 **限界と拡張計画**: サーバーが1台なので障害時はその間サイトが止まります（復旧は 運用ドキュメント）。DuckDNS の無料アドレスのため Cloudflare（CDN・DDoS 緩和）は使えません。書き込みが直列のため、管理者の同時編集やサーバー増設が必要になったら **PostgreSQL へ移行**します（ADR 0001）。料金・条件は変わりえます。
 
