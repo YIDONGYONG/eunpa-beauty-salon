@@ -50,11 +50,11 @@ Litestream のプロセスは別に +20〜40MB 程度と見積もっている（
 > 用語: **VM/サーバー** = 24時間動くインターネット上のパソコン。**IP** = サーバーの住所の番号。**DNS** = 名前（eunpabeautysalon.duckdns.org）から IP を引く電話帳。**HTTPS** = 通信を暗号化する鍵マーク。**ファイアウォール** = 出入口の鍵（どのポートを開けるか）。
 
 1. **料金の確認（作成前）**: Lightsail の料金ページでリージョンを「ソウル」にして **IPv4 付きの 1GB プラン（$7）**を選ぶ（IPv6 専用の $5 は不可。公式の料金ページで確認済み。ソウルの最終料金と消費税は契約画面で確認）。AWS の請求 → 予算で **月 $10 のアラート**を作る（超過前にメール。自動停止ではない）。
-2. **Lightsail でインスタンスを作成**: リージョン `ap-northeast-2`（ソウル）、OS は Ubuntu 24.04 LTS、プランは 1GB（メモリ 1GB）。
+2. **Lightsail でインスタンスを作成**: リージョンは `ap-northeast-2`（ソウル）。アカウントの都合でソウルを選べない間は、暫定的に `ap-southeast-2`（シドニー）を使い、後でソウルへ移す（その場合、S3 バケットと `AWS_REGION` もサーバーと同じリージョンにそろえる）。OS は Ubuntu 24.04 LTS、プランは IPv4 付きの 1GB。作成画面の「起動スクリプト（Launch script）」に `deploy/lightsail-launch-script.sh` の内容を貼り付けると、手順 6 の初期設定が作成直後に自動で終わる（ログ: `/var/log/eunpa-setup.log`）。
 3. **静的 IP を作ってインスタンスにアタッチ**（IP が再起動で変わらないようにする。**アタッチしたままにする**。未使用の静的 IP は課金される）。
 4. **ファイアウォール（Lightsail の「ネットワーキング」タブ）**: 開けるのは **22（SSH。可能なら自分の IP のみ）/ 80 / 443** だけ。それ以外は閉じる。
 5. **DuckDNS**: https://www.duckdns.org でログイン → サブドメイン `eunpabeautysalon` を作り、IP 欄に**手順3の静的 IP** を入れる（静的 IP なので更新作業は不要）。
-6. サーバーに SSH → `sudo deploy/vm-setup.sh`（スワップ 2GB、Docker、`/var/lib/eunpa`）。
+6. サーバーの初期設定: 手順 2 の起動スクリプトを使った場合は自動で済んでいる。使わなかった場合は、サーバーに SSH して `sudo deploy/vm-setup.sh` を実行する（スワップ 2GB、Docker、OS の自動更新、`/var/lib/eunpa`）。
 7. **バックアップ用の S3 バケット（ソウル）**を作り、**そのバケットだけ**に権限を絞った IAM ユーザーのアクセスキーを発行する（AWS ルートのキーは使わない）。
 8. `/opt/eunpa/` に `deploy/compose.production.yml`、`deploy/Caddyfile`、`.env`（`deploy/env.production.example` をコピーして値を入れる）を置く。`SECRET_KEY_BASE` は `bin/rails secret` で作る。`IMAGE` は GHCR のイメージ名で、**小文字**で書く（例: `ghcr.io/yidongyong/eunpa-beauty-salon`）。
 9. `docker compose -f compose.production.yml up -d` → Caddy が自動で HTTPS 証明書（Let's Encrypt）を取得する。`https://eunpabeautysalon.duckdns.org/up` が 200 なら成功。管理者を作成したら `.env` を `RUN_SEED=false` にする。
