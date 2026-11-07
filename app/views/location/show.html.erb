@@ -1,23 +1,33 @@
 <% page_title t("location.title") %>
 <% page_description t("location.meta_description") %>
 <% name = t("site.name") %>
+<%# NAVER 地図の Client ID がないときは、登録した地図画像（なければ案内文）だけを表示する。エラー文言は出さない %>
+<% static_map = naver_client_id.blank? %>
 
 <section class="section">
   <div class="container">
     <h1 class="page-title"><%= t("location.title") %></h1>
 
-    <div class="map-wrap"
+    <div class="map-wrap<%= " is-static" if static_map %>"
          data-controller="naver-map"
          data-naver-map-client-id-value="<%= naver_client_id %>"
          data-naver-map-lat-value="<%= site_setting.latitude %>"
          data-naver-map-lng-value="<%= site_setting.longitude %>"
          data-naver-map-title-value="<%= name %>">
-      <div class="map" data-naver-map-target="canvas" role="img" aria-label="<%= t('location.map_title') %>"></div>
+      <div class="map" data-naver-map-target="canvas" role="img" aria-label="<%= t('location.map_title') %>"<%= " hidden".html_safe if static_map %>></div>
       <%# NAVER 地図が出ないとき（キーなし・エラー）の代わりの領域: 登録済みの地図画像があれば、その画像を表示します %>
-      <div class="map-fallback" data-naver-map-target="fallback" hidden>
+      <div class="map-fallback" data-naver-map-target="fallback"<%= " hidden".html_safe unless static_map %>>
         <% if site_setting.map_image.attached? %>
-          <%= salon_image_tag site_setting.map_image, width: 1200, class: "map-image", alt: t("location.map_title") %>
-          <p class="hint"><%= t("location.map_image_hint") %></p>
+          <% image = salon_image_tag site_setting.map_image, width: 1200, class: "map-image", alt: t("location.map_title") %>
+          <% if static_map %>
+            <%= link_to image, naver_web_url(site_setting), target: "_blank", rel: "noopener", class: "map-image-link" %>
+            <p class="hint"><%= t("location.map_image_caption") %></p>
+          <% else %>
+            <%= image %>
+            <p class="hint"><%= t("location.map_image_hint") %></p>
+          <% end %>
+        <% elsif static_map %>
+          <p><%= t("location.map_static_empty") %></p>
         <% else %>
           <p><%= t("location.map_unavailable") %></p>
         <% end %>
@@ -36,9 +46,6 @@
         <%= link_to site_setting.phone_href, class: "btn btn-primary", data: track_data(:call) do %>
           <span aria-hidden="true">📞</span> <%= t("common.call") %>
         <% end %>
-      <% end %>
-      <%= link_to naver_web_url(site_setting), class: "btn btn-outline", target: "_blank", rel: "noopener" do %>
-        <%= t("location.open_web") %>
       <% end %>
     </div>
     <p class="hint"><%= t("location.navi_hint") %></p>

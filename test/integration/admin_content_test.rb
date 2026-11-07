@@ -172,4 +172,15 @@ class AdminContentTest < ActionDispatch::IntegrationTest
     delete map_image_admin_site_setting_path
     assert_not SiteSetting.instance.reload.map_image.attached?
   end
+
+  test "without a NAVER map key the uploaded map image is shown directly, linking to NAVER Map and no separate view button" do
+    get "/ko/location"
+    assert_select ".map-fallback:not([hidden])", text: /네이버 내비로 길 안내/
+    assert_not_includes response.body, "지도를 불러오지 못했습니다"
+    png = fixture_file_upload("dot.png", "image/png")
+    patch admin_site_setting_path, params: { site_setting: { map_image: png } }
+    get "/ko/location"
+    assert_select ".map-fallback:not([hidden]) a.map-image-link[target=_blank] img.map-image"
+    assert_not_includes response.body, "불러와지지 않아"
+  end
 end

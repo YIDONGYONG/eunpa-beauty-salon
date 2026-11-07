@@ -272,6 +272,8 @@ html:lang(ko) .hero-title { word-break: keep-all; }
 
 .map-wrap { margin-bottom: 8px; min-height: 320px; } /* 地図→代替表示に切り替わってもボタンが動かないよう高さを確保（CLS 対策） */
 .map { width: 100%; height: 320px; border-radius: var(--radius); background: var(--green-100); border: 1px solid var(--line); }
+.map-wrap.is-static { min-height: 0; }
+.map-image-link { display: block; }
 .map-fallback { padding: 20px; background: var(--green-100); border-radius: var(--radius); }
 .map-image { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--line); }
 .map-pin { position: relative; width: 28px; height: 28px; }
@@ -323,6 +325,7 @@ html:lang(ko) .hero-title { word-break: keep-all; }
   .info-list-stack { grid-template-columns: 1fr; }
   .map { height: 420px; }
   .map-wrap { min-height: 420px; }
+  .map-wrap.is-static { min-height: 0; }
   .mobile-bar { display: none; }
   body.public { padding-bottom: 0; }
 }

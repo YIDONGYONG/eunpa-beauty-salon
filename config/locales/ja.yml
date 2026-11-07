@@ -95,9 +95,10 @@ ja:
     closed: "定休日"
     parking: "駐車場のご案内"
     map_title: "地図"
-    map_unavailable: "地図を読み込めませんでした。下のボタンからNAVERマップでご確認ください。"
-    map_image_hint: "上の地図を読み込めないため、地図の画像を表示しています。下のボタンからNAVERマップで道順をご確認ください。"
-    open_web: "NAVERマップで見る"
+    map_unavailable: "地図を読み込めませんでした。下の「NAVERナビで道案内」ボタンをご利用ください。"
+    map_image_hint: "上の地図を読み込めないため、地図の画像を表示しています。下の「NAVERナビで道案内」ボタンで道順をご確認ください。"
+    map_image_caption: "地図の画像をタップすると、NAVERマップが開きます。"
+    map_static_empty: "道案内は、下の「NAVERナビで道案内」ボタンをご利用ください。"
     empty: "準備中です。"
     meta_description: "恩波美容室の住所、地図、電話番号、営業時間のご案内です。"
   footer:

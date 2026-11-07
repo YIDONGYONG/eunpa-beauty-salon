@@ -9,6 +9,9 @@
     <span aria-hidden="true">🗓</span> <%= t("extras.booking") %>
   <% end %>
 <% end %>
-<%= link_to location_path, class: "btn btn-secondary", data: track_data(:directions) do %>
-  <span aria-hidden="true">📍</span> <%= t("common.directions") %>
+<%# 押すと NAVER 地図アプリ（なければ Web）で直接道案内を開く。JS が動かない場合は NAVER 地図の Web へ通常リンクで移動 %>
+<%= link_to naver_web_url(site_setting), class: "btn btn-secondary", target: "_blank", rel: "noopener",
+      data: { controller: "navi", action: "navi#go", navi_app_url_value: naver_navi_app_url(site_setting, t("site.name")),
+              navi_web_url_value: naver_web_url(site_setting), navi_track_url_value: clicks_path(locale: nil), navi_page_value: "home" } do %>
+  <span aria-hidden="true">📍</span> <%= t("location.navi") %>
 <% end %>

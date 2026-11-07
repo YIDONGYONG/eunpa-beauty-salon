@@ -95,9 +95,10 @@ en:
     closed: "Closed"
     parking: "Parking"
     map_title: "Map"
-    map_unavailable: "The map could not be loaded. Please use the button below to view it on NAVER Map."
-    map_image_hint: "The live map could not be loaded, so a map image is shown. Use the button below to find directions in NAVER Map."
-    open_web: "View on NAVER Map"
+    map_unavailable: "The map could not be loaded. Please use the 'Get directions with NAVER Map' button below."
+    map_image_hint: "The live map could not be loaded, so a map image is shown. Use the 'Get directions with NAVER Map' button below to find your way."
+    map_image_caption: "Tap the map picture to open NAVER Map."
+    map_static_empty: "Please use the 'Get directions with NAVER Map' button below."
     empty: "Coming soon."
     meta_description: "Address, map, phone number, and opening hours for Eunpa Hair Salon."
   footer:
