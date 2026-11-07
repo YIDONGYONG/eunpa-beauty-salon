@@ -1,66 +1,66 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  # Settings specified here will take precedence over those in config/application.rb.
+  # ここでの設定は config/application.rb の設定より優先されます。
 
-  # Code is not reloaded between requests.
+  # リクエストごとのコード再読み込みは行いません。
   config.enable_reloading = false
 
-  # Eager load code on boot for better performance and memory savings (ignored by Rake tasks).
+  # 起動時にコードを先読みして、性能とメモリ効率を上げます（Rake タスクでは無視されます）。
   config.eager_load = true
 
-  # Full error reports are disabled.
+  # 詳細なエラーレポートは無効にします。
   config.consider_all_requests_local = false
 
-  # Turn on fragment caching in view templates.
+  # ビューのフラグメントキャッシュを有効にします。
   config.action_controller.perform_caching = true
 
-  # Cache assets for far-future expiry since they are all digest stamped.
+  # アセットはすべてダイジェスト付きなので、有効期限を遠い将来にしてキャッシュします。
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
 
-  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+  # 画像・CSS・JavaScript をアセット用サーバーから配信する場合の設定です。
   # config.asset_host = "http://assets.example.com"
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
+  # アップロードされたファイルをローカルのファイルシステムに保存します（選択肢は config/storage.yml を参照）。
   config.active_storage.service = :local
 
-  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
+  # アプリへのアクセスはすべて、SSL を終端するリバースプロキシ（Caddy）経由であるものとします。
   config.assume_ssl = ENV.fetch("FORCE_SSL", "true") == "true"
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  # アクセスをすべて SSL にし、Strict-Transport-Security と secure Cookie を使います。
   config.force_ssl = ENV.fetch("FORCE_SSL", "true") == "true"
 
-  # Skip http-to-https redirect for the default health check endpoint.
+  # 標準のヘルスチェック（/up）は、http から https へのリダイレクトの対象外にします。
   config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
-  # Log to STDOUT with the current request id as a default log tag.
+  # リクエスト ID をログのタグにして、標準出力へログを出します。
   config.log_tags = [ :request_id ]
   config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
 
-  # Change to "debug" to log everything (including potentially personally-identifiable information!).
+  # "debug" にすると全てを記録します（個人を特定できる情報を含む可能性があるので注意）。
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "warn")
 
-  # Prevent health checks from clogging up the logs.
+  # ヘルスチェックのログでログが埋まらないようにします。
   config.silence_healthcheck_path = "/up"
 
-  # Don't log any deprecations.
+  # 非推奨の警告はログに出しません。
   config.active_support.report_deprecations = false
 
-  # Replace the default in-process memory cache store with a durable alternative.
+  # 既定のプロセス内メモリキャッシュを、永続的な方式（Solid Cache）に置き換えます。
   config.cache_store = :solid_cache_store
 
-  # Replace the default in-process and non-durable queuing backend for Active Job.
+  # Active Job の既定の（永続しない）キューを、永続的な方式（Solid Queue）に置き換えます。
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
+  # 不正なメールアドレスは無視し、メール送信のエラーは発生させません。
+  # 送信エラーを発生させたい場合は true にして、メールサーバーの設定を行います。
   # config.action_mailer.raise_delivery_errors = false
 
-  # Set host to be used by links generated in mailer templates.
+  # メールのテンプレートで作られるリンクのホスト名を設定します。
   config.action_mailer.default_url_options = { host: ENV.fetch("APP_HOST", "example.com") }
 
-  # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
+  # 送信用の SMTP サーバーを指定します。認証情報は bin/rails credentials:edit で smtp/* に追加してください。
   # config.action_mailer.smtp_settings = {
   #   user_name: Rails.application.credentials.dig(:smtp, :user_name),
   #   password: Rails.application.credentials.dig(:smtp, :password),
@@ -69,14 +69,14 @@ Rails.application.configure do
   #   authentication: :plain
   # }
 
-  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation cannot be found).
+  # I18n のロケール代替を有効にします（翻訳が見つからないときは
+  # I18n.default_locale の翻訳で代替します）。
   config.i18n.fallbacks = true
 
-  # Do not dump schema after migrations.
+  # マイグレーションの後に schema を書き出しません。
   config.active_record.dump_schema_after_migration = false
 
-  # Only use :id for inspections in production.
+  # 本番では inspect の出力に :id だけを使います。
   config.active_record.attributes_for_inspect = [ :id ]
 
   # 追加のセキュリティヘッダ（HSTS は force_ssl が付けます）
@@ -86,7 +86,7 @@ Rails.application.configure do
     "X-Content-Type-Options" => "nosniff"
   )
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
+  # DNS リバインディングなど、Host ヘッダーを使った攻撃への保護を有効にします。
   # APP_HOST（例: "example.com,www.example.com"）が設定されていれば、そのホスト名だけを許可します。
   # ドメインが決まる前は未設定のまま（すべて許可）で動きます。
   if ENV["APP_HOST"].present?

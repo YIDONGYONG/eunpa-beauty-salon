@@ -1,5 +1,5 @@
-# 일본어(ja) 지원 추가: 번역 입력용 _ja 컬럼 (ADR 0003 개정)
-# 블로그 본문(Action Text)은 별도 테이블이라 마이그레이션이 필요 없습니다.
+# 日本語（ja）対応を追加: 翻訳入力用の _ja 列（ADR 0003 の改訂）
+# ブログ本文（Action Text）は別テーブルのため、このマイグレーションでの追加は不要。
 class AddJapaneseColumns < ActiveRecord::Migration[8.1]
   COLUMNS = {
     events: { title_ja: :string, message_ja: :text },

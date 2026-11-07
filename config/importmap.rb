@@ -1,4 +1,4 @@
-# Pin npm packages by running ./bin/importmap
+# ./bin/importmap を実行して、npm パッケージを固定（pin）します。
 
 pin "application"
 # 管理画面専用のモジュールは preload しない（公開ページで 500KB 以上の無駄な読み込みを避ける）

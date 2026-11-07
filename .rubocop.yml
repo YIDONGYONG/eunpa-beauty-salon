@@ -1,7 +1,7 @@
-# Omakase Ruby styling for Rails
+# Rails 標準（Omakase）の Ruby スタイルを使います。
 inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 
-# Overwrite or add rules to create your own house style
+# ルールを上書き・追加して、独自のスタイルにできます。
 #
 # # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
 # Layout/SpaceInsideArrayLiteralBrackets:

@@ -2,18 +2,16 @@ require_relative "boot"
 
 require "rails/all"
 
-# Require the gems listed in Gemfile, including any gems
-# you've limited to :test, :development, or :production.
+# Gemfile に書かれた gem（:test・:development・:production に限定したものを含む）を読み込みます。
 Bundler.require(*Rails.groups)
 
 module Eunpa
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
+    # 最初に生成された Rails のバージョンの既定値を読み込みます。
     config.load_defaults 8.1
 
-    # Please, add to the `ignore` list any other `lib` subdirectories that do
-    # not contain `.rb` files, or that should not be reloaded or eager loaded.
-    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    # `lib` の下に .rb ファイルを含まないサブディレクトリや、再読み込み・先読みの対象にしたくないものは、
+    # `ignore` リストに追加してください（例: `templates`、`generators`、`middleware`）。
     config.autoload_lib(ignore: %w[assets tasks])
 
     # 多言語: 韓国語（デフォルト）/ 英語 / 日本語
@@ -30,10 +28,9 @@ module Eunpa
     # アップロード制限（モデルの検証で使用）
     config.x.upload_max_size = ENV.fetch("UPLOAD_MAX_MB", "5").to_i.megabytes
 
-    # Configuration for the application, engines, and railties goes here.
+    # アプリ・エンジン・railtie の設定をここに書きます。
     #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
+    # これらの設定は、後から読み込まれる config/environments の各ファイルで、環境ごとに上書きできます。
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")

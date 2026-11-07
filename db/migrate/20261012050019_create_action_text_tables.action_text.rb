@@ -1,7 +1,7 @@
-# This migration comes from action_text (originally 20180528164100)
+# このマイグレーションは action_text から取り込んだものです（元の版: 20180528164100）
 class CreateActionTextTables < ActiveRecord::Migration[6.0]
   def change
-    # Use Active Record's configured type for primary and foreign keys
+    # 主キー・外部キーには Active Record で設定された型を使います
     primary_key_type, foreign_key_type = primary_and_foreign_key_types
 
     create_table :action_text_rich_texts, id: primary_key_type do |t|

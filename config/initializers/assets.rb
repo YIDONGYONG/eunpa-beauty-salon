@@ -1,7 +1,7 @@
-# Be sure to restart your server when you modify this file.
+# このファイルを変更したら、サーバーを再起動してください。
 
-# Version of your assets, change this if you want to expire all your assets.
+# アセットのバージョンです。すべてのアセットのキャッシュを無効にしたいときに変更します。
 Rails.application.config.assets.version = "1.0"
 
-# Add additional assets to the asset load path.
+# アセットの読み込みパスに、追加のアセットを加えます。
 # Rails.application.config.assets.paths << Emoji.images_path

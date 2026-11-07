@@ -1,4 +1,4 @@
-# Run using bin/ci
+# bin/ci で実行します。
 
 CI.run do
   step "Setup", "bin/setup --skip-server"
@@ -11,11 +11,11 @@ CI.run do
   step "Tests: Rails", "bin/rails test"
   step "Tests: Seeds", "env RAILS_ENV=test bin/rails db:seed:replant"
 
-  # Optional: Run system tests
+  # 任意: システムテストを実行します。
   # step "Tests: System", "bin/rails test:system"
 
-  # Optional: set a green GitHub commit status to unblock PR merge.
-  # Requires the `gh` CLI and `gh extension install basecamp/gh-signoff`.
+  # 任意: PR のマージを可能にするため、GitHub のコミットステータスを成功にします。
+  # `gh` CLI と `gh extension install basecamp/gh-signoff` が必要です。
   # if success?
   #   step "Signoff: All systems go. Ready for merge and deploy.", "gh signoff"
   # else

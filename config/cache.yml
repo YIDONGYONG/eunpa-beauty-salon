@@ -1,6 +1,6 @@
 default: &default
   store_options:
-    # Cap age of oldest cache entry to fulfill retention policies
+    # 保持ポリシーに合わせて、最も古いキャッシュの有効期間に上限を設けます。
     # max_age: <%= 60.days.to_i %>
     max_size: <%= 64.megabytes %> # 小さなサイトなので控えめに
     namespace: <%= Rails.env %>

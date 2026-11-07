@@ -1,7 +1,7 @@
-# This migration comes from active_storage (originally 20170806125915)
+# このマイグレーションは active_storage から取り込んだものです（元の版: 20170806125915）
 class CreateActiveStorageTables < ActiveRecord::Migration[7.0]
   def change
-    # Use Active Record's configured type for primary and foreign keys
+    # 主キー・外部キーには Active Record で設定された型を使います
     primary_key_type, foreign_key_type = primary_and_foreign_key_types
 
     create_table :active_storage_blobs, id: primary_key_type do |t|

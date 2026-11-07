@@ -1,4 +1,4 @@
-# examples:
+# 例:
 #   periodic_cleanup:
 #     class: CleanSoftDeletedRecordsJob
 #     queue: background

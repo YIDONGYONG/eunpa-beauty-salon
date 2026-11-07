@@ -1,5 +1,5 @@
-# Audit all gems listed in the Gemfile for known security problems by running bin/bundler-audit.
-# CVEs that are not relevant to the application can be enumerated on the ignore list below.
+# bin/bundler-audit で、Gemfile の全 gem に既知のセキュリティ問題がないか検査します。
+# このアプリに関係しない CVE は、下の ignore リストに挙げて除外できます。
 
 ignore:
   - CVE-THAT-DOES-NOT-APPLY
