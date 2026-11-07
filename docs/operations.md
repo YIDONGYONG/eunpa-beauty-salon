@@ -55,8 +55,8 @@ Litestream のプロセスは別に +20〜40MB 程度と見積もっている（
 4. **ファイアウォール（Lightsail の「ネットワーキング」タブ）**: 開けるのは **22（SSH。可能なら自分の IP のみ）/ 80 / 443** だけ。それ以外は閉じる。
 5. **DuckDNS**: https://www.duckdns.org でログイン → サブドメイン `eunpabeautysalon` を作り、IP 欄に**手順3の静的 IP** を入れる（静的 IP なので更新作業は不要）。
 6. サーバーの初期設定: 手順 2 の起動スクリプトを使った場合は自動で済んでいる。使わなかった場合は、サーバーに SSH して `sudo deploy/vm-setup.sh` を実行する（スワップ 2GB、Docker、OS の自動更新、`/var/lib/eunpa`）。
-7. **バックアップ用の S3 バケット（ソウル）**を作り、**そのバケットだけ**に権限を絞った IAM ユーザーのアクセスキーを発行する（AWS ルートのキーは使わない）。
-8. `/opt/eunpa/` に `deploy/compose.production.yml`（**`compose.yaml` という名前で**置く。GitHub Actions の配備が、ファイル名を指定せずに `docker compose` を実行するため）、`deploy/Caddyfile`、`.env`（`deploy/env.production.example` をコピーして値を入れる）を置く。`SECRET_KEY_BASE` は `bin/rails secret` で作る。`IMAGE` は GHCR のイメージ名で、**小文字**で書く（例: `ghcr.io/yidongyong/eunpa-beauty-salon`）。
+7. **バックアップ用の S3 バケット（ソウル）**（AWS の CloudShell で `deploy/cloudshell-s3-setup.sh` を実行すると、バケット・IAM ユーザー・アクセスキーを一度に作れる）を作り、**そのバケットだけ**に権限を絞った IAM ユーザーのアクセスキーを発行する（AWS ルートのキーは使わない）。
+8. （手順 8・9 は、サーバーで `deploy/bootstrap.sh` を実行すると、質問に答えるだけで自動的に済む。以下は手動で行う場合の内容）`/opt/eunpa/` に `deploy/compose.production.yml`（**`compose.yaml` という名前で**置く。GitHub Actions の配備が、ファイル名を指定せずに `docker compose` を実行するため）、`deploy/Caddyfile`、`.env`（`deploy/env.production.example` をコピーして値を入れる）を置く。`SECRET_KEY_BASE` は `bin/rails secret` で作る。`IMAGE` は GHCR のイメージ名で、**小文字**で書く（例: `ghcr.io/yidongyong/eunpa-beauty-salon`）。
 9. `docker compose up -d`（`/opt/eunpa` で実行）→ Caddy が自動で HTTPS 証明書（Let's Encrypt）を取得する。`https://eunpabeautysalon.duckdns.org/up` が 200 なら成功。管理者を作成したら `.env` を `RUN_SEED=false` にする。
 10. GitHub の Variables に `DEPLOY_ENABLED=true`、Secrets に `VM_HOST`・`VM_USER`・`VM_SSH_KEY`（配備専用の SSH 鍵）を設定する。
 
