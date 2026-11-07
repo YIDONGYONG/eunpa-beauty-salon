@@ -6,7 +6,7 @@
 
 | ファイル | 役割 |
 | --- | --- |
-| `CLAUDE.md` | プロジェクトのルール（構造、翻訳、アクセシビリティ、禁止事項、コマンド）。Claude が毎回読む（韓国語） |
+| `CLAUDE.md` | プロジェクトのルール（構造、翻訳、アクセシビリティ、禁止事項、コマンド）。Claude が毎回読む |
 | `.claude/settings.json` | 許可・禁止するコマンドと、フックの接続（`.env` の読み取り禁止、`docker compose down -v` の禁止など） |
 | `.claude/hooks/protect_files.sh` | 秘密のファイル・`schema.rb`・既存のマイグレーションの変更をブロック |
 | `.claude/hooks/after_edit.sh` | 編集の直後に RuboCop で自動修正し、ロケール・ビューを編集したときは翻訳の一貫性を検査 |
