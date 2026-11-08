@@ -39,6 +39,45 @@
 
 Litestream のプロセスは別に +20〜40MB 程度と見積もっている（本番の設定で再測定が必要）。
 
+## デプロイの進捗（2026-11-09 時点。別のコンピューターで作業を引き継ぐためのメモ）
+
+| 項目 | 状態 |
+|---|---|
+| Lightsail インスタンス `eunpa-web`（ソウル ap-northeast-2a、Ubuntu 24.04、$7 の 1GB、デュアルスタック） | 作成済み・稼働中 |
+| 静的 IP `eunpa-ip`（43.200.108.217） | 取得し、インスタンスにアタッチ済み |
+| DuckDNS `eunpabeautysalon.duckdns.org` → 上の静的 IP | 設定済み（`dig` で確認済み） |
+| サーバーの初期設定（`deploy/vm-setup.sh`: Docker・スワップ 2GB・`/opt/eunpa`） | 完了 |
+| ファイアウォール: 80（HTTP）、22（SSH） | 開放済み |
+| ファイアウォール: 443（HTTPS） | CloudShell の `open-instance-public-ports` で追加（成功を確認）。Lightsail の画面の一覧での確認は未了 |
+| GHCR のイメージ `ghcr.io/yidongyong/eunpa-beauty-salon:latest` | ビルド成功・公開（認証なしで取得できることを確認） |
+| S3 バケット + IAM ユーザー + アクセスキー | **未実施** → CloudShell で `deploy/cloudshell-s3-setup.sh` を実行 |
+| サーバーでのアプリ起動（`.env` の作成を含む） | **未実施** → サーバーで `deploy/bootstrap.sh` を実行 |
+| 起動後の確認（`/up`、バックアップ、`RUN_SEED=false`、管理者パスワード変更） | 未実施 |
+| 予算アラート（月 $10）、ルートの MFA | 未確認 |
+| 旧: シドニーのインスタンス `Ubuntu-1` | 作成後に削除したか未確認（残っていれば削除する。停止だけでも課金される） |
+
+### 続きの手順
+1. **AWS CloudShell**（コンソール左下）で実行: `curl -fsSL https://raw.githubusercontent.com/YIDONGYONG/eunpa-beauty-salon/main/deploy/cloudshell-s3-setup.sh | bash` → バケット名とアクセスキーが 1 回だけ表示される（書き留める。チャットや GitHub には貼らない）。
+2. **サーバー**（Lightsail の「Connect using SSH」で開く、`ubuntu@ip-...$` の画面）で実行: `curl -fsSL https://raw.githubusercontent.com/YIDONGYONG/eunpa-beauty-salon/main/deploy/bootstrap.sh -o /tmp/bootstrap.sh && bash /tmp/bootstrap.sh` → 質問に答えると `.env` を作成して起動する。
+3. `https://eunpabeautysalon.duckdns.org/up` が開けることを確認する（証明書の取得に数分かかる）。
+4. `/opt/eunpa/.env` の `RUN_SEED` を `false` にして `docker compose up -d`。管理画面でパスワードを変更する。
+5. S3 にバックアップのファイルができたことを確認し、`deploy/restore-test.sh` と同じ考え方で復元を一度試す。
+
+### コマンドを実行する場所（間違えやすい）
+| 画面の表示 | 場所 | 例 |
+|---|---|---|
+| `yi@MacBookPro ... %` / `yi@MacMini ... %` | 自分のコンピューター | `git`、`docker compose up`（開発）、`dig` |
+| `[cloudshell-user@...]$` | AWS CloudShell | `aws ...` のコマンド |
+| `ubuntu@ip-172-26-7-43:~$` | 本番サーバー | `docker compose`、`bootstrap.sh` |
+
+自分のコンピューターで `sudo bash deploy/vm-setup.sh` などのサーバー用スクリプトを実行しない。
+
+### 別のコンピューター（Mac mini など）で開発を再開するには
+- `git clone https://github.com/YIDONGYONG/eunpa-beauty-salon.git`（すでにあるなら `git pull`）。
+- `.env` はリポジトリにない。ローカル開発は `cp .env.example .env` で作り直す（本番の `.env` はサーバーにだけある）。
+- 開発用の DB とアップロード画像（`db/*.sqlite3`、`storage/`）はコミットされない。必要なら別途コピーするか、`docker compose up` でシードから作り直す。
+- アイコン画像（`db/seed_images/category-*.png`）はリポジトリに入っている。
+
 ---
 
 # 付録 A. セットアップと日々の運用
