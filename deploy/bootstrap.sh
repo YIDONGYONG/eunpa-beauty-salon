@@ -3,6 +3,7 @@
 #  1. GitHub から compose.yaml と Caddyfile を取得
 #  2. 質問に答えるだけで .env を作成（秘密の値は画面に表示せず、チャットなどにも送らない）
 #  3. イメージを pull してコンテナを起動
+# 注意: サーバーの端末は日本語・韓国語を表示できず文字が化けるため、画面に出すメッセージは英語にしている。
 # 使い方（サーバーの ubuntu ユーザーで実行。vm-setup.sh が済んでいること）:
 #   curl -fsSL https://raw.githubusercontent.com/YIDONGYONG/eunpa-beauty-salon/main/deploy/bootstrap.sh -o /tmp/bootstrap.sh && bash /tmp/bootstrap.sh
 set -euo pipefail
@@ -12,19 +13,19 @@ APP_DIR=/opt/eunpa
 cd "$APP_DIR"
 
 if ! docker ps >/dev/null 2>&1; then
-  echo "docker を使えません。ターミナルを閉じて開き直してから、もう一度実行してください。" >&2
+  echo "Cannot use docker. Close this terminal, open a new one, and run the script again." >&2
   exit 1
 fi
 
 # --- 1. ファイルの取得 ---
 curl -fsSL "$BASE/compose.production.yml" -o compose.yaml
 curl -fsSL "$BASE/Caddyfile" -o Caddyfile
-echo "compose.yaml と Caddyfile を取得しました。"
+echo "Downloaded compose.yaml and Caddyfile."
 
 # --- 2. .env の作成 ---
 if [ -f .env ]; then
-  read -r -p ".env がすでにあります。上書きしますか？ (yes/no): " ans
-  [ "$ans" = "yes" ] || { echo ".env を残したまま、起動だけ行います。"; SKIP_ENV=1; }
+  read -r -p ".env already exists. Overwrite it? (yes/no): " ans
+  [ "$ans" = "yes" ] || { echo "Keeping the existing .env and only starting the containers."; SKIP_ENV=1; }
 fi
 
 if [ -z "${SKIP_ENV:-}" ]; then
@@ -33,21 +34,21 @@ if [ -z "${SKIP_ENV:-}" ]; then
     local name=$1 prompt=$2 secret=${3:-} value
     while true; do
       if [ "$secret" = secret ]; then read -r -s -p "$prompt: " value; echo; else read -r -p "$prompt: " value; fi
-      if [ -z "$value" ]; then echo "  入力が空です。もう一度。"; continue; fi
-      if [[ "$value" =~ [[:space:]\$\"\'\`\\] ]]; then echo "  空白と \$ \" ' \` \\ は使えません。もう一度。"; continue; fi
+      if [ -z "$value" ]; then echo "  Empty input. Try again."; continue; fi
+      if [[ "$value" =~ [[:space:]\$\"\'\`\\] ]]; then echo "  Spaces and \$ \" ' \` \\ are not allowed. Try again."; continue; fi
       printf -v "$name" '%s' "$value"; return
     done
   }
 
   echo
-  echo "管理画面のログイン情報を決めます（パスワードは 16 文字以上を推奨）。"
-  ask ADMIN_EMAIL "管理者のメールアドレス"
-  ask ADMIN_PASSWORD "管理者のパスワード（入力しても表示されません）" secret
+  echo "Choose the admin login (password: 16+ characters recommended)."
+  ask ADMIN_EMAIL "Admin email address"
+  ask ADMIN_PASSWORD "Admin password (hidden while typing)" secret
   echo
-  echo "S3 のバックアップ先を入力します（CloudShell のスクリプトが表示した値）。"
-  ask BUCKET "S3 バケット名"
-  ask LS_KEY_ID "アクセスキー ID" secret
-  ask LS_SECRET "シークレットアクセスキー（入力しても表示されません）" secret
+  echo "Enter the S3 backup settings (the values printed by the CloudShell script)."
+  ask BUCKET "S3 bucket name"
+  ask LS_KEY_ID "Access key ID (hidden)" secret
+  ask LS_SECRET "Secret access key (hidden)" secret
 
   SECRET_KEY_BASE=$(openssl rand -hex 64)
   umask 077
@@ -80,7 +81,7 @@ IMAGE_MAX_EDGE=1600
 IMAGE_QUALITY=82
 EOF
   chmod 600 .env
-  echo ".env を作成しました（権限 600）。"
+  echo "Created .env (permission 600)."
 fi
 
 # --- 3. 起動 ---
@@ -89,8 +90,8 @@ docker compose up -d
 sleep 20
 docker compose ps
 echo
-echo "--- アプリのログ（末尾） ---"
+echo "--- app log (tail) ---"
 docker logs --tail 25 eunpa-web-1 || true
 echo
-echo "次: 数分待ってから https://eunpabeautysalon.duckdns.org/up を開く。"
-echo "表示できたら、.env の RUN_SEED を false にして 'docker compose up -d' を実行する。"
+echo "Next: wait a few minutes, then open https://eunpabeautysalon.duckdns.org/up"
+echo "When it works, set RUN_SEED=false in .env and run: docker compose up -d"
