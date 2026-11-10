@@ -39,7 +39,7 @@
 
 Litestream のプロセスは別に +20〜40MB 程度と見積もっている（本番の設定で再測定が必要）。
 
-## デプロイの進捗（2026-11-09 時点。別のコンピューターで作業を引き継ぐためのメモ）
+## デプロイの進捗（2026-11-10 時点。別のコンピューターで作業を引き継ぐためのメモ）
 
 | 項目 | 状態 |
 |---|---|
@@ -50,9 +50,10 @@ Litestream のプロセスは別に +20〜40MB 程度と見積もっている（
 | ファイアウォール: 80（HTTP）、22（SSH） | 開放済み |
 | ファイアウォール: 443（HTTPS） | CloudShell の `open-instance-public-ports` で追加（成功を確認）。Lightsail の画面の一覧での確認は未了 |
 | GHCR のイメージ `ghcr.io/yidongyong/eunpa-beauty-salon:latest` | ビルド成功・公開（認証なしで取得できることを確認） |
-| S3 バケット + IAM ユーザー + アクセスキー | **未実施** → CloudShell で `deploy/cloudshell-s3-setup.sh` を実行 |
-| サーバーでのアプリ起動（`.env` の作成を含む） | **未実施** → サーバーで `deploy/bootstrap.sh` を実行 |
-| 起動後の確認（`/up`、バックアップ、`RUN_SEED=false`、管理者パスワード変更） | 未実施 |
+| S3 バケット + IAM ユーザー + アクセスキー | 作成済み（`deploy/cloudshell-s3-setup.sh`） |
+| サーバーでのアプリ起動（`.env` の作成を含む） | 完了（`deploy/bootstrap.sh`）。https://eunpabeautysalon.duckdns.org で公開中（`/up`・`/ko`・`/ja` を確認済み） |
+| 起動後の確認 | `/up` は確認済み。`RUN_SEED=false` への変更、管理者ログインの確認、S3 へのバックアップ作成の確認、復元テストは **要確認** |
+| 検索エンジンへの登録（NAVER スマートプレイスの「ホームページ」欄、NAVER サーチアドバイザ、Google Search Console、Google ビジネスプロフィール） | 未実施（付録 A の §4 を参照） |
 | 予算アラート（月 $10）、ルートの MFA | 未確認 |
 | 旧: シドニーのインスタンス `Ubuntu-1` | 作成後に削除したか未確認（残っていれば削除する。停止だけでも課金される） |
 
