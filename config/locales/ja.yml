@@ -74,7 +74,7 @@ ja:
     gallery_title: "店内の写真"
     gallery_empty: "店内の写真は近日中に掲載いたします。"
     photo_alt: "オーナーの写真"
-    meta_description: "経験%{years}年以上のオーナーのごあいさつと、恩波美容室の店内写真をご紹介します。"
+    meta_description: "尚州の恩波美容室、経験%{years}年以上のオーナーのごあいさつと店内写真をご紹介します。"
   blog:
     title: "ブログ"
     lead: "季節ごとのヘアケアや、パーマ後のお手入れなど、役に立つ美容のお話をお届けします。"
@@ -85,7 +85,7 @@ ja:
     page: "%{page}ページ"
     pagination: "ページ移動"
     no_image: "写真なし"
-    meta_description: "恩波美容室がお届けするヘアケアと美容情報のブログです。"
+    meta_description: "尚州の恩波美容室がお届けするヘアケアと美容情報のブログです。"
   location:
     title: "アクセス"
     address: "住所"
@@ -100,7 +100,7 @@ ja:
     map_image_caption: "地図の画像をタップすると、NAVERマップが開きます。"
     map_static_empty: "道案内は、下の「NAVERナビで道案内」ボタンをご利用ください。"
     empty: "準備中です。"
-    meta_description: "恩波美容室の住所、地図、電話番号、営業時間のご案内です。"
+    meta_description: "尚州の恩波美容室の住所、地図、電話番号、営業時間のご案内です。"
   footer:
     business_info: "事業者情報"
     business_info_pending: "事業者情報は準備中です。"

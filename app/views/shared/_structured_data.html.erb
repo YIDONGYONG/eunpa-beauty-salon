@@ -1,15 +1,28 @@
-<%# 検索エンジン向けの構造化データ（JSON-LD: HairSalon）。住所・電話・営業時間・座標は「サイト設定」の値 %>
+<%# 検索エンジン向けの構造化データ（JSON-LD: HairSalon）。住所・電話・営業時間・座標・価格は「サイト設定」「料金表」の値 %>
 <%
+  salon_url = "#{base_url}/#{I18n.locale}"
   data = {
     "@context" => "https://schema.org",
     "@type" => "HairSalon",
+    "@id" => "#{salon_url}#salon",
     "name" => t("site.name"),
-    "url" => "#{base_url}/#{I18n.locale}",
-    "telephone" => site_setting.phone.presence,
-    "address" => (site_setting.address.present? ? { "@type" => "PostalAddress", "streetAddress" => site_setting.address, "addressCountry" => "KR" } : nil),
+    "url" => salon_url,
+    "description" => t("home.meta_description", years: career_years),
+    "image" => "#{base_url}/og-image.png",
+    "telephone" => phone_e164(site_setting.phone),
+    "priceRange" => price_range_text,
+    "address" => (site_setting.address.present? ? {
+      "@type" => "PostalAddress",
+      "streetAddress" => site_setting.address,
+      "addressLocality" => site_setting.region_name.presence,
+      "addressCountry" => "KR"
+    }.compact : nil),
     "geo" => (site_setting.coordinates? ? { "@type" => "GeoCoordinates", "latitude" => site_setting.latitude.to_f, "longitude" => site_setting.longitude.to_f } : nil),
+    "hasMap" => (site_setting.coordinates? ? naver_web_url(site_setting) : nil),
     "openingHours" => site_setting.schema_hours.presence,
-    "areaServed" => site_setting.region_name.presence
+    "areaServed" => site_setting.region_name.presence,
+    # NAVER の予約ページの URL が入っているときだけ、予約の入口を示す
+    "potentialAction" => (site_setting.booking? ? { "@type" => "ReserveAction", "target" => site_setting.naver_booking_url } : nil)
   }.compact
 %>
 <script type="application/ld+json"><%= raw json_escape(data.to_json) %></script>

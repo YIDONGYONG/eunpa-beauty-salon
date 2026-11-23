@@ -74,7 +74,7 @@ en:
     gallery_title: "Photos of the Salon"
     gallery_empty: "Photos of the salon are coming soon."
     photo_alt: "Photo of the owner"
-    meta_description: "Meet the owner of Eunpa Hair Salon, with over %{years} years of experience, and see photos of the salon."
+    meta_description: "Meet the owner of Eunpa Hair Salon in Sangju, with over %{years} years of experience, and see photos of the salon."
   blog:
     title: "Blog"
     lead: "Helpful hair care tips, from seasonal care to caring for your hair after a perm."
@@ -85,7 +85,7 @@ en:
     page: "Page %{page}"
     pagination: "Pages"
     no_image: "No photo"
-    meta_description: "Hair care information and tips from Eunpa Hair Salon."
+    meta_description: "Hair care information and tips from Eunpa Hair Salon in Sangju."
   location:
     title: "Location"
     address: "Address"
@@ -100,7 +100,7 @@ en:
     map_image_caption: "Tap the map picture to open NAVER Map."
     map_static_empty: "Please use the 'Get directions with NAVER Map' button below."
     empty: "Coming soon."
-    meta_description: "Address, map, phone number, and opening hours for Eunpa Hair Salon."
+    meta_description: "Address, map, phone number, and opening hours for Eunpa Hair Salon in Sangju."
   footer:
     business_info: "Business information"
     business_info_pending: "Business information is coming soon."

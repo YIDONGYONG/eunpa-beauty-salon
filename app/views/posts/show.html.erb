@@ -2,6 +2,24 @@
 <% page_description @post.excerpt(150) %>
 <% content_for(:og_image, rails_blob_url(@post.featured_image, locale: nil)) if @post.featured_image.attached? %>
 
+<%# 検索エンジン向けの構造化データ（記事: BlogPosting）%>
+<%
+  article = {
+    "@context" => "https://schema.org",
+    "@type" => "BlogPosting",
+    "headline" => @post.title,
+    "description" => @post.excerpt(150),
+    "inLanguage" => I18n.locale.to_s,
+    "datePublished" => @post.published_at&.iso8601,
+    "dateModified" => @post.updated_at&.iso8601,
+    "mainEntityOfPage" => "#{base_url}#{request.path}",
+    "image" => (@post.featured_image.attached? ? rails_blob_url(@post.featured_image, locale: nil) : nil),
+    "author" => { "@type" => "HairSalon", "name" => t("site.name"), "url" => "#{base_url}/#{I18n.locale}" },
+    "publisher" => { "@type" => "HairSalon", "name" => t("site.name"), "url" => "#{base_url}/#{I18n.locale}" }
+  }.compact
+%>
+<script type="application/ld+json"><%= raw json_escape(article.to_json) %></script>
+
 <article class="section">
   <div class="container narrow">
     <p><%= link_to "← #{t('blog.back')}", posts_path, class: "back-link" %></p>
@@ -10,7 +28,7 @@
     <%= translation_fallback_notice(@post.translated?(:title) && @post.content_translated?) %>
 
     <% if @post.featured_image.attached? %>
-      <%= salon_image_tag @post.featured_image, width: 1000, height: 700, class: "post-hero", alt: "" %>
+      <%= salon_image_tag @post.featured_image, width: 1000, height: 700, class: "post-hero", alt: @post.title %>
     <% end %>
 
     <div class="prose"><%= @post.content %></div>

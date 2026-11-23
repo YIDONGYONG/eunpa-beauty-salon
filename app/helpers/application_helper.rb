@@ -11,6 +11,24 @@ module ApplicationHelper
     t(item.price_from? ? "price.from" : "price.won", amount: amount)
   end
 
+  # 構造化データ（JSON-LD）用: 韓国の電話番号を国際形式（+82-54-535-6353）にする。変換できなければ元の値
+  def phone_e164(phone)
+    digits = phone.to_s.gsub(/\D/, "")
+    return phone.presence if digits.blank? || digits.start_with?("00")
+
+    digits = digits.delete_prefix("0")
+    area = digits.start_with?("2") ? 1 : 2 # 市外局番: ソウル（02）は 1 桁、それ以外（054・携帯の 010 など）は 2 桁
+    "+82-#{digits[0, area]}-#{digits[area..-5]}-#{digits[-4..]}"
+  end
+
+  # JSON-LD の priceRange 用: 公開中の価格表の最小〜最大（例: KRW 13,000-150,000）。価格がなければ nil
+  def price_range_text
+    prices = MenuItem.kept.visible.where(menu_category_id: MenuCategory.kept.visible.select(:id)).pluck(:price)
+    return nil if prices.empty?
+
+    "KRW #{number_with_delimiter(prices.min)}-#{number_with_delimiter(prices.max)}"
+  end
+
   def post_date(time)
     time&.strftime(t("date_format"))
   end
